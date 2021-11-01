@@ -1,0 +1,25 @@
+//
+//  {{ prefix }}{{ module_info.file_name }}
+//  {{ module_info.project_name }}
+//
+//  Created by {{ developer.name }} on {{ date }}.
+//  Copyright © {{ year }} {{ developer.company }}. All rights reserved.
+//
+
+import CArch
+
+/// Протокол взаимодействия с {{ module_info.name }}Presenter
+protocol {{ module_info.name }}PresentationLogic: RootPresentationLogic {}
+
+/// Объект содержаний логику получения данных из слоя бизнес логики 
+/// все типы данных передаются {{ module_info.name }}Presenter как `UIModel`
+final class {{ module_info.name }}Provider: {{ module_info.name }}ProvisionLogic {
+    
+    private let presenter: {{ module_info.name }}PresentationLogic
+    
+    /// Инициализация провайдера модуля `{{ module_info.name }}`
+    /// - Parameter presenter: `{{ module_info.name }}Presenter`
+    init(presenter: {{ module_info.name }}PresentationLogic) {
+        self.presenter = presenter
+    }
+}

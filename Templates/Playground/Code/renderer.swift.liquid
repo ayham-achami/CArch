@@ -1,0 +1,43 @@
+//
+//  {{ prefix }}{{ module_info.file_name }}
+//  {{ module_info.project_name }}
+//
+//  Created by {{ developer.name }} on {{ date }}.
+//  Copyright © {{ year }} {{ developer.company }}. All rights reserved.
+//
+
+import CArch
+
+/// Протокол взаимодействия пользователя с модулем
+protocol {{ module_info.name }}RendererUserInteraction: AnyUserInteraction {}
+
+/// Объект содержащий логику отображения данных 
+final class {{ module_info.name }}Renderer: NSObject, UIRenderer {    
+    
+    // MARK: - Renderer model
+    typealias ModelType = Model
+    
+    struct Model: UIModel {}
+
+    // MARK: - Outlet properties
+    @IBOutlet var delegate: AnyObject? {
+        get {
+            interactional as AnyObject
+        }
+        set {
+            interactional = newValue as? {{ module_info.name }}UserInteraction
+        }
+    }
+
+    // MARK: - Private properties
+    private weak var interactional: {{ module_info.name }}UserInteraction?
+    
+    // MARK: - Public methods
+    func set(content: {{ module_info.name }}Renderer.ModelType) {}
+}
+
+// MARK: - Renderer + IBAction
+private extension {{ module_info.name }}Renderer {}
+
+// MARK: - Private methods
+private extension {{ module_info.name }}Renderer {}

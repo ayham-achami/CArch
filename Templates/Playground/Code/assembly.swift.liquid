@@ -1,0 +1,82 @@
+//
+//  {{ prefix }}{{ module_info.file_name }}
+//  {{ module_info.project_name }}
+//
+//  Created by {{ developer.name }} on {{ date }}.
+//  Copyright © {{ year }} {{ developer.company }}. All rights reserved.
+//
+
+import CArch
+
+/// Пространство имен модуля {{ module_info.name }}
+struct {{ module_info.name }}Module {
+    
+    /// Объект содержащий логику преобразования из `UIStoryboard` и `UIViewController`
+    final class Convertor: ModuleStoryboardConvertor {
+          
+        static var storyboardName: UIStoryboard.Name {
+            UIStoryboard.Name(rawValue: "{{ module_info.name }}")!
+        }
+        
+        static var viewControllerName: UIViewController.Name {
+            UIViewController.Name(class: {{ module_info.name }}ViewController.self)!
+        }
+    }
+
+    /// Объект содержащий логику создание модуля `{{ module_info.name }}` 
+    /// с чистой иерархии (просто ViewController) 
+    final class Builder: ClearHierarchyModuleBuilder {
+        
+        typealias InitialStateType = {{ module_info.name }}ModuleState.InitialStateType
+        
+        func build(with initialState: InitialStateType) -> CArchModule {
+            let module = Convertor.viewController(type: {{ module_info.name }}ViewController.self)!
+            module.initializer?.set(initialState: initialState)
+            return module
+        }
+        
+        func build() -> CArchModule {
+            Convertor.viewController(type: {{ module_info.name }}ViewController.self)!
+        }
+    }
+}
+
+/// Объект содержащий логику внедрение зависимости компонентов модула `{{ module_info.name }}`
+final class {{ module_info.name }}Assembly: StoryboardModuleAssembly {
+    
+    required init() {
+        print("{{ module_info.name }}ModuleAssembly is beginning assembling")
+    }
+    
+    func registerView(in container: DIStoryboardContainer) {
+        container.setInitCompleted(for: {{ module_info.name }}ViewController.self) { (resolver, controller) in
+            guard let presenter = resolver.unravel({{ module_info.name }}PresentationLogic.self, 
+                                                    arguments: controller as {{ module_info.name }}RenderingLogic,
+                                                    controller as {{ module_info.name }}ModuleStateRepresentable) else {
+                fatalError("Could not to build {{ module_info.name }} module, module Presenter is nil")
+            }
+            controller.provider = resolver.unravel({{ module_info.name }}ProvisionLogic.self,
+                                                   argument: presenter as {{ module_info.name }}PresentationLogic)
+            controller.router = resolver.unravel({{ module_info.name }}RoutingLogic.self,
+                                                 argument: controller as TransitionController)
+        }
+    }
+    
+    func registerProvider(in container: DIStoryboardContainer) {
+        container.record({{ module_info.name }}ProvisionLogic.self) { (resolver, presenter: {{ module_info.name }}PresentationLogic) in
+            {{ module_info.name }}Provider(presenter: presenter)
+        }
+    }
+    
+    func registerPresenter(in container: DIStoryboardContainer) {
+        container.record({{ module_info.name }}PresentationLogic.self) { (resolver, view: {{ module_info.name }}RenderingLogic, state: {{ module_info.name }}ModuleStateRepresentable) in
+            {{ module_info.name }}Presenter(view: view, state: state)
+        }
+    }
+    
+    func registerRouter(in container: DIStoryboardContainer) {
+        container.record({{ module_info.name }}RoutingLogic.self) { (resolver, transitionController: TransitionController) in
+            {{ module_info.name }}Router(transitionController: transitionController)
+        }
+    }
+}

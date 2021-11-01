@@ -1,0 +1,31 @@
+# Template information section
+name: "Playground"
+summary: "Swift CArch module template with UIViewController playing as a View."
+author: "Community Arch"
+version: "2.0"
+license: "MIT"
+
+# The declarations for code files
+
+code_files:
+# Renderers
+- {name: Renderers/Renderer.swift , path: Code/renderer.swift.liquid}
+# View layer
+- {name: .storyboard, path: Code/storyboard.storyboard.liquid}
+- {name: View.swift, path: Code/view.swift.liquid}
+# State
+- {name: State.swift, path: Code/state.swift.liquid}
+# Presenter layer
+- {name: Presenter.swift, path: Code/presenter.swift.liquid}
+# Provider layer
+- {name: Provider.swift, path: Code/provider.swift.liquid}
+# Router layer
+- {name: Router.swift, path: Code/router.swift.liquid}
+# Assembly
+- {name: Assembly.swift, path: Code/assembly.swift.liquid}
+
+# The declarations for test files
+
+test_files:
+# Assembly tests
+- {name: Assembly/AssemblyTest.swift, path: Tests/Assembly/AssemblyTest.swift.liquid}

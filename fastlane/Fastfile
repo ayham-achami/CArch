@@ -1,0 +1,135 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+SLACK_INCOMING_WEBHOOK_URL = "https://hooks.slack.com/services/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"
+SLACK_INCOMING_CHANNEL = "#frameworks"
+SLACK_API_TOKEN = "xoxp-735197608115-746649318405-748848474758-4348d8175049b0b5672db9b0e8d2281d"
+LINT_REPORT_OUTPUT = "fastlane/lintResults.html"
+
+default_platform(:ios)
+
+platform :ios do
+    desc "Swiftlint code validation"
+    def check_code_style
+        swiftlint(mode: :lint,
+                  strict: true,
+                  reporter: "html",
+                  output_file: LINT_REPORT_OUTPUT,
+                  config_file: '.swiftlint.yml',
+                  executable: "Pods/SwiftLint/swiftlint")
+    end
+
+    desc "Build CArch framework"
+    def build_framework
+        clean_build_artifacts
+        sh("bundle exec pod install --repo-update")
+        run_tests(scheme: "CArch",
+                  force_quit_simulator: true,
+                  clean: true)
+    end
+    
+    desc "Build playground"
+    def build_playground
+        clean_build_artifacts
+        sh("bundle exec pod install --repo-update")
+        build_app(scheme: "Playground",
+                  clean: true,
+                  silent: true,
+                  skip_archive: true,
+                  skip_codesigning: true)
+    end
+
+    desc "Submit error message to slack"
+    def submit_error(exception, message)
+        slack(message: message,
+              success: false,
+              channel: SLACK_INCOMING_CHANNEL,
+              slack_url: SLACK_INCOMING_WEBHOOK_URL,
+              attachment_properties: {
+                  fields: [
+                    {
+                        title: "Error message",
+                        value: exception.message,
+                        short: false
+                    }
+                  ]
+             })
+    end
+    
+    desc "Submit success message to slack"
+    def submit_success(message)
+        slack(message: message,
+              success: true,
+              channel: SLACK_INCOMING_CHANNEL,
+              slack_url: SLACK_INCOMING_WEBHOOK_URL)
+    end
+
+    desc "Upload file to slack"
+    def upload_file(message, file_path)
+        slack_upload(slack_api_token: SLACK_API_TOKEN,
+                     title: message,
+                     channel: SLACK_INCOMING_CHANNEL,
+                     file_path: file_path,
+                     initial_comment: "New file posted")
+    end
+
+    desc "Abort script"
+    def exit_lane(exception)
+        UI.user_error!("Lane fail with exception: #{exception}")
+        UI.error exception
+    end
+
+    desc "Check code style, create report html file run \"bundle exec fastlane prepareMergeRequest\""
+    lane :lint do |options|
+        begin
+            sh("bundle exec pod install --repo-update")
+            check_code_style
+        rescue => exception
+            upload_file("Lint report", LINT_REPORT_OUTPUT)
+            submit_error(exception, "Code style lint problem")
+            exit_lane(exception)
+        else
+            submit_success("Success check code style")
+        end
+    end
+
+    desc "Build CArch framework, run \"bundle exec fastlane buildFramework\""
+    lane :buildFramework do |options|
+        begin
+            clear_derived_data
+            sh("bundle exec pod install --repo-update")
+            build_framework
+        rescue => exception
+            submit_error(exception, "Could't to build CArch framework")
+            exit_lane(exception)
+        else
+            submit_success("Success build CArch framework")
+        end
+    end
+
+    desc "Build CArch playground, run \"bundle exec fastlane buildFramework\""
+    lane :buildPlayground do |options|
+        begin
+            clear_derived_data
+            sh("bundle exec pod install --repo-update")
+            build_playground
+        rescue => exception
+            submit_error(exception, "Could't to build playground")
+            exit_lane(exception)
+        else
+            submit_success("Success build playground")
+        end
+    end
+end

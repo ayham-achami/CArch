@@ -1,0 +1,67 @@
+//
+//  {{ module_info.file_name }}
+//  {{ module_info.project_name }}
+//
+//  Created by {{ developer.name }} on {{ date }}.
+//  Copyright © {{ year }} {{ developer.company }}. All rights reserved.
+//
+
+import CArch
+
+/// Протокол реализующий логику получения данных из слоя бизнес логики
+protocol {{ module_info.name }}ProvisionLogic: RootProvisionLogic {}
+
+/// Все взаимодействия пользователя с модулем
+typealias {{ module_info.name }}UserInteraction = {{ module_info.name }}RendererUserInteraction // & <#SecondUserInteractionIfNeeded#>
+
+/// Объект содержаний логику отображения данных
+final class {{ module_info.name }}ViewController: UIViewController {
+
+    // MARK: - Module reference
+    private let moduleReference = assembly({{ module_info.name }}Assembly.self)
+
+    // MARK: - Injected properties
+    var provider: {{ module_info.name }}ProvisionLogic!
+    var router: {{ module_info.name }}RoutingLogic!
+
+    // MARK: - Outlet Renderers
+    @IBOutlet private var renderer: {{ module_info.name }}Renderer!
+
+    /// состояние модуля `{{ module_info.name }}`
+    private var state = {{ module_info.name }}ModuleState()
+
+    // MARK: - Lifecycle
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        do {
+            try router.prepare(for: segue, sender: sender)
+        } catch {
+            assertionFailure("Error: [\(error)] Could not to prepare for segue \(segue)")
+        }
+    }
+}
+
+// MARK: - {{ module_info.name }} + Initializer
+extension {{ module_info.name }}ViewController: AnyModuleInitializer {
+    
+    func set<StateType>(initialState: StateType) where StateType: ModuleInitialState {
+        state.initialState = initialState.is({{ module_info.name }}ModuleState.InitialStateType.self)
+    }
+}
+
+// MARK: - {{ module_info.name }} + StateRepresentable
+extension {{ module_info.name }}ViewController: {{ module_info.name }}ModuleStateRepresentable {
+    
+    var readOnly: {{ module_info.name }}ModuleReadOnlyState {
+    	state
+    }
+}
+
+// MARK: - {{ module_info.name }} + RenderingLogic
+extension {{ module_info.name }}ViewController: {{ module_info.name }}RenderingLogic {}
+
+// MARK: - {{ module_info.name }} + UserInteraction
+extension {{ module_info.name }}ViewController: {{ module_info.name }}UserInteraction {}
