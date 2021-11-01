@@ -6,7 +6,8 @@ Pod::Spec.new do |spec|
     Архитектура (CArch), это набор протоколов и расширения, созданные для организации взаимодействия компонентов архитектуры между собой
     DESC
     spec.license      = { :type => "MIT", :file => "LICENSE" }
-    spec.author        = { "Ayham Hylam" => "Ayham Hylam" }
+    spec.author       = { "Ayham Hylam" => "Ayham Hylam" }
+    spec.homepage     = "https://github.com/ayham-achami/CArch"
     spec.ios.deployment_target = "11.0"
     spec.source = {
         :git => "git@github.com:ayham-achami/CArch.git",
