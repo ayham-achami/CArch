@@ -81,19 +81,19 @@ final class MainAssembly: StoryboardModuleAssembly {
     }
     
     func registerProvider(in container: DIStoryboardContainer) {
-        container.record(MainProvisionLogic.self) { (resolver, presenter: MainPresentationLogic) in
+        container.record(MainProvisionLogic.self) { (_, presenter: MainPresentationLogic) in
             MainProvider(presenter: presenter)
         }
     }
     
     func registerPresenter(in container: DIStoryboardContainer) {
-        container.record(MainPresentationLogic.self) { (resolver, view: MainRenderingLogic, state: MainModuleStateRepresentable) in
+        container.record(MainPresentationLogic.self) { (_, view: MainRenderingLogic, state: MainModuleStateRepresentable) in
             MainPresenter(view: view, state: state)
         }
     }
     
     func registerRouter(in container: DIStoryboardContainer) {
-        container.record(MainRoutingLogic.self) { (resolver, transitionController: TransitionController) in
+        container.record(MainRoutingLogic.self) { (_, transitionController: TransitionController) in
             MainRouter(transitionController: transitionController)
         }
     }
