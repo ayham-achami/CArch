@@ -55,8 +55,8 @@ public extension ModuleStoryboardConvertor {
         return storyboard.instantiateViewController(with: viewControllerName)
     }
 
-    static func viewController<T>(type: T.Type) -> T? where T: UIViewController {
-        let storyboard = UIStoryboard(name: storyboardName)
+    static func viewController<T>(type: T.Type, bundle: Bundle? = nil) -> T? where T: UIViewController {
+        let storyboard = UIStoryboard(name: storyboardName, bundle: bundle)
         return storyboard.instantiateViewController(with: viewControllerName) as? T
     }
 }
