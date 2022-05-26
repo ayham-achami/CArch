@@ -67,7 +67,7 @@ public extension UIStoryboard {
     ///
     /// - Parameter name: названине UIViewController
     /// - Returns: `UIViewController` с указанным названием, если не
-    ///             какого контроллеряне не было найден, этот метод выдает исключение
+    ///             какого контроллера не было найден, этот метод выдает исключение
     func instantiateViewController(with name: UIViewController.Name) -> UIViewController {
         return instantiateViewController(withIdentifier: name.rawValue)
     }

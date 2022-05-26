@@ -26,7 +26,7 @@
 import UIKit
 
 /// Основной протокол содержащий логику показа данных на вью (экране)
-/// все протолколы `RenderingLogic` должны быть наследовными от `RootRenderingLogic`
+/// все протоколы `RenderingLogic` должны быть унаследованными от `RootRenderingLogic`
 public protocol RootRenderingLogic: AlertAbility {}
 
 /// Рендер с делегацией

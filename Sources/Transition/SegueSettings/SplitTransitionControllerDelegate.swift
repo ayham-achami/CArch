@@ -30,7 +30,7 @@ public protocol PrimaryViewController: CArchProtocol {
 
     /// Получить дефолтный контроллер, при разделении экрана.
     ///
-    /// - Returns: module convertator
+    /// - Returns: module convertor
     func splitViewControllerSeparateFor(_ splitViewController: UISplitViewController) -> ModuleStoryboardConvertor.Type
 }
 
@@ -59,8 +59,8 @@ public final class SplitTransitionControllerDelegate: NSObject, UISplitViewContr
         }
         if let initializer = vc as? AnyModuleInitializer {
             configurator.configurator(initializer)
-        } else if let nc = vc as? UINavigationController,
-            let initializer = nc.viewControllers.first as? AnyModuleInitializer {
+        } else if let navigationController = vc as? UINavigationController,
+            let initializer = navigationController.viewControllers.first as? AnyModuleInitializer {
             configurator.configurator(initializer)
         } else {
             preconditionFailure("Error: \(TransitionPrepareError(case: .invalidInitializer))")

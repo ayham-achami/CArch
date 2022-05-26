@@ -54,9 +54,9 @@ public protocol StoryboardDIAssemblyFactory: AnyDIAssemblyFactory {
     
     /// Регистрирует компонент модуля в контейнер зависимости
     ///
-    /// - Parameter moduel: Модуль
-    /// - Returns: Модуль после регистриации
-    func assembly<Module>(_ moduel: Module) -> Module where Module: StoryboardModuleAssembly
+    /// - Parameter module: Модуль
+    /// - Returns: Модуль после регистрации
+    func assembly<Module>(_ module: Module) -> Module where Module: StoryboardModuleAssembly
 }
 
 /// Протокол получения доступа к контейнеру зависимости
@@ -67,7 +67,7 @@ public protocol LayoutDIAssemblyFactory: AnyDIAssemblyFactory {
     
     /// Регистрирует компонент модуля в контейнер зависимости
     ///
-    /// - Parameter moduel: Модуль
-    /// - Returns: Модуль после регистриации
-    func assembly<Module>(_ moduel: Module) -> Module where Module: LayoutModuleAssembly
+    /// - Parameter module: Модуль
+    /// - Returns: Модуль после регистрации
+    func assembly<Module>(_ module: Module) -> Module where Module: LayoutModuleAssembly
 }

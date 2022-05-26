@@ -30,6 +30,7 @@ import UIKit
 /// - destination: появляющийся модуль
 public typealias TransitionCompletion = ((CArchModule, CArchModule) -> Void)
 
+/// Поддержка все возможности 
 public typealias AggregateAbility = AlertAbility & ShareAbility & MailAbility & DocumentInteractionAbility
 
 /// Протокол получение модуля из UIStoryboard
@@ -55,107 +56,9 @@ public extension ModuleStoryboardConvertor {
         return storyboard.instantiateViewController(with: viewControllerName)
     }
 
-    static func viewController<T>(type: T.Type) -> T? where T: UIViewController {
-        let storyboard = UIStoryboard(name: storyboardName)
+    static func viewController<T>(type: T.Type, bundle: Bundle? = nil) -> T? where T: UIViewController {
+        let storyboard = UIStoryboard(name: storyboardName, bundle: bundle)
         return storyboard.instantiateViewController(with: viewControllerName) as? T
-    }
-}
-
-/// Опции сменть RootViweController у KeyWindow
-public enum WindowTransitionOptions {
-
-    /// - none: Без анимации
-    case none
-    /// - presenting(Bool): Выполнить транзакцию через призент и потом замена на root
-    case presenting(Bool)
-    /// - animation(UIView.AnimationOptions): Выполнить транзакцию с анимации с `UIView.AnimationOptions`
-    case animation(UIView.AnimationOptions)
-}
-
-/// Изменение (выполнять переход) через окно приложения
-public protocol WindowTransition {
-
-    /// Изменить текущий корневой `UIViewController` окна на новый
-    /// - Parameter destination: Новый `UIViewController`
-    /// - Parameter window: Окно приложения
-    /// - Parameter option: Опции анимации
-    func transition(to destination: UIViewController, with window: UIWindow, option: WindowTransitionOptions)
-}
-
-// MARK: - WindowTransition + Default
-fileprivate extension WindowTransition {
-
-    /// Сделать скриншот предыдущего модуля и выполнить транзакцию под ним
-    /// - Parameter destination: Новый `UIViewController`
-    /// - Parameter window: окно Приложения
-    @available(*, deprecated, message: "Use animationTransition(to destination:, with window:, animation:)")
-    func snapshotViewTransition(to destination: UIViewController,
-                                with window: UIWindow) {
-        if let snapshot = window.snapshotView(afterScreenUpdates: true) {
-            destination.view.addSubview(snapshot)
-            UIView.transition(with: window, duration: 0.3, animations: {
-                window.rootViewController = destination
-            }, completion: { _ in
-                UIView.animate(withDuration: 0.2, delay: 0, animations: {
-                    snapshot.alpha = 0
-                }, completion: { _ in
-                    snapshot.removeFromSuperview()
-                })
-            })
-        } else {
-            window.rootViewController = destination
-        }
-    }
-
-    /// Выполнить транзакцию с анимацей с `UIView.AnimationOptions`
-    /// - Parameter destination: Новый `UIViewController`
-    /// - Parameter window: Окно приложения
-    /// - Parameter animation: Анимация`UIView.AnimationOptions`
-    func animationTransition(to destination: UIViewController,
-                             with window: UIWindow,
-                             animation: UIView.AnimationOptions) {
-        let setWindow: () -> Void = { window.rootViewController = destination }
-        UIView.transition(with: window,
-                          duration: 0.5,
-                          options: animation,
-                          animations: setWindow,
-                          completion: nil)
-    }
-
-    /// Презентует модуль на `rootViewController` затем заминить `rootViewController` на `destination`
-    /// - Parameter destination: Новый `UIViewController`
-    /// - Parameter window: Окно приложения
-    /// - Parameter animated: true, чтобы показать модуль анимационно
-    func present(destination: UIViewController, with window: UIWindow, animated: Bool) {
-        destination.modalPresentationStyle = .fullScreen
-        destination.modalTransitionStyle = .crossDissolve
-        window.rootViewController?.present(destination, animated: animated) {
-            DispatchQueue.main.async { window.rootViewController = destination }
-        }
-    }
-}
-
-// MARK: - UIWindow + WindowTransition
-extension UIWindow: WindowTransition {
-
-    public func transition(to destination: UIViewController,
-                           with window: UIWindow,
-                           option: WindowTransitionOptions) {
-        switch option {
-        case .none:
-            window.rootViewController = destination
-        case .presenting(let animated):
-            present(destination: destination, with: window, animated: animated)
-        case .animation(let animation):
-            animationTransition(to: destination, with: window, animation: animation)
-        }
-    }
-
-    /// Изменить текущий корневой `UIViewController` окна на новый
-    /// - Parameter destination: Новый `UIViewController`
-    /// - Parameter option: Опции анимации
-    public func transition(to destination: UIViewController, option: WindowTransitionOptions = .none) {
-        transition(to: destination, with: self, option: option)
     }
 }
 

@@ -41,7 +41,7 @@ struct TransitionPrepareError: Error {
 }
 
 /// Основной протокол содержащий логику навигации между модулями
-/// все протолколы `RoutingLogic` должны быть наследовными от `RootRoutingLogic`
+/// все протоколы `RoutingLogic` должны быть унаследованными от `RootRoutingLogic`
 public protocol RootRoutingLogic: CArchProtocol {
 
     /// Подготовить транзакцию между модулями
@@ -77,8 +77,8 @@ public extension RootRoutingLogic {
         }
         if let initializer = segue.destination as? AnyModuleInitializer {
             configurator.configurator(initializer)
-        } else if let nc = segue.destination as? UINavigationController,
-            let initializer = nc.viewControllers.first as? AnyModuleInitializer {
+        } else if let navigationController = segue.destination as? UINavigationController,
+            let initializer = navigationController.viewControllers.first as? AnyModuleInitializer {
             configurator.configurator(initializer)
         } else {
             throw TransitionPrepareError(case: .invalidInitializer)

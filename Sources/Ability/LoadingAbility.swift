@@ -25,7 +25,7 @@
 
 import UIKit
 
-/// Протокол пелезации получения доступа к заглушке прогресс загрузки
+/// Протокол получения доступа к заглушке прогресс загрузки
 public protocol LoadingPlaceholder {
 
     /// Заглушка прогресс загрузки
@@ -33,11 +33,11 @@ public protocol LoadingPlaceholder {
 }
 
 /// Возможность показать индикатор загрузки
-public protocol LodingAbility {
+public protocol LoadingAbility {
 
     /// Показать индикатор загрузки
     ///
-    /// - Parameter message: Сообшение, будет отображаться под индиктом загрузки
+    /// - Parameter message: Сообщение, будет отображаться под индикатором загрузки
     func displayLoading(with message: String)
 
     /// Скрыть индикатор загрузки
@@ -57,7 +57,7 @@ public protocol LodingAbility {
 
     /// Показать индикатор загрузки
     ///
-    /// - Parameter view: Цель, где показть индикатор загрузки
+    /// - Parameter view: Цель, где показать индикатор загрузки
     func displayLoading(on view: UIView)
 
     /// Скрыть индикатор загрузки
@@ -66,8 +66,8 @@ public protocol LodingAbility {
     func hideLoading(on view: UIView)
 }
 
-// MARK: - LodingAbility + Defalut
-public extension LodingAbility {
+// MARK: - LodingAbility + Default
+public extension LoadingAbility {
 
     func displayLoading() {
         displayLoading(with: "")

@@ -36,7 +36,7 @@ func convert<T>(some: Any, to type: T.Type) -> T where T: Any {
 }
 
 /// Набор данных с помощью которых модуль будет инициализирован
-/// на пример передать id эелмент из модуль модул в детайлс модул
+/// на пример передать id элемента из модуль в детальный модуль
 public protocol ModuleInitialState {}
 
 // MARK: - ModuleInitialState + Conversion
@@ -118,7 +118,7 @@ public protocol AnyModuleStateRepresentable: CArchProtocol {}
 /// Основной протокол инициализации любого модуля
 public protocol AnyModuleInitializer: CArchProtocol {
 
-    /// Настроить состенине инициализация модуль
+    /// Настроить состояние инициализация модуль
     ///
     /// - Parameter initialState: Данные для инициализации
     func set<StateType>(initialState: StateType) where StateType: ModuleInitialState

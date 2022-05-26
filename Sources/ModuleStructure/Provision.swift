@@ -26,5 +26,5 @@
 import Foundation
 
 /// Основной протокол содержащий логику взаимодействия с BusinessLogic слоя
-/// все протолколы `ProvisionLogic` должны быть наследовными от `RootProvisionLogic`
+/// все протоколы `ProvisionLogic` должны быть унаследованными от `RootProvisionLogic`
 public protocol RootProvisionLogic: CArchProtocol {}

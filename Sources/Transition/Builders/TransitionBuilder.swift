@@ -30,7 +30,7 @@ public class TransitionBuilder {
 
     /// Типы транзакции
     ///
-    /// - auto: Покзать модуль если у source есть `UINavigationController` то, выполняется push если нет то, выполняется present
+    /// - auto: Показать модуль если у source есть `UINavigationController` то, выполняется push если нет то, выполняется present
     /// - push: Запушать модуль через `UINavigationController`
     /// - detail: Запушать модуль как DetailViewController
     /// - present: Презентовать модуль
@@ -77,7 +77,7 @@ public class TransitionBuilder {
         self.transitionController = transitionController
     }
 
-    /// Добваить данные инициализации модуля к билдеру
+    /// Добавить данные инициализации модуля к билдеру
     ///
     /// - Parameter initialState: Данные инициализации модуля
     /// - Returns: текущий билдер Транзакции
@@ -86,7 +86,7 @@ public class TransitionBuilder {
         return self
     }
 
-    /// Добваить иерархии модуля к билдеру
+    /// Добавить иерархии модуля к билдеру
     ///
     /// - Parameter hierarchy: Иерархии модуля
     /// - Returns: Текущий билдер транзакции
@@ -111,7 +111,7 @@ public class TransitionBuilder {
         return self
     }
 
-    /// Добваить билдер иерархии модуля к билдеру
+    /// Добавить билдер иерархии модуля к билдеру
     ///
     /// - Parameter hierarchyBuilder: Билдер иерархии модуля
     /// - Returns: Текущий билдер транзакции
@@ -120,8 +120,8 @@ public class TransitionBuilder {
         return self
     }
 
-    /// Добваить замыкание завершения анимации транзакции модуля к билдеру
-    /// оно выпоняется только если тип `Transition` был `Transition.present`
+    /// Добавить замыкание завершения анимации транзакции модуля к билдеру
+    /// оно выполняется только если тип `Transition` был `Transition.present`
     ///
     /// - Parameter completion: Замыкание завершения анимации транзакции модуля
     /// - Returns: Текущий билдер транзакции
@@ -132,7 +132,9 @@ public class TransitionBuilder {
 
     /// Выполняет транзакцию
     public func commit() {
-        guard let module = builder?.build(with: state, into: hierarchy) else { assertionFailure("The Hierarchy Builder is nil checkout your settings"); return }
+        guard
+            let module = builder?.build(with: state, into: hierarchy)
+        else { assertionFailure("The Hierarchy Builder is nil checkout your settings"); return }
         switch transition {
         case .auto:
             transitionController.show(module)

@@ -72,7 +72,7 @@ public extension AnyHierarchyModuleBuilder where Self: ModuleBuilder {
     }
 }
 
-/// Чистая иерархия модуля протос VC
+/// Чистая иерархия модуля простой VC
 public protocol ClearHierarchyModuleBuilder: AnyHierarchyModuleBuilder, ModuleBuilder {}
 
 /// VC в NavigationController
@@ -87,7 +87,7 @@ public protocol DetailsHierarchyModuleBuilder: AnyHierarchyModuleBuilder, Module
 /// VC c TabItem
 public protocol TabHierarchyModuleBuilder: AnyHierarchyModuleBuilder, ModuleBuilder {}
 
-// MARK: - ClearHierarchyModuleBuilder + Реализация по умолчанию
+// MARK: - ClearHierarchyModuleBuilder + Default
 public extension ClearHierarchyModuleBuilder {
 
     func build(with initialState: ModuleInitialState?, into hierarchy: Hierarchy) -> CArchModule {
@@ -96,7 +96,7 @@ public extension ClearHierarchyModuleBuilder {
     }
 }
 
-// MARK: - NavigationHierarchyModuleBuilder + Реализация по умолчанию
+// MARK: - NavigationHierarchyModuleBuilder + Default
 public extension NavigationHierarchyModuleBuilder {
 
     func build(with initialState: ModuleInitialState?, into hierarchy: Hierarchy) -> CArchModule {
@@ -105,7 +105,7 @@ public extension NavigationHierarchyModuleBuilder {
     }
 }
 
-// MARK: - MasterHierarchyModuleBuilder + Реализация по умолчанию
+// MARK: - MasterHierarchyModuleBuilder + Default
 public extension MasterHierarchyModuleBuilder {
 
     func build(with initialState: ModuleInitialState?, into hierarchy: Hierarchy) -> CArchModule {
@@ -114,7 +114,7 @@ public extension MasterHierarchyModuleBuilder {
     }
 }
 
-// MARK: - DetailsHierarchyModuleBuilder + Реализация по умолчанию
+// MARK: - DetailsHierarchyModuleBuilder + Default
 public extension DetailsHierarchyModuleBuilder {
 
     func build(with initialState: ModuleInitialState?, into hierarchy: Hierarchy) -> CArchModule {
@@ -123,7 +123,7 @@ public extension DetailsHierarchyModuleBuilder {
     }
 }
 
-// MARK: - TabHierarchyModuleBuilder + Реализация по умолчанию
+// MARK: - TabHierarchyModuleBuilder + Default
 public extension TabHierarchyModuleBuilder {
 
     func build(with initialState: ModuleInitialState?, into hierarchy: Hierarchy) -> CArchModule {

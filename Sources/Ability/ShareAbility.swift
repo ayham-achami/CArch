@@ -34,7 +34,7 @@ public protocol ShareAbility {
     ///   - text: Текст
     ///   - image: Изображение
     ///   - url: Ссылка
-    ///   - completion: Замылканине вызывается при завершение диалога
+    ///   - completion: Замыкание вызывается при завершение диалога
     func share(_ text: String?, _ image: UIImage?, _ url: URL?, _ completion: (() -> Void)?)
 }
 
@@ -45,7 +45,7 @@ public extension ShareAbility {
     ///
     /// - Parameters:
     ///   - text: Текст
-    ///   - completion: Забылканине вызывается при завершение диалога
+    ///   - completion: Замыкание вызывается при завершение диалога
     func share(_ text: String, _ completion: (() -> Void)? = nil) {
         share(text, nil, nil, completion)
     }
@@ -55,7 +55,7 @@ public extension ShareAbility {
     /// - Parameters:
     ///   - text: Текст
     ///   - url: Ссылка
-    ///   - completion: Замылканине вызывается при завершение диалога
+    ///   - completion: Замыкание вызывается при завершение диалога
     func share(_ text: String? = nil, _ image: UIImage, _ completion: (() -> Void)? = nil) {
         share(text, image, nil, completion)
     }
@@ -65,7 +65,7 @@ public extension ShareAbility {
     /// - Parameters:
     ///   - text: Текст
     ///   - url: Ссылка
-    ///   - completion: Замылканине вызывается при завершение диалога
+    ///   - completion: Замыкание вызывается при завершение диалога
     func share(_ text: String? = nil, _ url: URL, _ completion: (() -> Void)? = nil) {
         share(text, nil, url, completion)
     }

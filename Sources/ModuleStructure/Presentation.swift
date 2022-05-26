@@ -27,10 +27,10 @@ import Foundation
 
 /// Основной протокол содержащий логику преобразование данных
 /// в UIModel все протолколы `PresentationLogic` должны быть
-/// наследовными от `RootPresentationLogic`
+/// унаследованными от `RootPresentationLogic`
 public protocol RootPresentationLogic: CArchProtocol {
 
-    /// обработка ошибоки от BusinessLogic слоя
+    /// обработка ошибки от BusinessLogic слоя
     ///
     /// - Parameter error: ошибка от BusinessLogic слоя
     func encountered(_ error: Error)
