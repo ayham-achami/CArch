@@ -47,7 +47,7 @@ public protocol AnyDIAssemblyFactory {
 public protocol StoryboardDIAssemblyFactory: AnyDIAssemblyFactory {
     
     /// Контейнер зависимости
-    var container: DIStoryboardContainer { get }
+    var storyboardContainer: DIStoryboardContainer { get }
     
     /// Внедрение зависимости для Storyboard
     var storyboard: DIStoryboard { get }
@@ -63,7 +63,7 @@ public protocol StoryboardDIAssemblyFactory: AnyDIAssemblyFactory {
 public protocol LayoutDIAssemblyFactory: AnyDIAssemblyFactory {
 
     /// Контейнер зависимости
-    var container: DIContainer { get }
+    var layoutContainer: DIContainer { get }
     
     /// Регистрирует компонент модуля в контейнер зависимости
     ///
