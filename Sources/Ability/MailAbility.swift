@@ -23,6 +23,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
+#if canImport(MessageUI)
 import MessageUI
 
 /// Возможность показать экран отправление E-Mail
@@ -41,3 +42,4 @@ public extension MailAbility where Self: UIViewController {
         present(mailComposer, animated: true)
     }
 }
+#endif

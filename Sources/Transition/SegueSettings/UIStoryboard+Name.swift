@@ -23,6 +23,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
+#if canImport(UIKit)
 import UIKit
 
 // MARK: - UIStoryboard + CArch
@@ -72,3 +73,4 @@ public extension UIStoryboard {
         return instantiateViewController(withIdentifier: name.rawValue)
     }
 }
+#endif

@@ -23,7 +23,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-import UIKit
+import Foundation
 
 /// Типы ссылок на объекты в контейнер зависимостей
 public enum StorageType {
@@ -202,34 +202,4 @@ public protocol DIResolver {
     ///   - arg3: Аргумент3 чтобы передавать в замыкание фабрики
     /// - Returns: Объекта из контейнера зависимости
     func unravel<Service, Arg1, Arg2, Arg3>(_ serviceType: Service.Type, arguments: Arg1, _ arg2: Arg2, arg3: Arg3) -> Service?
-}
-
-/// Протокол получения UIViewController из Storyboard с помощью DI
-public protocol DIStoryboard {
-    
-    /// Настроить замыкание, которое необходимо
-    /// выполнять при заверении инициализации UIViewController из Storyboard
-    ///
-    /// - Parameters:
-    ///   - controllerType: Тип UIViewController
-    ///   - name: Названине UIViewController
-    ///   - initCompleted: Замыкание инициализации
-    func setInitCompleted<Controller>(for controllerType: Controller.Type,
-                                      name: String?,
-                                      initCompleted: @escaping (DIResolver, Controller) -> Void) where Controller: UIViewController
-}
-
-// MARK: - DIStoryboard + Additions
-public extension DIStoryboard {
-    
-    /// Настроить замыкание, которое необходимо
-    /// выполнять при заверении инициализации UIViewController из Storyboard
-    ///
-    /// - Parameters:
-    ///   - controllerType: Тип UIViewController
-    ///   - initCompleted: Замыкание инициализации
-    func setInitCompleted<Controller>(for controllerType: Controller.Type,
-                                      initCompleted: @escaping (DIResolver, Controller) -> Void) where Controller: UIViewController {
-        setInitCompleted(for: controllerType, name: nil, initCompleted: initCompleted)
-    }
 }
