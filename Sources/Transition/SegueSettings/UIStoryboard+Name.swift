@@ -60,7 +60,7 @@ public extension UIStoryboard {
     /// Инициализация с названием
     ///
     /// - Parameter name: названине storyboard
-    convenience init(name: UIStoryboard.Name, bundle: Bundle? = nil) {
+    convenience init(with name: UIStoryboard.Name, bundle: Bundle? = nil) {
         self.init(name: name.rawValue, bundle: bundle)
     }
 

@@ -53,12 +53,12 @@ public protocol ModuleStoryboardConvertor: CArchProtocol {
 public extension ModuleStoryboardConvertor {
 
     static func viewController() -> UIViewController {
-        let storyboard = UIStoryboard(name: storyboardName)
+        let storyboard = UIStoryboard(with: storyboardName)
         return storyboard.instantiateViewController(with: viewControllerName)
     }
 
     static func viewController<T>(type: T.Type, bundle: Bundle? = nil) -> T? where T: UIViewController {
-        let storyboard = UIStoryboard(name: storyboardName, bundle: bundle)
+        let storyboard = UIStoryboard(with: storyboardName, bundle: bundle)
         return storyboard.instantiateViewController(with: viewControllerName) as? T
     }
 }
