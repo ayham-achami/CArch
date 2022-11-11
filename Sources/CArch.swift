@@ -23,7 +23,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-import UIKit
+import Foundation
 
 /// Основной протокол новой архитектурой, все протоколы
 /// компонентов архитектурой должны быть унаследованным
@@ -32,52 +32,8 @@ import UIKit
 /// протоколы архитектурные от других
 public protocol CArchProtocol: AnyObject {}
 
-/// CArch Модуль
-public protocol CArchModule: CArchProtocol {
-
-    /// View component
-    var view: UIViewController { get }
-
-    /// Инициализатор модуля
-    var initializer: AnyModuleInitializer? { get }
-
-    /// Делегат модуля, объекта ожидаемый результат от текущего модуля
-    var finalizer: AnyModuleFinalizer? { get }
-}
-
-// MARK: - CArchModule + UIViewController
-public extension CArchModule where Self: UIViewController {
-
-    var view: UIViewController {
-        return self
-    }
-
-    var initializer: AnyModuleInitializer? {
-        return self as? AnyModuleInitializer
-    }
-
-    var finalizer: AnyModuleFinalizer? {
-        return self as? AnyModuleFinalizer
-    }
-}
-
 /// Oсновой протокол любого объекта UI модели
 public protocol UIModel {}
-
-/// Объект реализующий переиспользуемую логику BusinessLogic слоя
-public protocol Worker: CArchProtocol, CustomStringConvertible, CustomDebugStringConvertible {}
-
-// MARK: - BusinessLogicService + StringConvertible
-public extension Worker {
-
-    var description: String {
-        "🛠 \(String(describing: Self.self))"
-    }
-
-    var debugDescription: String {
-        description
-    }
-}
 
 /// Базовый протокол любого сервиса слоя бизнес логики
 /// нельзя создавать сервис и не наследовать данный протокол

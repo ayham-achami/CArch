@@ -23,6 +23,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
+#if canImport(UIKit)
 import UIKit
 
 /// Возможность поделиться разных материалов
@@ -94,3 +95,4 @@ public extension ShareAbility where Self: UIViewController {
         present(activityViewController, animated: true, completion: completion)
     }
 }
+#endif

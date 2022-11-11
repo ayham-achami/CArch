@@ -23,7 +23,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-import UIKit
+import Foundation
 
 // MARK: - Bool + UIModel
 extension Bool: UIModel {}
@@ -45,12 +45,3 @@ extension Array: UIModel {}
 
 // MARK: - Dictionary + UIModel
 extension Dictionary: UIModel {}
-
-// MARK: - UIViewController + TransitionController
-extension UIViewController: TransitionController {}
-
-// MARK: - UIViewController + CArchModule
-extension UIViewController: CArchModule {}
-
-// MARK: - UIViewController + AlertAbility
-extension UIViewController: AlertAbility {}

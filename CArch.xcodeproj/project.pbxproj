@@ -12,6 +12,8 @@
 		44EEDA86F134A0A8857AE990 /* MainState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A9577BC80E69719FA4E23A6 /* MainState.swift */; };
 		46694782347BDD614F59EF6E /* Pods_Playground.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A6BB816C415750FA1E572CEF /* Pods_Playground.framework */; };
 		4EFF9A280F10934E941919E6 /* MainProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A794918EFE2223152FEA03BC /* MainProvider.swift */; };
+		6B144428291BDA9C00F1C119 /* UIViewControllerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B144427291BDA9C00F1C119 /* UIViewControllerExtensions.swift */; };
+		6B14442A291BDAF600F1C119 /* DIStoryboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B144429291BDAF600F1C119 /* DIStoryboard.swift */; };
 		717F14968C2A0E2C7C30750E /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24176CE5A18DDF4F5E753C11 /* MainView.swift */; };
 		725014B1430D7A0B9B83E2EB /* MainAssemblyTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66329B5A67F586325205FCE4 /* MainAssemblyTest.swift */; };
 		A0CB1D6C88C063E8498951FC /* MainPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 726256FBA9B3EC94BCA89681 /* MainPresenter.swift */; };
@@ -102,6 +104,8 @@
 		4F63790854F35555A36EF121 /* Pods_CArch_CArchTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CArch_CArchTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		66329B5A67F586325205FCE4 /* MainAssemblyTest.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MainAssemblyTest.swift; sourceTree = "<group>"; };
 		686E5B73B1F76CA589E3A200 /* MainAssembly.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MainAssembly.swift; sourceTree = "<group>"; };
+		6B144427291BDA9C00F1C119 /* UIViewControllerExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewControllerExtensions.swift; sourceTree = "<group>"; };
+		6B144429291BDAF600F1C119 /* DIStoryboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DIStoryboard.swift; sourceTree = "<group>"; };
 		726256FBA9B3EC94BCA89681 /* MainPresenter.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MainPresenter.swift; sourceTree = "<group>"; };
 		A6BB816C415750FA1E572CEF /* Pods_Playground.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Playground.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A794918EFE2223152FEA03BC /* MainProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MainProvider.swift; sourceTree = "<group>"; };
@@ -386,6 +390,7 @@
 		F0FFD70C26D649AF00291681 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				6B144427291BDA9C00F1C119 /* UIViewControllerExtensions.swift */,
 				F0FFD70E26D649AF00291681 /* Info.plist */,
 				F0FFD70D26D649AF00291681 /* CArch.h */,
 				F0FFD72A26D64CFA00291681 /* CArch.swift */,
@@ -410,6 +415,7 @@
 		F0FFD72326D64CF900291681 /* Assemblies */ = {
 			isa = PBXGroup;
 			children = (
+				6B144429291BDAF600F1C119 /* DIStoryboard.swift */,
 				F0FFD72826D64CF900291681 /* DIContainer.swift */,
 				F0FFD72626D64CF900291681 /* AssemblyAPI.swift */,
 				F0FFD72526D64CF900291681 /* ModuleAssembler.swift */,
@@ -831,6 +837,7 @@
 				F0FFD74B26D64CFA00291681 /* Rendering.swift in Sources */,
 				F0FFD75026D64CFA00291681 /* DocumentInteractionAbility.swift in Sources */,
 				F0FFD74726D64CFA00291681 /* DispatchQueueName.swift in Sources */,
+				6B14442A291BDAF600F1C119 /* DIStoryboard.swift in Sources */,
 				F0FFD75926D64CFA00291681 /* UIViewController+Name.swift in Sources */,
 				F0FFD75526D64CFA00291681 /* MailAbility.swift in Sources */,
 				F0FFD74A26D64CFA00291681 /* CArch.swift in Sources */,
@@ -850,6 +857,7 @@
 				F0FFD74C26D64CFA00291681 /* Provision.swift in Sources */,
 				F0FFD74426D64CFA00291681 /* AssemblyFactores.swift in Sources */,
 				F0FFD75B26D64CFA00291681 /* UIStoryboard+Name.swift in Sources */,
+				6B144428291BDA9C00F1C119 /* UIViewControllerExtensions.swift in Sources */,
 				F0FFD75D26D64CFA00291681 /* TransitionController.swift in Sources */,
 				F0FFD75426D64CFA00291681 /* ShareAbility.swift in Sources */,
 				F0FFD75C26D64CFA00291681 /* UIStoryboardSegue+Identifier.swift in Sources */,

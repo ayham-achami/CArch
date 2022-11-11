@@ -23,6 +23,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
+#if canImport(UIKit)
 import UIKit
 
 /// Основной протокол содержащий логику показа данных на вью (экране)
@@ -120,3 +121,4 @@ public extension ModuleLifeCycleOwner {
         lifeCycle.forEach { $0.moduleWillTransition(to: size, with: coordinator) }
     }
 }
+#endif

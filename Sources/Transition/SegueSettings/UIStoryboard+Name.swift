@@ -23,6 +23,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
+#if canImport(UIKit)
 import UIKit
 
 // MARK: - UIStoryboard + CArch
@@ -59,7 +60,7 @@ public extension UIStoryboard {
     /// Инициализация с названием
     ///
     /// - Parameter name: названине storyboard
-    convenience init(name: UIStoryboard.Name, bundle: Bundle? = nil) {
+    convenience init(with name: UIStoryboard.Name, bundle: Bundle? = nil) {
         self.init(name: name.rawValue, bundle: bundle)
     }
 
@@ -72,3 +73,4 @@ public extension UIStoryboard {
         return instantiateViewController(withIdentifier: name.rawValue)
     }
 }
+#endif
