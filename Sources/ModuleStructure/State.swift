@@ -25,7 +25,7 @@
 
 import Foundation
 
-/// преобразование между типами, в случае ошибки сбрасывается фатальная ошибка
+/// Преобразование между типами, в случае ошибки сбрасывается фатальная ошибка
 /// - Parameter converted: объект для преобразования
 /// - Parameter type: тип, в котором необходимо преобразовать
 func convert<T>(some: Any, to type: T.Type) -> T where T: Any {
@@ -63,7 +63,7 @@ public extension ModuleFinalState {
     /// - Parameter type: Тип для преобразования
     /// - Returns: Преобразованный объект с заданном типе или сбрасывается фатальная ошибка
     func `is`<StateType>(_ type: StateType.Type) -> StateType where StateType: ModuleFinalState {
-        return convert(some: self, to: StateType.self)
+        convert(some: self, to: StateType.self)
     }
 }
 
@@ -76,11 +76,11 @@ public extension AnyReadOnlyState {
     /// Преобразование состояние модуля в состояние только для чтения или сбрасывается фатальная ошибка
     /// - Parameter type: Тип для преобразования
     func `is`<StateType>(_ type: StateType.Type) -> StateType where StateType: AnyReadOnlyState {
-        return convert(some: self, to: StateType.self)
+        convert(some: self, to: StateType.self)
     }
 }
 
-/// Текущее состояние модуля содержить
+/// Текущее состояние модуля 
 /// содержит `ModuleInitialState` и `ModuleFinalState`
 /// и набор данных необходимых для работы модуля
 public protocol ModuleState {
@@ -108,7 +108,7 @@ public protocol ModuleState {
 public extension ModuleState {
 
     func readOnly<ReadOnlyState>() -> ReadOnlyState where ReadOnlyState: AnyReadOnlyState {
-        return convert(some: self, to: ReadOnlyState.self)
+        convert(some: self, to: ReadOnlyState.self)
     }
 }
 
@@ -139,13 +139,13 @@ public extension ModuleState {
     /// Возвращает не опциональный статус инициализации, если
     /// статус инициализации nil сбрасывается фатальная ошибка
     var initial: InitialStateType {
-        return initialState.initial
+        initialState.initial
     }
 
     /// Возвращает не опциональный финальный статус, если
     /// финальный статус nil сбрасывается фатальная ошибка
     var final: FinalStateType {
-        return finalState.final
+        finalState.final
     }
 }
 

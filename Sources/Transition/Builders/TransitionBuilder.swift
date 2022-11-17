@@ -27,7 +27,7 @@
 import UIKit
 
 /// Билдер транзакции
-public class TransitionBuilder {
+public final class TransitionBuilder {
 
     /// Типы транзакции
     ///
@@ -51,8 +51,17 @@ public class TransitionBuilder {
     ///
     /// - Parameter transitionController: Контролер перехода между моделями
     /// - Returns: Билдер транзакции
-    static public func with(_ transitionController: TransitionController) -> TransitionBuilder {
-        return TransitionBuilder.init(transitionController)
+    static public func with(_ transitionController: TransitionController) -> Self {
+        .init(transitionController)
+    }
+    
+    /// Фабричный метод создания билдера
+    /// - Parameters:
+    ///   - transitionController: Контролер перехода между моделями
+    ///   - holder: Носитель информации о переходе
+    /// - Returns: Билдер транзакции
+    static public func with(_ transitionController: TransitionController, _ holder: TransitionHolder) -> Self {
+        .init(transitionController, holder)
     }
 
     /// Данные инициализации модуля
@@ -77,12 +86,26 @@ public class TransitionBuilder {
     private init(_ transitionController: TransitionController) {
         self.transitionController = transitionController
     }
+    
+    /// Инициализации
+    /// - Parameters:
+    ///   - transitionController: Контролер перехода между моделями
+    ///   - holder: Носитель информации о переходе
+    private init(_ transitionController: TransitionController, _ holder: TransitionHolder) {
+        self.state = holder.state
+        self.hierarchy = holder.hierarchy
+        self.transition = holder.transition
+        self.animated = holder.animated
+        self.builder = holder.builder
+        self.completion = holder.completion
+        self.transitionController = transitionController
+    }
 
     /// Добавить данные инициализации модуля к билдеру
     ///
     /// - Parameter initialState: Данные инициализации модуля
     /// - Returns: текущий билдер Транзакции
-    public func with(state: ModuleInitialState) -> TransitionBuilder {
+    public func with(state: ModuleInitialState) -> Self {
         self.state = state
         return self
     }
@@ -91,7 +114,7 @@ public class TransitionBuilder {
     ///
     /// - Parameter hierarchy: Иерархии модуля
     /// - Returns: Текущий билдер транзакции
-    public func with(hierarchy: Hierarchy) -> TransitionBuilder {
+    public func with(hierarchy: Hierarchy) -> Self {
         self.hierarchy = hierarchy
         return self
     }
@@ -100,14 +123,14 @@ public class TransitionBuilder {
     ///
     /// - Parameter transition: Тип транзакции
     /// - Returns: Текущий билдер транзакции
-    public func with(transition: Transition) -> TransitionBuilder {
+    public func with(transition: Transition) -> Self {
         self.transition = transition
         return self
     }
 
     /// Добавить анимацую
     /// - Parameter animated: Анимационная ли транзакция
-    public func with(animated: Bool) -> TransitionBuilder {
+    public func with(animated: Bool) -> Self {
         self.animated = animated
         return self
     }
@@ -116,7 +139,7 @@ public class TransitionBuilder {
     ///
     /// - Parameter hierarchyBuilder: Билдер иерархии модуля
     /// - Returns: Текущий билдер транзакции
-    public func with(builder: AnyHierarchyModuleBuilder) -> TransitionBuilder {
+    public func with(builder: AnyHierarchyModuleBuilder) -> Self {
         self.builder = builder
         return self
     }
@@ -126,7 +149,7 @@ public class TransitionBuilder {
     ///
     /// - Parameter completion: Замыкание завершения анимации транзакции модуля
     /// - Returns: Текущий билдер транзакции
-    public func with(completion: @escaping TransitionCompletion) -> TransitionBuilder {
+    public func with(completion: @escaping TransitionCompletion) -> Self {
         self.completion = completion
         return self
     }
@@ -135,7 +158,7 @@ public class TransitionBuilder {
     public func commit() {
         guard
             let module = builder?.build(with: state, into: hierarchy)
-        else { assertionFailure("The Hierarchy Builder is nil checkout your settings"); return }
+        else { preconditionFailure("The Hierarchy Builder is nil checkout your settings") }
         switch transition {
         case .auto:
             transitionController.show(module)
