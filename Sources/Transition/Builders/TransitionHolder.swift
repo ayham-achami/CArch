@@ -41,6 +41,11 @@ public final class TransitionHolder {
     /// Если анимационно, замыкание, которое будет выполнено после завершения анимации транзакции
     var completion: TransitionCompletion?
     
+    /// Создает и возвращает новый экземпляр `TransitionHolder`
+    public static var make: Self {
+        .init()
+    }
+    
     /// Добавить данные инициализации модуля к билдеру
     ///
     /// - Parameter initialState: Данные инициализации модуля
