@@ -34,6 +34,33 @@ public protocol DIAssembly {
     func assemble(container: DIContainer)
 }
 
+/// Коллекция объектов для добавления в контейнер зависимости
+protocol DIAssemblyCollection: Collection {
+    
+    /// Коллекция объектов
+    var services: [DIAssembly] { get }
+}
+
+// MARK: - ServicesDICollection + Default
+extension DIAssemblyCollection {
+    
+    var startIndex: Int {
+        services.startIndex
+    }
+    
+    var endIndex: Int {
+        services.endIndex
+    }
+    
+    subscript(position: Int) -> DIAssembly {
+        services[position]
+    }
+    
+    func index(after index: Int) -> Int {
+        services.index(after: index)
+    }
+}
+
 /// Протокол отвечающий за создание всех серверов
 public protocol ServicesRecorder {
     
@@ -41,7 +68,16 @@ public protocol ServicesRecorder {
     init()
     
     /// Возвращает всех cервисов бизнес логики
-    ///
     /// - Returns: Сервисы бизнес логики
+    @available(*, deprecated, message: "Use services")
     var records: [DIAssembly] { get }
+    
+    /// Коллекция объектов
+    var recordsCollection: DIAssemblyCollection { get }
+}
+
+// MARK: - ServicesRecorder + Default
+public extension ServicesRecorder {
+    
+    var records: [DIAssembly] { [] }
 }
