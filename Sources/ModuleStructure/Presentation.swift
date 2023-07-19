@@ -30,8 +30,7 @@ import Foundation
 /// унаследованными от `RootPresentationLogic`
 public protocol RootPresentationLogic: CArchProtocol {
 
-    /// обработка ошибки от BusinessLogic слоя
-    ///
-    /// - Parameter error: ошибка от BusinessLogic слоя
+    /// Обработка ошибки от BusinessLogic слоя
+    /// - Parameter error: Ошибка от BusinessLogic слоя
     func encountered(_ error: Error)
 }

@@ -29,7 +29,6 @@ import Foundation
 public protocol StoryboardModuleAssembler: AnyObject {
 
     /// регистрирует компонент `ModuleAssembly` в контейнер зависимости
-    ///
     /// - Parameter assembly: компонент, который надо зарегистрировать
     /// - Returns: ссылку на контейнер зависимостей
     static func assembly<Module>(_ type: Module.Type) -> StorageType.WeakReference<Module> where Module: StoryboardModuleAssembly
@@ -39,7 +38,6 @@ public protocol StoryboardModuleAssembler: AnyObject {
 public protocol LayoutModuleAssembler: AnyObject {
 
     /// регистрирует компонент `ModuleAssembly` в контейнер зависимости
-    ///
     /// - Parameter assembly: компонент, который надо зарегистрировать
     /// - Returns: ссылку на контейнер зависимостей
     static func assembly<Module>(_ type: Module.Type) -> StorageType.WeakReference<Module> where Module: LayoutModuleAssembly
@@ -59,22 +57,18 @@ public typealias DIStoryboardContainer = DIRegistrar & DIResolver & DIStoryboard
 public protocol StoryboardModuleAssembly: AnyModuleAssembly {
 
     /// Зарегистрировать ссылку на вид
-    ///
     /// - Parameter container: Контейнер внедрения зависимостей
     func registerView(in container: DIStoryboardContainer)
 
     /// Зарегистрировать ссылку на presenter
-    ///
     /// - Parameter container: Контейнер внедрения зависимостей
     func registerPresenter(in container: DIStoryboardContainer)
 
     /// Зарегистрировать ссылку на Provider
-    ///
     /// - Parameter container: Контейнер внедрения зависимостей
     func registerProvider(in container: DIStoryboardContainer)
 
     /// Зарегистрировать ссылку на роутер
-    ///
     /// - Parameter container: Контейнер внедрения зависимостей
     func registerRouter(in container: DIStoryboardContainer)
 }
@@ -84,24 +78,24 @@ public typealias DIContainer = DIRegistrar & DIResolver
 
 /// Протокол отвечающий за регистрацию компонентов модуля архитектуры CArch в контейнер зависимости
 public protocol LayoutModuleAssembly: AnyModuleAssembly {
-
+    
+    /// Зарегистрировать рендера
+    /// - Parameter container: Контейнер внедрения зависимостей
+    func registerRenderers(in container: CArch.DIContainer)
+    
     /// Зарегистрировать ссылку на вид
-    ///
     /// - Parameter container: Контейнер внедрения зависимостей
     func registerView(in container: DIContainer)
 
     /// Зарегистрировать ссылку на presenter
-    ///
     /// - Parameter container: Контейнер внедрения зависимостей
     func registerPresenter(in container: DIContainer)
 
     /// Зарегистрировать ссылку на Provider
-    ///
     /// - Parameter container: Контейнер внедрения зависимостей
     func registerProvider(in container: DIContainer)
 
     /// Зарегистрировать ссылку на роутер
-    ///
     /// - Parameter container: Контейнер внедрения зависимостей
     func registerRouter(in container: DIContainer)
 }

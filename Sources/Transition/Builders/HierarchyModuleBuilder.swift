@@ -49,11 +49,10 @@ extension Hierarchy {
 }
 
 /// Любая иерархия модуля
-public protocol AnyHierarchyModuleBuilder {
+@MainActor public protocol AnyHierarchyModuleBuilder {
 
     /// Создает и возвращает новый модуль передавая ему данные
     /// инициализации, с нужной иерархия исходя из объекта `Hierarchy`
-    ///
     /// - Parameters:
     ///   - initialState: Данные инициализации
     ///   - anarchy: Типы иерархии модуля
@@ -73,19 +72,7 @@ public extension AnyHierarchyModuleBuilder where Self: ModuleBuilder {
 }
 
 /// Чистая иерархия модуля простой VC
-public protocol ClearHierarchyModuleBuilder: AnyHierarchyModuleBuilder, ModuleBuilder {}
-
-/// VC в NavigationController
-public protocol NavigationHierarchyModuleBuilder: AnyHierarchyModuleBuilder, ModuleBuilder {}
-
-/// VC Мастер SplitViewController
-public protocol MasterHierarchyModuleBuilder: AnyHierarchyModuleBuilder, ModuleBuilder {}
-
-/// VC Детали SplitViewController
-public protocol DetailsHierarchyModuleBuilder: AnyHierarchyModuleBuilder, ModuleBuilder {}
-
-/// VC c TabItem
-public protocol TabHierarchyModuleBuilder: AnyHierarchyModuleBuilder, ModuleBuilder {}
+@MainActor public protocol ClearHierarchyModuleBuilder: AnyHierarchyModuleBuilder, ModuleBuilder {}
 
 // MARK: - ClearHierarchyModuleBuilder + Default
 public extension ClearHierarchyModuleBuilder {
@@ -96,6 +83,9 @@ public extension ClearHierarchyModuleBuilder {
     }
 }
 
+/// VC в NavigationController
+@MainActor public protocol NavigationHierarchyModuleBuilder: AnyHierarchyModuleBuilder, ModuleBuilder {}
+
 // MARK: - NavigationHierarchyModuleBuilder + Default
 public extension NavigationHierarchyModuleBuilder {
 
@@ -104,6 +94,9 @@ public extension NavigationHierarchyModuleBuilder {
         return initialState == nil ? build() : build(with: initialState!)
     }
 }
+
+/// VC Мастер SplitViewController
+@MainActor public protocol MasterHierarchyModuleBuilder: AnyHierarchyModuleBuilder, ModuleBuilder {}
 
 // MARK: - MasterHierarchyModuleBuilder + Default
 public extension MasterHierarchyModuleBuilder {
@@ -114,6 +107,9 @@ public extension MasterHierarchyModuleBuilder {
     }
 }
 
+/// VC Детали SplitViewController
+@MainActor public protocol DetailsHierarchyModuleBuilder: AnyHierarchyModuleBuilder, ModuleBuilder {}
+
 // MARK: - DetailsHierarchyModuleBuilder + Default
 public extension DetailsHierarchyModuleBuilder {
 
@@ -122,6 +118,9 @@ public extension DetailsHierarchyModuleBuilder {
         return initialState == nil ? build() : build(with: initialState!)
     }
 }
+
+/// VC c TabItem
+@MainActor public protocol TabHierarchyModuleBuilder: AnyHierarchyModuleBuilder, ModuleBuilder {}
 
 // MARK: - TabHierarchyModuleBuilder + Default
 public extension TabHierarchyModuleBuilder {

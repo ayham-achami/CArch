@@ -1,5 +1,5 @@
 //
-//  UIStoryboardSegue+Identifier.swift
+//  Actors.swift
 //
 //  The MIT License (MIT)
 //
@@ -23,42 +23,24 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#if canImport(UIKit)
-import UIKit
+import Foundation
 
-// MARK: - UIStoryboardSegue + CArch
-extension UIStoryboardSegue {
-
-    /// Названине storyboard
-    public struct Identifier: RawRepresentable, Hashable {
-
-        public typealias RawValue = String
-
-        public var rawValue: String
-
-        /// Инициализация
-        ///
-        /// - Parameter rawValue: Названине
-        public init?(rawValue: Identifier.RawValue) {
-            guard !rawValue.isEmpty else { return nil }
-            self.rawValue = rawValue
-        }
-
-        /// Инициализация
-        ///
-        /// - Parameter rawValue: Названине
-        public init?(rawValue: Identifier.RawValue?) {
-            guard let rawValue = rawValue, !rawValue.isEmpty else { return nil }
-            self.rawValue = rawValue
-        }
-
-        public func hash(into hasher: inout Hasher) {
-            hasher.combine(rawValue)
-        }
-
-        public static func == (lhs: Identifier, rhs: Identifier) -> Bool {
-            return lhs.rawValue == rhs.rawValue
-        }
-    }
+/// Глобальный актор для выполнения асинхронных задач бизнес логики
+@globalActor public actor ProvisionActor {
+    
+    /// `ProvisionActor`
+    public static var shared = ProvisionActor()
+    
+    /// Инициализация
+    private init() {}
 }
-#endif
+
+/// Глобальный актор для выполнения асинхронных задач бизнес логики уровня провайдера
+@globalActor public actor MaintenanceActor {
+    
+    /// `MaintenanceActor`
+    public static var shared = MaintenanceActor()
+    
+    /// Инициализация
+    private init() {}
+}

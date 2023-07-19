@@ -27,7 +27,7 @@
 import UIKit
 
 /// Протокол способности оповещения
-public protocol AlertAbility: CArchProtocol {
+@MainActor public protocol AlertAbility: CArchProtocol {
 
     /// Показать диалог оповещения с одной кнопкой
     /// ```
@@ -140,28 +140,28 @@ public extension AlertAbility {
 }
 
 // MARK: - AlertAbility + UIViewController
-public extension AlertAbility where Self: UIViewController {
+extension UIViewController: AlertAbility {
 
-    func displayAlert(with title: String, _ message: String?) {
+    public func displayAlert(with title: String, _ message: String?) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         present(alert, animated: true)
     }
 
-    func displayAlert(with title: String, _ message: String?, _ actions: [UIAlertAction]) {
+    public func displayAlert(with title: String, _ message: String?, _ actions: [UIAlertAction]) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         actions.forEach { alert.addAction($0) }
         present(alert, animated: true)
     }
 
-    func displayAlert(with title: String, _ message: String?, _ textFieldHandler: ((UITextField) -> Void)?, _ actions: [UIAlertAction]) {
+    public func displayAlert(with title: String, _ message: String?, _ textFieldHandler: ((UITextField) -> Void)?, _ actions: [UIAlertAction]) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alert.addTextField(configurationHandler: textFieldHandler)
         actions.forEach { alert.addAction($0) }
         present(alert, animated: true)
     }
 
-    func displayActionSheet(with title: String?, _ message: String?, _ actions: [UIAlertAction]) {
+    public func displayActionSheet(with title: String?, _ message: String?, _ actions: [UIAlertAction]) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .actionSheet)
         actions.forEach { alert.addAction($0) }
         if let popoverController = alert.popoverPresentationController {

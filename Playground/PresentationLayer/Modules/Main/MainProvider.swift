@@ -36,7 +36,7 @@ final class MainProvider: MainProvisionLogic {
     
     /// Инициализация провайдера модуля `Main`
     /// - Parameter presenter: `MainPresenter`
-    init(presenter: MainPresentationLogic) {
+    nonisolated init(presenter: MainPresentationLogic) {
         self.presenter = presenter
     }
 }

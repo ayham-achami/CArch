@@ -23,67 +23,8 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#if canImport(UIKit)
-import UIKit
-
-/// Ошибка подготовки транзакции между модулями
-struct TransitionPrepareError: Error {
-
-    /// Возможные ошибки
-    ///
-    /// - invalidConfigurator: Инвалидный конфигуратор не удалось преобразовать sendr в TransitionConfigurator
-    /// - invalidConvertible: Инвалидный конвертатор не удалось преобразовать destination в AnyModuleInitializer
-    enum Case {
-        case invalidConfigurator
-        case invalidInitializer
-    }
-
-    let `case`: Case
-}
+import Foundation
 
 /// Основной протокол содержащий логику навигации между модулями
 /// все протоколы `RoutingLogic` должны быть унаследованными от `RootRoutingLogic`
-public protocol RootRoutingLogic: CArchProtocol {
-
-    /// Подготовить транзакцию между модулями
-    ///
-    /// - Parameters:
-    ///   - segue: Объект segue, содержащий информацию о модулях, участвующих в segue
-    ///   - sender: Объект создающий транзакцию
-    /// - Throws: `TransitionPrepareError`
-    func prepare(for segue: UIStoryboardSegue, sender: Any?) throws
-
-    /// Показать диалог ошибки
-    /// ```
-    /// +----------------------+
-    /// |        Error         |
-    /// |   Some error has     |
-    /// |   happened check     |
-    /// |   your settings      |
-    /// +----------------------+
-    /// |          OK          |
-    /// +----------------------+
-    /// ```
-    /// - Parameter message: Описание ошибки на текущем языка локализации
-    func showErrorAlert( _ message: String)
-}
-
-// MARK: - RootRoutingLogic + Default
-public extension RootRoutingLogic {
-
-    func prepare(for segue: UIStoryboardSegue, sender: Any?) throws {
-        guard let sender = sender else { return }
-        guard let configurator = sender as? TransitionConfigurator else {
-            throw TransitionPrepareError(case: .invalidConfigurator)
-        }
-        if let initializer = segue.destination as? AnyModuleInitializer {
-            configurator.configurator(initializer)
-        } else if let navigationController = segue.destination as? UINavigationController,
-            let initializer = navigationController.viewControllers.first as? AnyModuleInitializer {
-            configurator.configurator(initializer)
-        } else {
-            throw TransitionPrepareError(case: .invalidInitializer)
-        }
-    }
-}
-#endif
+@MainActor public protocol RootRoutingLogic: CArchProtocol {}

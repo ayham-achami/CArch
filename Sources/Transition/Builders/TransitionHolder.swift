@@ -23,6 +23,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
+#if canImport(UIKit)
 import UIKit
 
 /// Носитель информации о переходе
@@ -47,8 +48,7 @@ public final class TransitionHolder {
     }
     
     /// Добавить данные инициализации модуля к билдеру
-    ///
-    /// - Parameter initialState: Данные инициализации модуля
+    /// - Parameter state: Данные инициализации модуля
     /// - Returns: текущий билдер Транзакции
     public func with(state: ModuleInitialState) -> Self {
         self.state = state
@@ -56,7 +56,6 @@ public final class TransitionHolder {
     }
 
     /// Добавить иерархии модуля к билдеру
-    ///
     /// - Parameter hierarchy: Иерархии модуля
     /// - Returns: Текущий билдер транзакции
     public func with(hierarchy: Hierarchy) -> Self {
@@ -64,8 +63,7 @@ public final class TransitionHolder {
         return self
     }
 
-    /// Добваить тип транзакции к билдеру
-    ///
+    /// Добавить тип транзакции к билдеру
     /// - Parameter transition: Тип транзакции
     /// - Returns: Текущий билдер транзакции
     public func with(transition: TransitionBuilder.Transition) -> Self {
@@ -73,7 +71,7 @@ public final class TransitionHolder {
         return self
     }
 
-    /// Добавить анимацую
+    /// Добавить анимацию
     /// - Parameter animated: Анимационная ли транзакция
     public func with(animated: Bool) -> Self {
         self.animated = animated
@@ -81,17 +79,15 @@ public final class TransitionHolder {
     }
 
     /// Добавить билдер иерархии модуля к билдеру
-    ///
-    /// - Parameter hierarchyBuilder: Билдер иерархии модуля
+    /// - Parameter builder: Билдер иерархии модуля
     /// - Returns: Текущий билдер транзакции
     public func with(builder: AnyHierarchyModuleBuilder) -> Self {
         self.builder = builder
         return self
     }
-
+    
     /// Добавить замыкание завершения анимации транзакции модуля к билдеру
     /// оно выполняется только если тип `Transition` был `Transition.present`
-    ///
     /// - Parameter completion: Замыкание завершения анимации транзакции модуля
     /// - Returns: Текущий билдер транзакции
     public func with(completion: @escaping TransitionCompletion) -> Self {
@@ -99,3 +95,4 @@ public final class TransitionHolder {
         return self
     }
 }
+#endif

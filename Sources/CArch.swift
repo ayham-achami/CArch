@@ -32,12 +32,48 @@ import Foundation
 /// протоколы архитектурные от других
 public protocol CArchProtocol: AnyObject {}
 
-/// Oсновой протокол любого объекта UI модели
+/// Основной протокол любого объекта UI модели
 public protocol UIModel {}
+
+#if canImport(UIKit)
+import UIKit
+public typealias ViewController = UIViewController
+#endif
+
+/// CArch Модуль
+@MainActor public protocol CArchModule: CArchProtocol {
+
+    /// View component
+    var node: ViewController { get }
+
+    /// Инициализатор модуля
+    var initializer: AnyModuleInitializer? { get }
+
+    /// Делегат модуля, объекта ожидаемый результат от текущего модуля
+    var finalizer: AnyModuleFinalizer? { get }
+}
+
+#if canImport(UIKit)
+// MARK: - UIViewController + CArchModule
+extension UIViewController: CArchModule {
+    
+    public var node: UIViewController {
+        self
+    }
+    
+    public var initializer: AnyModuleInitializer? {
+        self as? AnyModuleInitializer
+    }
+    
+    public var finalizer: AnyModuleFinalizer? {
+        self as? AnyModuleFinalizer
+    }
+}
+#endif
 
 /// Базовый протокол любого сервиса слоя бизнес логики
 /// нельзя создавать сервис и не наследовать данный протокол
-public protocol BusinessLogicService: CArchProtocol, CustomStringConvertible, CustomDebugStringConvertible {}
+@MaintenanceActor public protocol BusinessLogicService: CArchProtocol, CustomStringConvertible, CustomDebugStringConvertible {}
 
 // MARK: - BusinessLogicService + StringConvertible
 public extension BusinessLogicService {
@@ -50,3 +86,6 @@ public extension BusinessLogicService {
         description
     }
 }
+
+/// Протокол множества сервисов
+@MaintenanceActor public protocol BusinessLogicServicePool: CArchProtocol {}

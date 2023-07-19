@@ -33,11 +33,7 @@ final class MainRouter: MainRoutingLogic {
     
     private unowned let transitionController: TransitionController
     
-    init(transitionController: TransitionController) {
+    nonisolated init(transitionController: TransitionController) {
         self.transitionController = transitionController
-    }
-
-    func showErrorAlert(_ message: String) {
-        transitionController.displayErrorAlert(with: message)
     }
 }

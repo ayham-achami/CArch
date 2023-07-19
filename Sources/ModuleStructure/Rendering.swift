@@ -23,39 +23,38 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
+import Foundation
 #if canImport(UIKit)
 import UIKit
 
 /// Основной протокол содержащий логику показа данных на вью (экране)
 /// все протоколы `RenderingLogic` должны быть унаследованными от `RootRenderingLogic`
-public protocol RootRenderingLogic: AlertAbility {}
+@MainActor public protocol RootRenderingLogic: AlertAbility {}
 
-/// Рендер с делегацией
-public protocol UIRenderer: ModuleLifeCycle {
+/// Рендер с делегаций
+@MainActor public protocol UIRenderer: ModuleLifeCycle {
     
     /// Тип моделей, которые будут показаны в области действия рендера
     associatedtype ModelType: UIModel
 
     /// Обновить/Изменить контент рендера
-    ///
-    /// - Parameter models: новый контент
+    /// - Parameter content: Новый контент
     func set(content: ModelType)
-
-    /// Объект получающий действий пользователя
-    var delegate: AnyObject? { get set }
-}
-
-// MARK: - UIResponder + Default
-public extension UIRenderer {
-
-    var delegate: AnyObject? { nil }
 }
 
 /// Любое действие пользователя
-public protocol AnyUserInteraction: AnyObject {}
+@MainActor public protocol AnyUserInteraction: AnyObject {}
 
-/// Протокол монибулации жизненный цикл модуля
-public protocol ModuleLifeCycle: CArchProtocol, NSObjectProtocol {
+/// <#Description#>
+public protocol UIRendererPreview {
+    
+    /// <#Description#>
+    /// - Returns: <#description#>
+    static func preview() -> Self
+}
+
+/// Протокол манипуляции жизненный цикл модуля
+@MainActor public protocol ModuleLifeCycle: CArchProtocol {
 
     /// Вызывается когда модуль будет загружен
     /// эквивалентно `viewDidLoad` у `UIViewController`
@@ -72,8 +71,8 @@ public protocol ModuleLifeCycle: CArchProtocol, NSObjectProtocol {
     /// Вызывается когда модуль становится неактивным
     /// эквивалентно `viewDidDisappear` у `UIViewController`
     func moduleDidResignActive()
-
-    /// Уведомляет о том, что размер основего View и его вида собирается измениться.
+    
+    /// Уведомляет о том, что размер основного View и его вида собирается измениться.
     /// эквивалентно `viewWillTransition` у `UIViewController`
     /// - Parameters:
     ///   - size: Новый размер
@@ -83,7 +82,7 @@ public protocol ModuleLifeCycle: CArchProtocol, NSObjectProtocol {
 
 // MARK: - ModuleLifeCycle + Default
 public extension ModuleLifeCycle {
-
+    
     func moduleDidLoad() {}
     func moduleLayoutSubviews() {}
     func moduleDidBecomeActive() {}
@@ -92,32 +91,32 @@ public extension ModuleLifeCycle {
 }
 
 /// Протокол контроля жизненный цикл модуля
-public protocol ModuleLifeCycleOwner: ModuleLifeCycle {
+@MainActor public protocol ModuleLifeCycleOwner: ModuleLifeCycle {
 
-    /// массив подписчиков на изменение жизненнего цикла модуля
+    /// массив подписчиков на изменение жизненного цикла модуля
     var lifeCycle: [ModuleLifeCycle] { get }
 }
 
 // MARK: - ModuleLifeCycleOwner + Default
 public extension ModuleLifeCycleOwner {
-
-    func moduleDidLoad() {
+    
+    @MainActor func moduleDidLoad() {
         lifeCycle.forEach { $0.moduleDidLoad() }
     }
     
-    func moduleLayoutSubviews() {
+    @MainActor func moduleLayoutSubviews() {
         lifeCycle.forEach { $0.moduleLayoutSubviews() }
     }
-
-    func moduleDidBecomeActive() {
+    
+    @MainActor func moduleDidBecomeActive() {
         lifeCycle.forEach { $0.moduleDidBecomeActive() }
     }
-
-    func moduleDidResignActive() {
+    
+    @MainActor func moduleDidResignActive() {
         lifeCycle.forEach { $0.moduleDidResignActive() }
     }
-
-    func moduleWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+    
+    @MainActor func moduleWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         lifeCycle.forEach { $0.moduleWillTransition(to: size, with: coordinator) }
     }
 }

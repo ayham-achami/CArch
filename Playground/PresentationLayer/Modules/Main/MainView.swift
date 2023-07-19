@@ -30,7 +30,7 @@ import UIKit
 protocol MainProvisionLogic: RootProvisionLogic {}
 
 /// Все взаимодействия пользователя с модулем
-typealias MainUserInteraction = MainRendererUserInteraction // & <#SecondUserInteractionIfNeeded#>
+typealias MainUserInteraction = MainRendererUserInteraction 
 
 /// Объект содержаний логику отображения данных
 final class MainViewController: UIViewController {
@@ -39,11 +39,9 @@ final class MainViewController: UIViewController {
     // private let moduleReference = assembly(MainAssembly.self)
 
     // MARK: - Injected properties
-    var provider: MainProvisionLogic!
+    var renderer: MainRenderer!
     var router: MainRoutingLogic!
-
-    // MARK: - Outlet Renderers
-    @IBOutlet private var renderer: MainRenderer!
+    var provider: MainProvisionLogic!
 
     /// состояние модуля `Main`
     private var state = MainModuleState()
@@ -51,14 +49,6 @@ final class MainViewController: UIViewController {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        do {
-            try router.prepare(for: segue, sender: sender)
-        } catch {
-            assertionFailure("Error: [\(error)] Could not to prepare for segue \(segue)")
-        }
     }
 }
 

@@ -59,7 +59,6 @@ public enum StorageType {
         public private(set) var wrapped: Wrapped?
         
         /// Инициализация с объектом
-        ///
         /// - Parameter wrapped: Объект, на которого ссылка будет создано
         public init(_ wrapped: Wrapped) {
             self.wrapped = wrapped
@@ -71,7 +70,6 @@ public enum StorageType {
 public protocol DIRegistrar {
     
     /// Регистрация объекта в контейнер зависимости
-    ///
     /// - Parameters:
     ///   - serviceType: Тип объекта
     ///   - storage: Тип ссылки
@@ -81,7 +79,6 @@ public protocol DIRegistrar {
                          factory: @escaping (DIResolver) -> Service)
     
     /// Регистрация объекта в контейнер зависимости по названию (Таг)
-    ///
     /// - Parameters:
     ///   - serviceType: Тип объекта
     ///   - name: Название (Таг)
@@ -93,7 +90,6 @@ public protocol DIRegistrar {
                          factory: @escaping (DIResolver) -> Service)
     
     /// Регистрация объекта в контейнер зависимости
-    ///
     /// - Parameters:
     ///   - serviceType: Тип объекта
     ///   - storage: Тип ссылки
@@ -103,7 +99,6 @@ public protocol DIRegistrar {
                               factory: @escaping (DIResolver, Arg) -> Service)
     
     /// Регистрация объекта в контейнер зависимости
-    ///
     /// - Parameters:
     ///   - serviceType: Тип объекта
     ///   - storage: Тип ссылки
@@ -117,7 +112,6 @@ public protocol DIRegistrar {
 public extension DIRegistrar {
     
     /// Регистрация объекта в контейнер зависимости
-    ///
     /// - Parameters:
     ///   - serviceType: Тип объекта
     ///   - factory: Блок содержащий код реализующий логику внедрения объекта
@@ -127,7 +121,6 @@ public extension DIRegistrar {
     }
     
     /// Регистрация объекта в контейнер зависимости по названию (Таг)
-    ///
     /// - Parameters:
     ///   - serviceType: Тип объекта
     ///   - name: Название (Таг)
@@ -139,7 +132,6 @@ public extension DIRegistrar {
     }
     
     /// Регистрация объекта в контейнер зависимости
-    ///
     /// - Parameters:
     ///   - serviceType: Тип объекта
     ///   - factory: Блок содержащий код реализующий логику внедрения объекта
@@ -149,7 +141,6 @@ public extension DIRegistrar {
     }
     
     /// Регистрация объекта в контейнер зависимости
-    ///
     /// - Parameters:
     ///   - serviceType: Тип объекта
     ///   - factory: Блок содержащий код реализующий логику внедрения объекта
@@ -163,13 +154,11 @@ public extension DIRegistrar {
 public protocol DIResolver {
     
     /// Получение объекта из контейнера зависимости
-    ///
     /// - Parameter serviceType: Тип объекта
     /// - Returns: Объекта из контейнера зависимости
     func unravel<Service>(_ serviceType: Service.Type) -> Service?
     
     /// Получение объекта из контейнера зависимости
-    ///
     /// - Parameters:
     ///   - serviceType: Тип объекта
     ///   - name: Название объекта (таг) добровольное значение при поиске объекта в контейнере
@@ -177,7 +166,6 @@ public protocol DIResolver {
     func unravel<Service>(_ serviceType: Service.Type, name: String?) -> Service?
     
     /// Получение объекта из контейнера зависимости
-    ///
     /// - Parameters:
     ///   - serviceType: Тип объекта
     ///   - argument: Аргумент чтобы передавать в замыкание фабрики
@@ -185,7 +173,6 @@ public protocol DIResolver {
     func unravel<Service, Arg>(_ serviceType: Service.Type, argument: Arg) -> Service?
     
     /// Получение объекта из контейнера зависимости
-    ///
     /// - Parameters:
     ///   - serviceType: Тип объекта
     ///   - arguments: Аргумент1 чтобы передавать в замыкание фабрики
@@ -194,7 +181,6 @@ public protocol DIResolver {
     func unravel<Service, Arg1, Arg2>(_ serviceType: Service.Type, arguments: Arg1, _ arg2: Arg2) -> Service?
     
     /// Получение объекта из контейнера зависимости
-    ///
     /// - Parameters:
     ///   - serviceType: Тип объекта
     ///   - arguments: Аргумент1 чтобы передавать в замыкание фабрики

@@ -27,10 +27,9 @@
 import UIKit
 
 /// Возможность поделиться разных материалов
-public protocol ShareAbility {
+@MainActor public protocol ShareAbility {
 
     /// Поделиться разных материалов
-    ///
     /// - Parameters:
     ///   - text: Текст
     ///   - image: Изображение
@@ -43,7 +42,6 @@ public protocol ShareAbility {
 public extension ShareAbility {
 
     /// Поделиться разных материалов
-    ///
     /// - Parameters:
     ///   - text: Текст
     ///   - completion: Замыкание вызывается при завершение диалога
@@ -52,7 +50,6 @@ public extension ShareAbility {
     }
 
     /// Поделиться разных материалов
-    ///
     /// - Parameters:
     ///   - text: Текст
     ///   - url: Ссылка
@@ -62,7 +59,6 @@ public extension ShareAbility {
     }
 
     /// Поделиться разных материалов
-    ///
     /// - Parameters:
     ///   - text: Текст
     ///   - url: Ссылка
@@ -73,9 +69,9 @@ public extension ShareAbility {
 }
 
 // MARK: - UIViewController + ShareAbility
-public extension ShareAbility where Self: UIViewController {
+extension UIViewController: ShareAbility {
 
-    func share(_ text: String?, _ image: UIImage?, _ url: URL?, _ completion: (() -> Void)?) {
+    public func share(_ text: String?, _ image: UIImage?, _ url: URL?, _ completion: (() -> Void)?) {
         var activityItems = [Any]()
         if let text = text {
             activityItems.append(text + " ")

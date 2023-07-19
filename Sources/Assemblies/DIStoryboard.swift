@@ -31,7 +31,6 @@ public protocol DIStoryboard {
     
     /// Настроить замыкание, которое необходимо
     /// выполнять при заверении инициализации UIViewController из Storyboard
-    ///
     /// - Parameters:
     ///   - controllerType: Тип UIViewController
     ///   - name: Названине UIViewController
@@ -46,7 +45,6 @@ public extension DIStoryboard {
     
     /// Настроить замыкание, которое необходимо
     /// выполнять при заверении инициализации UIViewController из Storyboard
-    ///
     /// - Parameters:
     ///   - controllerType: Тип UIViewController
     ///   - initCompleted: Замыкание инициализации

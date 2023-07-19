@@ -38,7 +38,6 @@ public protocol AnyDIAssemblyFactory {
     init()
 
     /// Выполнять регистрации всех сервисов бизнес логики в контейнер зависимости
-    ///
     /// - Parameter recorder: Класс отвечающий за создание всех серверов
     func record<Recorder>(_ recorder: Recorder.Type) where Recorder: ServicesRecorder
 }
@@ -53,7 +52,6 @@ public protocol StoryboardDIAssemblyFactory: AnyDIAssemblyFactory {
     var storyboard: DIStoryboard { get }
     
     /// Регистрирует компонент модуля в контейнер зависимости
-    ///
     /// - Parameter module: Модуль
     /// - Returns: Модуль после регистрации
     func assembly<Module>(_ module: Module) -> Module where Module: StoryboardModuleAssembly
@@ -66,7 +64,6 @@ public protocol LayoutDIAssemblyFactory: AnyDIAssemblyFactory {
     var layoutContainer: DIContainer { get }
     
     /// Регистрирует компонент модуля в контейнер зависимости
-    ///
     /// - Parameter module: Модуль
     /// - Returns: Модуль после регистрации
     func assembly<Module>(_ module: Module) -> Module where Module: LayoutModuleAssembly

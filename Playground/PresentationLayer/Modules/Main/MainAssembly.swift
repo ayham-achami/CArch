@@ -28,18 +28,6 @@ import UIKit
 
 /// Пространство имен модуля Main
 struct MainModule {
-    
-    /// Объект содержащий логику преобразования из `UIStoryboard` и `UIViewController`
-    final class Convertor: ModuleStoryboardConvertor {
-          
-        static var storyboardName: UIStoryboard.Name {
-            UIStoryboard.Name(rawValue: "Main")!
-        }
-        
-        static var viewControllerName: UIViewController.Name {
-            UIViewController.Name(class: MainViewController.self)!
-        }
-    }
 
     /// Объект содержащий логику создание модуля `Main` 
     /// с чистой иерархии (просто ViewController) 
@@ -48,13 +36,13 @@ struct MainModule {
         typealias InitialStateType = MainModuleState.InitialStateType
         
         func build(with initialState: InitialStateType) -> CArchModule {
-            let module = Convertor.viewController(type: MainViewController.self)!
+            let module = build()
             module.initializer?.set(initialState: initialState)
             return module
         }
         
         func build() -> CArchModule {
-            Convertor.viewController(type: MainViewController.self)!
+            preconditionFailure()
         }
     }
 }

@@ -26,24 +26,6 @@
 #if canImport(UIKit)
 import UIKit
 
-/// Протокол работы с документами
-public protocol DocumentInteractionAbility: CArchProtocol {
-
-    /// Показать содержание документа
-    /// - Parameters:
-    ///   - url: Ссылка к документу на диске
-    ///   - delegate: Набор методов, которые вы можете реализовать для ответа на сообщения от контроллера взаимодействия документов.
-    func showPreview(for url: URL, delegate: UIDocumentInteractionControllerDelegate) -> Bool
-}
-
-// MARK: - DocumentInteractionAbility + UIViewController
-public extension DocumentInteractionAbility where Self: UIViewController {
-
-    func showPreview(for url: URL, delegate: UIDocumentInteractionControllerDelegate) -> Bool {
-        return UIDocumentInteractionController(url: url, delegate: delegate).presentPreview(animated: true)
-    }
-}
-
 // MARK: UIDocumentInteractionController + Init
 private extension UIDocumentInteractionController {
 
@@ -54,6 +36,24 @@ private extension UIDocumentInteractionController {
     convenience init(url: URL, delegate: UIDocumentInteractionControllerDelegate) {
         self.init(url: url)
         self.delegate = delegate
+    }
+}
+
+/// Протокол работы с документами
+@MainActor public protocol DocumentInteractionAbility: CArchProtocol {
+
+    /// Показать содержание документа
+    /// - Parameters:
+    ///   - url: Ссылка к документу на диске
+    ///   - delegate: Набор методов, которые вы можете реализовать для ответа на сообщения от контроллера взаимодействия документов.
+    func showPreview(for url: URL, delegate: UIDocumentInteractionControllerDelegate) -> Bool
+}
+
+// MARK: - DocumentInteractionAbility + UIViewController
+extension UIViewController: DocumentInteractionAbility {
+
+    public func showPreview(for url: URL, delegate: UIDocumentInteractionControllerDelegate) -> Bool {
+        return UIDocumentInteractionController(url: url, delegate: delegate).presentPreview(animated: true)
     }
 }
 

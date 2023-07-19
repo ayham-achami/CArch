@@ -27,13 +27,12 @@
 import UIKit
 
 /// Тип слабая ссылка на объект
-public class ViewBox<View: UIView> {
+public final class ViewBox<View: UIView> {
 
     /// Объект назначения
     public private(set) weak var view: View?
 
     /// Инициализация с объектом
-    ///
     /// - Parameter view: Объект, на которого ссылка будет создано
     public init(_ view: View) {
         self.view = view
@@ -41,14 +40,13 @@ public class ViewBox<View: UIView> {
 }
 
 /// Делегат нажатия на экране, чтобы скрыть клавиатуру
-public final class HideKeyboardWhenTappedAroundDelegate: NSObject, UIGestureRecognizerDelegate {
+@MainActor public final class HideKeyboardWhenTappedAroundDelegate: NSObject, UIGestureRecognizerDelegate {
 
     /// Исключенные элементы при нажатии
     private let exceptElements: [ViewBox<UIView>]
     private let exceptTypes: [AnyClass]
 
     /// Инициализация с исключенными элементам при нажатии
-    ///
     /// - Parameter exceptElements: Исключенные элементы при нажатии
     fileprivate init(exceptElements: [ViewBox<UIView>], exceptTypes: [AnyClass]) {
         self.exceptElements = exceptElements
@@ -65,20 +63,20 @@ public final class HideKeyboardWhenTappedAroundDelegate: NSObject, UIGestureReco
 }
 
 /// Способность управления клавиатурой
-public protocol KeyboardManagedAbility {
+@MainActor public protocol KeyboardManagedAbility {
 
-    ///  Скрыть клавиатуру при нажатии на экране
-    ///
-    /// - Parameter exceptElements: Исключенные элементы при нажатии
-    /// - Parameter exceptTypes: Исключенные типы при нажатии
+    /// Скрыть клавиатуру при нажатии на экране
+    /// - Parameters:
+    ///   - exceptElements: Исключенные элементы при нажатии
+    ///   - exceptTypes: Исключенные типы при нажатии
     /// - Returns: Делегат нажатия на экране
     func hideKeyboardWhenTappedAround(exceptElements: [ViewBox<UIView>], exceptTypes: [AnyClass]) -> HideKeyboardWhenTappedAroundDelegate
 }
 
 // MARK: - KeyboardManagedAbility + UIViewController
-public extension KeyboardManagedAbility where Self: UIViewController {
+extension UIViewController: KeyboardManagedAbility {
 
-    func hideKeyboardWhenTappedAround(exceptElements: [ViewBox<UIView>] = [], exceptTypes: [AnyClass] = []) -> HideKeyboardWhenTappedAroundDelegate {
+    public func hideKeyboardWhenTappedAround(exceptElements: [ViewBox<UIView>] = [], exceptTypes: [AnyClass] = []) -> HideKeyboardWhenTappedAroundDelegate {
         let delegate = HideKeyboardWhenTappedAroundDelegate(exceptElements: exceptElements, exceptTypes: exceptTypes)
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
         tap.cancelsTouchesInView = false

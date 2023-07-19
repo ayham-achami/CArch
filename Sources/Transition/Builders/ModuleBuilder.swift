@@ -26,10 +26,9 @@
 import Foundation
 
 /// Билдер любого модуля
-public protocol AnyModuleBuilder {
-
+@MainActor public protocol AnyModuleBuilder {
+    
     /// Создает и возвращает новый модуль передавая ему данные инициализации
-    ///
     /// - Parameter initialState: Данные инициализации
     /// - Returns: СArch Модуль
     func build(with initialState: ModuleInitialState) -> CArchModule
@@ -42,13 +41,11 @@ public protocol ModuleBuilder: AnyModuleBuilder {
     associatedtype InitialStateType: ModuleInitialState
 
     /// Создает и возвращает новый модуль передавая ему данные инициализации
-    ///
     /// - Parameter initialState: Данные инициализации
     /// - Returns: CArch Модуль
     func build(with initialState: InitialStateType) -> CArchModule
 
     /// Создает и возвращает новый модуль
-    ///
     /// - Returns: CArch Модуль
     func build() -> CArchModule
 }

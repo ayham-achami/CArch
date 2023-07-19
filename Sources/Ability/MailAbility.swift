@@ -23,22 +23,22 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
-#if canImport(MessageUI)
+#if canImport(UIKit) && canImport(MessageUI)
+import UIKit
 import MessageUI
 
 /// Возможность показать экран отправление E-Mail
-public protocol MailAbility {
+@MainActor public protocol MailAbility {
 
-    /// Показать cтандартный интерфейс для управления, редактирования и отправки сообщений электронной почты.
-    ///
+    /// Показать стандартный интерфейс для управления, редактирования и отправки сообщений электронной почты.
     /// - Parameter mailComposer: Стандартный интерфейс для управления электронной почты.
     func displayMailComposer(mailComposer: MFMailComposeViewController)
 }
 
 // MARK: - UIViewController + MailAbility
-public extension MailAbility where Self: UIViewController {
+extension UIViewController: MailAbility {
 
-    func displayMailComposer(mailComposer: MFMailComposeViewController) {
+    public func displayMailComposer(mailComposer: MFMailComposeViewController) {
         present(mailComposer, animated: true)
     }
 }

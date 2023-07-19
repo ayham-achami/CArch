@@ -27,28 +27,26 @@
 import UIKit
 
 /// Билдер транзакции
-public final class TransitionBuilder {
+@MainActor public final class TransitionBuilder {
 
     /// Типы транзакции
-    ///
-    /// - auto: Показать модуль если у source есть `UINavigationController` то, выполняется push если нет то, выполняется present
-    /// - push: Запушать модуль через `UINavigationController`
-    /// - detail: Запушать модуль как DetailViewController
-    /// - present: Презентовать модуль
-    /// - embed: Добавить childe `UIViewController`
-    /// - customPresent:
     public enum Transition {
 
+        // Показать модуль если у source есть `UINavigationController` то, выполняется push если нет то, выполняется present
         case auto
+        // Запушать модуль через `UINavigationController`
         case push
+        // Запушать модуль как DetailViewController
         case detail
+        // Презентовать модуль
         case present
+        // Добавить childe `UIViewController`
         case embed(UIView)
+        // Кастомный Презентовать модуль
         case customPresent(UIModalPresentationStyle, UIModalTransitionStyle)
     }
-
+    
     /// Фабричный метод создания билдера
-    ///
     /// - Parameter transitionController: Контролер перехода между моделями
     /// - Returns: Билдер транзакции
     static public func with(_ transitionController: TransitionController) -> Self {
@@ -81,7 +79,6 @@ public final class TransitionBuilder {
     private unowned var transitionController: TransitionController
 
     /// Инициализации
-    ///
     /// - Parameter transitionController: Контролер перехода между моделями
     private init(_ transitionController: TransitionController) {
         self.transitionController = transitionController
@@ -100,27 +97,24 @@ public final class TransitionBuilder {
         self.completion = holder.completion
         self.transitionController = transitionController
     }
-
+    
     /// Добавить данные инициализации модуля к билдеру
-    ///
-    /// - Parameter initialState: Данные инициализации модуля
-    /// - Returns: текущий билдер Транзакции
+    /// - Parameter state: Данные инициализации модуля
+    /// - Returns: Tекущий билдер Транзакции
     public func with(state: ModuleInitialState) -> Self {
         self.state = state
         return self
     }
 
     /// Добавить иерархии модуля к билдеру
-    ///
     /// - Parameter hierarchy: Иерархии модуля
     /// - Returns: Текущий билдер транзакции
     public func with(hierarchy: Hierarchy) -> Self {
         self.hierarchy = hierarchy
         return self
     }
-
-    /// Добваить тип транзакции к билдеру
-    ///
+    
+    /// Добавить тип транзакции к билдеру
     /// - Parameter transition: Тип транзакции
     /// - Returns: Текущий билдер транзакции
     public func with(transition: Transition) -> Self {
@@ -128,25 +122,23 @@ public final class TransitionBuilder {
         return self
     }
 
-    /// Добавить анимацую
+    /// Добавить анимацию
     /// - Parameter animated: Анимационная ли транзакция
     public func with(animated: Bool) -> Self {
         self.animated = animated
         return self
     }
-
+    
     /// Добавить билдер иерархии модуля к билдеру
-    ///
-    /// - Parameter hierarchyBuilder: Билдер иерархии модуля
+    /// - Parameter builder: Билдер иерархии модуля
     /// - Returns: Текущий билдер транзакции
     public func with(builder: AnyHierarchyModuleBuilder) -> Self {
         self.builder = builder
         return self
     }
-
+    
     /// Добавить замыкание завершения анимации транзакции модуля к билдеру
     /// оно выполняется только если тип `Transition` был `Transition.present`
-    ///
     /// - Parameter completion: Замыкание завершения анимации транзакции модуля
     /// - Returns: Текущий билдер транзакции
     public func with(completion: @escaping TransitionCompletion) -> Self {
@@ -169,10 +161,10 @@ public final class TransitionBuilder {
         case .present:
             transitionController.present(module, animated: animated, completion: completion)
         case .embed(let container):
-            transitionController.embed(submodule: module.view, container: container)
+            transitionController.embed(submodule: module.node, container: container)
         case .customPresent(let presentationStyle, let transitionStyle):
-            module.view.modalPresentationStyle = presentationStyle
-            module.view.modalTransitionStyle = transitionStyle
+            module.node.modalPresentationStyle = presentationStyle
+            module.node.modalTransitionStyle = transitionStyle
             transitionController.present(module, animated: animated, completion: completion)
         }
     }

@@ -26,12 +26,14 @@
 import Foundation
 
 /// Преобразование между типами, в случае ошибки сбрасывается фатальная ошибка
-/// - Parameter converted: объект для преобразования
-/// - Parameter type: тип, в котором необходимо преобразовать
+/// - Parameters:
+///   - some: Объект для преобразования
+///   - type: Тип, в котором необходимо преобразовать
+/// - Returns: Новый тип
 func convert<T>(some: Any, to type: T.Type) -> T where T: Any {
-    guard let converted = some as? T else {
-        preconditionFailure("Could not convert \(String(describing: some.self)) to \(String(describing: T.self))")
-    }
+    guard
+        let converted = some as? T
+    else { preconditionFailure("Could not convert \(String(describing: some.self)) to \(String(describing: T.self))") }
     return converted
 }
 
@@ -43,11 +45,10 @@ public protocol ModuleInitialState {}
 public extension ModuleInitialState {
 
     /// Преобразование статус инициализации в заданный тип
-    ///
     /// - Parameter type: Тип для преобразования
     /// - Returns: Преобразованный объект с заданном типе или сбрасывается фатальная ошибка
     func `is`<StateType>(_ type: StateType.Type) -> StateType where StateType: ModuleInitialState {
-        return convert(some: self, to: StateType.self)
+        convert(some: self, to: StateType.self)
     }
 }
 
@@ -59,7 +60,6 @@ public protocol ModuleFinalState {}
 public extension ModuleFinalState {
 
     /// Преобразование финальный статус в заданный тип
-    ///
     /// - Parameter type: Тип для преобразования
     /// - Returns: Преобразованный объект с заданном типе или сбрасывается фатальная ошибка
     func `is`<StateType>(_ type: StateType.Type) -> StateType where StateType: ModuleFinalState {
@@ -75,6 +75,7 @@ public extension AnyReadOnlyState {
 
     /// Преобразование состояние модуля в состояние только для чтения или сбрасывается фатальная ошибка
     /// - Parameter type: Тип для преобразования
+    /// - Returns:  Преобразованный объект
     func `is`<StateType>(_ type: StateType.Type) -> StateType where StateType: AnyReadOnlyState {
         convert(some: self, to: StateType.self)
     }
@@ -155,12 +156,10 @@ public extension Optional where Wrapped: ModuleInitialState {
     /// Возвращает не опциональный статус инициализации, если
     /// статус инициализации nil сбрасывается фатальная ошибка
     var initial: Wrapped {
-        switch self {
-        case .none:
-            preconditionFailure("initialState is nil, You must set an initial before call state.initialState")
-        case .some(let state):
-            return state
-        }
+        guard
+            case let .some(wrapped) = self
+        else { preconditionFailure("initialState is nil, You must set an initial before call state.initialState") }
+        return wrapped
     }
 }
 
@@ -170,11 +169,9 @@ public extension Optional where Wrapped: ModuleFinalState {
     /// Возвращает не опциональный финальный статус ,
     /// если финальный статус nil сбрасывается фатальная ошибка
     var final: Wrapped {
-        switch self {
-        case .none:
-            preconditionFailure("FinalState is nil, You must set an final before call state.finalState")
-        case .some(let state):
-            return state
-        }
+        guard
+            case let .some(wrapped) = self
+        else { preconditionFailure("FinalState is nil, You must set an final before call state.finalState") }
+        return wrapped
     }
 }

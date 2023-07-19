@@ -23,13 +23,14 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
+#if canImport(UIKit)
 import UIKit
 
 /// Тип перехода с преимуществом
 public protocol RoutingAdvantageType {}
 
 /// Перехода с преимуществом
-public protocol RoutingAdvantage: AnyObject {
+@MainActor public protocol RoutingAdvantage: AnyObject {
     
     /// Требуется переход с преимуществом
     /// - Parameter type: Тип
@@ -38,7 +39,7 @@ public protocol RoutingAdvantage: AnyObject {
 }
 
 /// Представление о контроле перехода
-public protocol TransitionControllerRepresentable {
+@MainActor public protocol TransitionControllerRepresentable {
     
     /// Протокол контроля перехода между моделями
     var transition: TransitionController { get }
@@ -65,7 +66,7 @@ public extension RootRoutingLogic where Self: TransitionControllerRepresentable 
     /// - Parameters:
     ///   - type: Тип
     ///   - advantage: Перехода с преимуществом
-    func advantageRoute<T>(with type: T, from advantage: RoutingAdvantage) where T: RoutingAdvantageType {
+    @MainActor func advantageRoute<T>(with type: T, from advantage: RoutingAdvantage) where T: RoutingAdvantageType {
         let holder = advantage.didRequestTransition(with: type)
         TransitionBuilder
             .with(transition, holder)
@@ -73,3 +74,4 @@ public extension RootRoutingLogic where Self: TransitionControllerRepresentable 
         
     }
 }
+#endif
