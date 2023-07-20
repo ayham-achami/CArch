@@ -1,6 +1,6 @@
 import CArch
 
-@Provisioning
+// @Provisioning
 protocol TestProtocol {
 
     func syncFunction(_ object: Any)
@@ -44,5 +44,5 @@ struct Test: TestProtocol {
 }
 
 let test = Test()
-test.asyncFunction(0)
-test.asyncThrowsObtain(with: "Id")
+// test.asyncFunction(0)
+// test.asyncThrowsObtain(with: "Id")

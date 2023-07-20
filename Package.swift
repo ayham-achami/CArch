@@ -7,21 +7,26 @@ import CompilerPluginSupport
 let package = Package(
     name: "CArch",
     platforms: [
-        .macOS(.v10_15),
         .iOS(.v13),
+        .macOS(.v12),
         .macCatalyst(.v13)
     ],
     products: [
         .library(
             name: "CArch",
-            targets: ["CArch"]),
+            targets: [
+                "CArch"
+            ]),
         .executable(
             name: "CArchClient",
-            targets: ["CArchClient"]
+            targets: [
+                "CArchClient"
+            ]
         ),
     ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-syntax.git", from: "509.0.0-swift-5.9-DEVELOPMENT-SNAPSHOT-2023-04-25-b"),
+        .package(url: "https://github.com/realm/SwiftLint", from: "0.52.4"),
     ],
     targets: [
         .macro(
@@ -30,18 +35,31 @@ let package = Package(
                 .product(name: "SwiftSyntaxMacros", package: "swift-syntax"),
                 .product(name: "SwiftCompilerPlugin", package: "swift-syntax")
             ],
-            path: "CArchMacros"
+            path: "CArchMacros",
+            plugins: [
+                .plugin(name: "SwiftLintPlugin", package: "SwiftLint"),
+            ]
         ),
         .target(
             name: "CArch",
-            dependencies: ["CArchMacros"],
+            dependencies: [
+                "CArchMacros"
+            ],
             path: "Sources",
-            exclude: ["Info.plist"]
+            exclude: ["Info.plist"],
+            plugins: [
+                .plugin(name: "SwiftLintPlugin", package: "SwiftLint"),
+            ]
         ),
         .executableTarget(
             name: "CArchClient",
-            dependencies: ["CArch"],
-            path: "CArchClient"
+            dependencies: [
+                "CArch"
+            ],
+            path: "CArchClient",
+            plugins: [
+                .plugin(name: "SwiftLintPlugin", package: "SwiftLint"),
+            ]
         ),
         .testTarget(
             name: "CArchTests",
@@ -49,7 +67,10 @@ let package = Package(
                 "CArch"
             ],
             path: "CArchTests",
-            exclude: ["Info.plist"]
+            exclude: ["Info.plist"],
+            plugins: [
+                .plugin(name: "SwiftLintPlugin", package: "SwiftLint"),
+            ]
         ),
     ],
     swiftLanguageVersions: [.v5]

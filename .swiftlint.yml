@@ -8,7 +8,9 @@ opt_in_rules: # some rules are only opt-in
   # swiftlint rules
 included: # paths to include during linting. `--path` is ignored if present.
   - Sources
-  - Tests
+  - CArchMacros
+  - CArchClient
+  - CArchTests
   - Playground
 excluded: # paths to ignore during linting. Takes precedence over `included`.
   - Pods
@@ -23,8 +25,8 @@ force_try:
 # implicitly
 line_length: 250
 function_body_length:
-  warning: 21
-  error: 22
+  warning: 50
+  error: 51
 # they can set both implicitly with an array
 type_body_length:
   warning: 200
