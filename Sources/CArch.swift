@@ -25,6 +25,9 @@
 
 import Foundation
 
+@attached(conformance)
+public macro Provisioning() = #externalMacro(module: "CArchMacros", type: "ProvisioningMacro")
+
 /// Основной протокол новой архитектурой, все протоколы
 /// компонентов архитектурой должны быть унаследованным
 /// от этого протокола, основная задача протокола `CArchProtocol`
