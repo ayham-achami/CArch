@@ -49,7 +49,7 @@ extension Hierarchy {
 }
 
 /// Любая иерархия модуля
-@MainActor public protocol AnyHierarchyModuleBuilder {
+public protocol AnyHierarchyModuleBuilder {
 
     /// Создает и возвращает новый модуль передавая ему данные
     /// инициализации, с нужной иерархия исходя из объекта `Hierarchy`
@@ -72,7 +72,7 @@ public extension AnyHierarchyModuleBuilder where Self: ModuleBuilder {
 }
 
 /// Чистая иерархия модуля простой VC
-@MainActor public protocol ClearHierarchyModuleBuilder: AnyHierarchyModuleBuilder, ModuleBuilder {}
+public protocol ClearHierarchyModuleBuilder: AnyHierarchyModuleBuilder, ModuleBuilder {}
 
 // MARK: - ClearHierarchyModuleBuilder + Default
 public extension ClearHierarchyModuleBuilder {
@@ -84,7 +84,7 @@ public extension ClearHierarchyModuleBuilder {
 }
 
 /// VC в NavigationController
-@MainActor public protocol NavigationHierarchyModuleBuilder: AnyHierarchyModuleBuilder, ModuleBuilder {}
+public protocol NavigationHierarchyModuleBuilder: AnyHierarchyModuleBuilder, ModuleBuilder {}
 
 // MARK: - NavigationHierarchyModuleBuilder + Default
 public extension NavigationHierarchyModuleBuilder {
@@ -96,7 +96,7 @@ public extension NavigationHierarchyModuleBuilder {
 }
 
 /// VC Мастер SplitViewController
-@MainActor public protocol MasterHierarchyModuleBuilder: AnyHierarchyModuleBuilder, ModuleBuilder {}
+public protocol MasterHierarchyModuleBuilder: AnyHierarchyModuleBuilder, ModuleBuilder {}
 
 // MARK: - MasterHierarchyModuleBuilder + Default
 public extension MasterHierarchyModuleBuilder {
@@ -108,7 +108,7 @@ public extension MasterHierarchyModuleBuilder {
 }
 
 /// VC Детали SplitViewController
-@MainActor public protocol DetailsHierarchyModuleBuilder: AnyHierarchyModuleBuilder, ModuleBuilder {}
+public protocol DetailsHierarchyModuleBuilder: AnyHierarchyModuleBuilder, ModuleBuilder {}
 
 // MARK: - DetailsHierarchyModuleBuilder + Default
 public extension DetailsHierarchyModuleBuilder {
@@ -120,7 +120,7 @@ public extension DetailsHierarchyModuleBuilder {
 }
 
 /// VC c TabItem
-@MainActor public protocol TabHierarchyModuleBuilder: AnyHierarchyModuleBuilder, ModuleBuilder {}
+public protocol TabHierarchyModuleBuilder: AnyHierarchyModuleBuilder, ModuleBuilder {}
 
 // MARK: - TabHierarchyModuleBuilder + Default
 public extension TabHierarchyModuleBuilder {

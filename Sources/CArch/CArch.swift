@@ -25,9 +25,6 @@
 
 import Foundation
 
-@attached(conformance)
-public macro Provisioning() = #externalMacro(module: "CArchMacros", type: "ProvisioningMacro")
-
 /// Основной протокол новой архитектурой, все протоколы
 /// компонентов архитектурой должны быть унаследованным
 /// от этого протокола, основная задача протокола `CArchProtocol`
@@ -37,14 +34,15 @@ public protocol CArchProtocol: AnyObject {}
 
 /// Основной протокол любого объекта UI модели
 public protocol UIModel {}
-
-#if canImport(UIKit)
+#if os(iOS)
 import UIKit
 public typealias ViewController = UIViewController
+#else
+public typealias ViewController = Any
 #endif
 
 /// CArch Модуль
-@MainActor public protocol CArchModule: CArchProtocol {
+public protocol CArchModule: CArchProtocol {
 
     /// View component
     var node: ViewController { get }
@@ -57,10 +55,12 @@ public typealias ViewController = UIViewController
 }
 
 #if canImport(UIKit)
+import UIKit
+
 // MARK: - UIViewController + CArchModule
 extension UIViewController: CArchModule {
     
-    public var node: UIViewController {
+    public var node: ViewController {
         self
     }
     
@@ -92,3 +92,7 @@ public extension BusinessLogicService {
 
 /// Протокол множества сервисов
 @MaintenanceActor public protocol BusinessLogicServicePool: CArchProtocol {}
+
+/// <#Description#>
+@attached(conformance)
+public macro SyncAlias() = #externalMacro(module: "CArchMacros", type: "SyncAliasMacro")

@@ -42,6 +42,7 @@ public protocol AnyDIAssemblyFactory {
     func record<Recorder>(_ recorder: Recorder.Type) where Recorder: ServicesRecorder
 }
 
+#if canImport(UIKit)
 /// Протокол получения доступа к контейнеру зависимости с Storyboard
 public protocol StoryboardDIAssemblyFactory: AnyDIAssemblyFactory {
     
@@ -56,6 +57,7 @@ public protocol StoryboardDIAssemblyFactory: AnyDIAssemblyFactory {
     /// - Returns: Модуль после регистрации
     func assembly<Module>(_ module: Module) -> Module where Module: StoryboardModuleAssembly
 }
+#endif
 
 /// Протокол получения доступа к контейнеру зависимости
 public protocol LayoutDIAssemblyFactory: AnyDIAssemblyFactory {

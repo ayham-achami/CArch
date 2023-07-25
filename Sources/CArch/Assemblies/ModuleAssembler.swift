@@ -25,6 +25,7 @@
 
 import Foundation
 
+#if canImport(UIKit)
 /// Протокол отвечающий за регистрацию компонентов архитектуры CArch в контейнер зависимости
 public protocol StoryboardModuleAssembler: AnyObject {
 
@@ -33,6 +34,7 @@ public protocol StoryboardModuleAssembler: AnyObject {
     /// - Returns: ссылку на контейнер зависимостей
     static func assembly<Module>(_ type: Module.Type) -> StorageType.WeakReference<Module> where Module: StoryboardModuleAssembly
 }
+#endif
 
 /// Протокол отвечающий за регистрацию компонентов архитектуры CArch в контейнер зависимости
 public protocol LayoutModuleAssembler: AnyObject {
@@ -50,6 +52,7 @@ public protocol AnyModuleAssembly {
     init()
 }
 
+#if canImport(UIKit)
 /// Контейнер зависимости + Storyboard
 public typealias DIStoryboardContainer = DIRegistrar & DIResolver & DIStoryboard
 
@@ -72,6 +75,7 @@ public protocol StoryboardModuleAssembly: AnyModuleAssembly {
     /// - Parameter container: Контейнер внедрения зависимостей
     func registerRouter(in container: DIStoryboardContainer)
 }
+#endif
 
 /// Контейнер зависимости
 public typealias DIContainer = DIRegistrar & DIResolver

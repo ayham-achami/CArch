@@ -120,4 +120,14 @@ public extension ModuleLifeCycleOwner {
         lifeCycle.forEach { $0.moduleWillTransition(to: size, with: coordinator) }
     }
 }
+
+public extension UIRenderer where Self: UIViewController {
+    
+    func embed(into parent: UIViewController) {
+        parent.addChild(self)
+        view.frame = parent.view.frame
+        parent.view.addSubview(view)
+        didMove(toParent: parent)
+    }
+}
 #endif

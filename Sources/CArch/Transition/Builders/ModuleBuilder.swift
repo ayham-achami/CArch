@@ -26,7 +26,7 @@
 import Foundation
 
 /// Билдер любого модуля
-@MainActor public protocol AnyModuleBuilder {
+public protocol AnyModuleBuilder {
     
     /// Создает и возвращает новый модуль передавая ему данные инициализации
     /// - Parameter initialState: Данные инициализации

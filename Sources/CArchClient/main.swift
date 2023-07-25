@@ -1,8 +1,11 @@
 import CArch
 
-// @Provisioning
-protocol TestProtocol {
+protocol TestProtocolInc {}
+protocol TestProtocolInc2 {}
 
+@SyncAlias
+protocol TestProtocol: TestProtocolInc, ErrorAsyncHandler {
+    
     func syncFunction(_ object: Any)
     
     func asyncFunction(_ object: Any) async
@@ -41,8 +44,13 @@ struct Test: TestProtocol {
     func asyncThrowsObtain(with id: String, and object: Any) async throws {
         print(id, object)
     }
+    
+    func encountered(_ error: Swift.Error) {
+        print(error)
+    }
 }
 
 let test = Test()
-// test.asyncFunction(0)
-// test.asyncThrowsObtain(with: "Id")
+test.asyncFunction(0)
+test.asyncThrowsFunction("Some")
+test.asyncThrowsObtain(with: "Id")
