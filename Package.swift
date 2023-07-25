@@ -44,7 +44,7 @@ let package = Package(
                 "CArchMacros"
             ],
             exclude: [
-                "Sources/CArch/Info.plist"
+                "Info.plist"
             ]
             //plugins: [.plugin(name: "SwiftLintPlugin", package: "SwiftLint")]
         ),
