@@ -121,12 +121,17 @@ public extension ModuleLifeCycleOwner {
     }
 }
 
+// MARK: - UIRenderer + UIViewController
 public extension UIRenderer where Self: UIViewController {
     
-    func embed(into parent: UIViewController) {
+    /// <#Description#>
+    /// - Parameters:
+    ///   - parent: <#parent description#>
+    ///   - container: <#container description#>
+    func embed(into parent: UIViewController, container: UIView? = nil) {
         parent.addChild(self)
         view.frame = parent.view.frame
-        parent.view.addSubview(view)
+        (container ?? parent.view).addSubview(view)
         didMove(toParent: parent)
     }
 }
