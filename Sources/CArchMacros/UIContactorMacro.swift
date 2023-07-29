@@ -13,7 +13,7 @@ public struct UIContactorMacro: ExtensionMacro {
         guard
             let protocolDecl = declaration.as(ProtocolDeclSyntax.self)
         else { throw ProtocolsMacros.Error.notProtocol }
-            
+        
         let functions = functions(from: protocolDecl)
         
         let protocolName = protocolDecl.identifier.text
@@ -22,6 +22,7 @@ public struct UIContactorMacro: ExtensionMacro {
                 function
             }
         }
+        
         return [extensionDecl]
     }
     
@@ -39,10 +40,25 @@ public struct UIContactorMacro: ExtensionMacro {
                 $0.signature.output == nil
             }
             .compactMap {
-                $0.with(\.identifier, .identifier("async\($0.identifier.text.capitalized)"))
+                $0.with(\.identifier, .identifier("nonisolated\($0.identifier.text.capitalized)"))
                     .with(\.signature, $0.signature)
                     .with(\.body, .awaitSyntax($0))
+                    .addModifier(.init(name: .keyword(.nonisolated)))
             }
     }
 }
 
+
+/*
+ 
+ $0.with(\.unexpectedBetweenAttributesAndModifiers, nil)
+     .with(\.unexpectedBetweenModifiersAndFuncKeyword, nil)
+     .with(\.modifiers, ModifierListSyntax([.init(name: .keyword(.nonisolated))])
+         
+ 
+ .with(\.modifiers, .init(itemsBuilder: {
+     for modifier in modifiers {
+         modifier
+     }
+ }))
+ */

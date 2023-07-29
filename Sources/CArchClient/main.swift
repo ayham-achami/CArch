@@ -102,4 +102,4 @@ struct TestUI: TestUIProtocol {
 }
 
 let testUI = TestUI()
-test.asyncFunction("")
+testUI.nonisolatedFunction("")
