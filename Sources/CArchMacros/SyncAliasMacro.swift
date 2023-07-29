@@ -4,35 +4,7 @@ import SwiftSyntaxMacros
 import SwiftSyntaxBuilder
 
 /// <#Description#>
-public struct SyncAliasMacro {
-    
-    /// <#Description#>
-    public enum Error: Swift.Error, CustomStringConvertible {
-        
-        /// <#Description#>
-        case notProtocol
-        
-        public var description: String {
-            switch self {
-            case .notProtocol:
-                return "SyncAliasMacro can be applied to protocols only"
-            }
-        }
-    }
-    
-    /// <#Description#>
-    public struct Message: DiagnosticMessage, FixItMessage, Swift.Error {
-        
-        public let message: String
-        public let diagnosticID: MessageID
-        public let severity: DiagnosticSeverity
-        
-        public var fixItID: MessageID { diagnosticID }
-    }
-}
-
-// MARK: - SyncAliasMacro + ExtensionMacro
-extension SyncAliasMacro: ExtensionMacro {
+public struct SyncAliasMacro: ExtensionMacro {
     
     public static func expansion(of node: AttributeSyntax,
                                  attachedTo declaration: some DeclGroupSyntax,
@@ -41,7 +13,7 @@ extension SyncAliasMacro: ExtensionMacro {
                                  in context: some MacroExpansionContext) throws -> [ExtensionDeclSyntax] {
         guard
             let protocolDecl = declaration.as(ProtocolDeclSyntax.self)
-        else { throw Error.notProtocol }
+        else { throw ProtocolsMacros.Error.notProtocol }
         
         try checkInheritanceSpecifier(to: protocolDecl, in: context)
         
@@ -92,8 +64,8 @@ extension SyncAliasMacro: ExtensionMacro {
         }
         
         let messageID = MessageID(domain: String(describing: SyncAliasMacro.self), id: errorAsyncHandler)
-        let fixItMessage = Message(message: "add inheritance from \(errorAsyncHandler)", diagnosticID: messageID, severity: .error)
-        let diagnosticMessage = Message(message: "SyncAliasMacro can be applied to protocols inherited from \(errorAsyncHandler) only", diagnosticID: messageID, severity: .error)
+        let fixItMessage = Diagnostics.Message(message: "add inheritance from \(errorAsyncHandler)", diagnosticID: messageID, severity: .error)
+        let diagnosticMessage = Diagnostics.Message(message: "SyncAliasMacro can be applied to protocols inherited from \(errorAsyncHandler) only", diagnosticID: messageID, severity: .error)
         let changes = [FixIt.Change.replace(oldNode: .init(protocolDecl), newNode: .init(newProtocolDecl))]
         let fixIt = FixIt(message: fixItMessage, changes: changes)
         let diagnostic = Diagnostic(node: Syntax(protocolDecl.protocolKeyword), message: diagnosticMessage, fixIts: [fixIt])

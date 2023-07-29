@@ -96,3 +96,7 @@ public extension BusinessLogicService {
 /// <#Description#>
 @attached(conformance)
 public macro SyncAlias() = #externalMacro(module: "CArchMacros", type: "SyncAliasMacro")
+
+/// <#Description#>
+@attached(conformance)
+public macro UIContactor() = #externalMacro(module: "CArchMacros", type: "UIContactorMacro")

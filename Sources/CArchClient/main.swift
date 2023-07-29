@@ -54,3 +54,52 @@ let test = Test()
 test.asyncFunction(0)
 test.asyncThrowsFunction("Some")
 test.asyncThrowsObtain(with: "Id")
+
+@UIContactor
+@MainActor protocol TestUIProtocol {
+    
+    func function(_ object: Any)
+    
+    func function(with id: String)
+    
+    func function(with id: String, and object: Any)
+    
+    func function1(_ object: Any) async
+    
+    func function2(with id: String) async throws
+    
+    func function3(with id: String, and object: Any) -> Int
+}
+
+struct TestUI: TestUIProtocol {
+    
+    nonisolated init() {}
+    
+    func function(_ object: Any) {
+        print(object)
+    }
+    
+    func function(with id: String) {
+        print(id)
+    }
+    
+    func function(with id: String, and object: Any) {
+        print(id, object)
+    }
+    
+    func function1(_ object: Any) async {
+        print(object)
+    }
+    
+    func function2(with id: String) async throws {
+        print(id)
+    }
+    
+    func function3(with id: String, and object: Any) -> Int {
+        print(id, object)
+        return 0
+    }
+}
+
+let testUI = TestUI()
+test.asyncFunction("")
