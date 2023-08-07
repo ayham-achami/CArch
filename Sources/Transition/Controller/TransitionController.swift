@@ -344,10 +344,13 @@ public extension TransitionController where Self: UIViewController {
     }
 
     func activate(with activator: TabActivator.Type) {
-        guard let index = tabBarController?.viewControllers?.firstIndex(for: activator) else {
+        if let tabBarController = self as? UITabBarController, let index = tabBarController.viewControllers?.firstIndex(for: activator) {
+            tabBarController.selectedIndex = index
+        } else if let index = tabBarController?.viewControllers?.firstIndex(for: activator) {
+            tabBarController?.selectedIndex = index
+        } else {
             preconditionFailure("Colud not to filde index of \(String(describing: activator.key))")
         }
-        tabBarController?.selectedIndex = index
     }
 
     func embed<Submodule, Container>(submodule: Submodule,
