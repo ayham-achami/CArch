@@ -40,25 +40,10 @@ public struct UIContactorMacro: ExtensionMacro {
                 $0.signature.output == nil
             }
             .compactMap {
-                $0.with(\.identifier, .identifier("nonisolated\($0.identifier.text.capitalized)"))
-                    .with(\.signature, $0.signature)
+                $0.addModifier(.init(name: .keyword(.nonisolated)))
+                    .with(\.identifier, .identifier("nonisolated\($0.identifier.text.capitalized)"))
                     .with(\.body, .awaitSyntax($0))
-                    .addModifier(.init(name: .keyword(.nonisolated)))
+                    
             }
     }
 }
-
-
-/*
- 
- $0.with(\.unexpectedBetweenAttributesAndModifiers, nil)
-     .with(\.unexpectedBetweenModifiersAndFuncKeyword, nil)
-     .with(\.modifiers, ModifierListSyntax([.init(name: .keyword(.nonisolated))])
-         
- 
- .with(\.modifiers, .init(itemsBuilder: {
-     for modifier in modifiers {
-         modifier
-     }
- }))
- */

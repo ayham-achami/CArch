@@ -94,9 +94,9 @@ public extension BusinessLogicService {
 @MaintenanceActor public protocol BusinessLogicServicePool: CArchProtocol {}
 
 /// <#Description#>
-@attached(conformance)
+@attached(extension, names: arbitrary)
 public macro SyncAlias() = #externalMacro(module: "CArchMacros", type: "SyncAliasMacro")
 
 /// <#Description#>
-@attached(conformance)
+@attached(extension, names: arbitrary)
 public macro UIContactor() = #externalMacro(module: "CArchMacros", type: "UIContactorMacro")
