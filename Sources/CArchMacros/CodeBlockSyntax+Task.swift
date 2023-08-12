@@ -7,7 +7,7 @@ extension CodeBlockSyntax {
     /// - Parameter function: <#function description#>
     /// - Returns: <#description#>
     static func awaitSyntax(_ function: FunctionDeclSyntax) -> Self {
-        bodySyntax(.init(stringLiteral: "await \(function.identifier)(\(arguments(of: function)))"))
+        bodySyntax(.init(stringLiteral: "await \(function.name)(\(arguments(of: function)))"))
     }
     
     /// <#Description#>
@@ -17,7 +17,7 @@ extension CodeBlockSyntax {
         bodySyntax(.init(stringLiteral:
         """
         do {
-        try await \(function.identifier)(\(arguments(of: function)))
+        try await \(function.name)(\(arguments(of: function)))
         } catch {
         encountered(error)
         }
@@ -28,7 +28,7 @@ extension CodeBlockSyntax {
     /// - Parameter function: <#function description#>
     /// - Returns: <#description#>
     static func arguments(of function: FunctionDeclSyntax) -> String {
-        function.signature.input.parameterList.map { param in
+        function.signature.parameterClause.parameters.map { param in
             let argName = param.secondName ?? param.firstName
             let paramName = param.firstName
             if paramName.text != "_" {

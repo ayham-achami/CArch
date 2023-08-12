@@ -15,10 +15,9 @@ public struct UIContactorMacro: ExtensionMacro {
         else { throw ProtocolsMacros.Error.notProtocol }
         
         let functions = functions(from: protocolDecl)
-        
-        let protocolName = protocolDecl.identifier.text
-        let extensionDecl = try ExtensionDeclSyntax("extension \(raw: protocolName)") {
-            for function in functions {
+        let nonisolatedFunctions = appdendNonisolated(to: functions)
+        let extensionDecl = try ExtensionDeclSyntax("extension \(raw: protocolDecl.name.text)") {
+            for function in nonisolatedFunctions {
                 function
             }
         }
@@ -37,13 +36,38 @@ public struct UIContactorMacro: ExtensionMacro {
             .filter {
                 $0.signature.effectSpecifiers?.asyncSpecifier == nil &&
                 $0.signature.effectSpecifiers?.throwsSpecifier == nil &&
-                $0.signature.output == nil
+                $0.signature.returnClause == nil
             }
-            .compactMap {
-                $0.addModifier(.init(name: .keyword(.nonisolated)))
-                    .with(\.identifier, .identifier("nonisolated\($0.identifier.text.capitalized)"))
-                    .with(\.body, .awaitSyntax($0))
-                    
-            }
+    }
+    
+    /// <#Description#>
+    /// - Parameter functions: <#functions description#>
+    /// - Returns: <#description#>
+    private static func appdendNonisolated(to functions: [FunctionDeclSyntax]) -> [FunctionDeclSyntax] {
+        functions.compactMap {
+            $0.with(\.name, .identifier("nonisolated\($0.name.text.capitalized)"))
+                .with(\.modifiers, appdendNonisolated(to: $0.modifiers))
+                .with(\.body, .awaitSyntax($0))
+                .with(\.leadingTrivia, .newline)
+                .with(\.funcKeyword, .keyword(.func))
+                .with(\.leadingTrivia, .newline)
+        }
+    }
+    
+    /// <#Description#>
+    /// - Parameter modifiers: <#modifiers description#>
+    /// - Returns: <#description#>
+    private static func appdendNonisolated(to modifiers: DeclModifierListSyntax?) -> DeclModifierListSyntax {
+        let newModifiers: DeclModifierListSyntax
+        if let modifiers {
+            var modifiers = modifiers
+            modifiers.append(.init(name: .keyword(.nonisolated)))
+            newModifiers = modifiers
+        } else {
+            newModifiers = .init(itemsBuilder: {
+                DeclModifierSyntax(name: .keyword(.nonisolated))
+            })
+        }
+        return newModifiers
     }
 }

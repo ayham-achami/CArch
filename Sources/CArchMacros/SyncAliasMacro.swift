@@ -20,7 +20,7 @@ public struct SyncAliasMacro: ExtensionMacro {
         let asyncFunctions = asyncFunctions(from: protocolDecl)
         let asyncThrowsFunctions = asyncThrowsFunctions(from: protocolDecl)
         
-        let protocolName = protocolDecl.identifier.text
+        let protocolName = protocolDecl.name.text
         let extensionDecl = try ExtensionDeclSyntax("extension \(raw: protocolName)") {
             for asyncFunction in asyncFunctions {
                 asyncFunction
@@ -42,25 +42,25 @@ public struct SyncAliasMacro: ExtensionMacro {
         let newProtocolDecl: ProtocolDeclSyntax
         if let inheritanceClause = protocolDecl.inheritanceClause {
             let inheritedTypes = inheritanceClause
-                .inheritedTypeCollection
-                .map(\.typeName)
-                .compactMap({ $0.as(SimpleTypeIdentifierSyntax.self) })
+                .inheritedTypes
+                .map(\.type)
+                .compactMap({ $0.as(IdentifierTypeSyntax.self) })
                 .map(\.name)
                 .map(\.text)
             guard
                 !inheritedTypes.contains(errorAsyncHandler)
             else { return }
             var newInheritedTypes = inheritedTypes
-                .map { SimpleTypeIdentifierSyntax(name: .identifier($0)) }
-                .map { InheritedTypeSyntax(leadingTrivia: .space, typeName: $0, trailingComma: .commaToken())}
+                .map { IdentifierTypeSyntax(name: .identifier($0)) }
+                .map { InheritedTypeSyntax(leadingTrivia: .space, type: $0, trailingComma: .commaToken())}
             newInheritedTypes.append(InheritedTypeSyntax(leadingTrivia: .space,
-                                                         typeName: SimpleTypeIdentifierSyntax(name: .identifier(errorAsyncHandler)),
+                                                         type: IdentifierTypeSyntax(name: .identifier(errorAsyncHandler)),
                                                          trailingTrivia: .space))
-            newProtocolDecl = protocolDecl.with(\.inheritanceClause, TypeInheritanceClauseSyntax { .init(newInheritedTypes) })
+            newProtocolDecl = protocolDecl.with(\.inheritanceClause, InheritanceClauseSyntax { .init(newInheritedTypes) })
         } else {
-            let inheritanceType = SimpleTypeIdentifierSyntax(leadingTrivia: .space, name: .identifier(errorAsyncHandler))
-            let inheritedTypeSyntax = InheritedTypeSyntax(typeName: inheritanceType, trailingTrivia: .space)
-            newProtocolDecl = protocolDecl.with(\.inheritanceClause, TypeInheritanceClauseSyntax { .init([inheritedTypeSyntax]) })
+            let inheritanceType = IdentifierTypeSyntax(leadingTrivia: .space, name: .identifier(errorAsyncHandler))
+            let inheritedTypeSyntax = InheritedTypeSyntax(type: inheritanceType, trailingTrivia: .space)
+            newProtocolDecl = protocolDecl.with(\.inheritanceClause, InheritanceClauseSyntax { .init([inheritedTypeSyntax]) })
         }
         
         let messageID = MessageID(domain: String(describing: SyncAliasMacro.self), id: errorAsyncHandler)
@@ -84,8 +84,8 @@ public struct SyncAliasMacro: ExtensionMacro {
             .compactMap {
                 $0.with(\.signature, $0.signature.with(\.effectSpecifiers, $0.signature.effectSpecifiers?
                     .with(\.asyncSpecifier, nil))
-                    .with(\.output, nil)
-                    .with(\.input, $0.signature.input))
+                    .with(\.returnClause, nil)
+                    .with(\.parameterClause, $0.signature.parameterClause))
                 .with(\.body, .awaitSyntax($0))
             }
     }
@@ -103,8 +103,8 @@ public struct SyncAliasMacro: ExtensionMacro {
                 $0.with(\.signature, $0.signature.with(\.effectSpecifiers, $0.signature.effectSpecifiers?
                     .with(\.asyncSpecifier, nil)
                     .with(\.throwsSpecifier, nil))
-                    .with(\.output, nil)
-                    .with(\.input, $0.signature.input))
+                    .with(\.returnClause, nil)
+                    .with(\.parameterClause, $0.signature.parameterClause))
                 .with(\.body, .tryAwaitSyntax($0))
             }
     }
