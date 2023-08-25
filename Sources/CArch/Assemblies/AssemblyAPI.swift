@@ -70,6 +70,7 @@ public protocol ServicesRecorder {
     var records: [any DIAssemblyCollection] { get }
 }
 
+// MARK: - ServicesRecorder + DIAssemblyCollection
 public extension ServicesRecorder {
     
     var all: [DIAssembly] {

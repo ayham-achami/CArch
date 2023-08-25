@@ -115,9 +115,11 @@ public extension DIRegistrar {
     /// - Parameters:
     ///   - serviceType: Тип объекта
     ///   - factory: Блок содержащий код реализующий логику внедрения объекта
+    
     func record<Service>(_ serviceType: Service.Type,
+                         inScope storage: StorageType = .autoRelease,
                          factory: @escaping (DIResolver) -> Service) {
-        record(serviceType, inScope: .autoRelease, factory: factory)
+        record(serviceType, inScope: storage, factory: factory)
     }
     
     /// Регистрация объекта в контейнер зависимости по названию (Таг)
@@ -127,8 +129,9 @@ public extension DIRegistrar {
     ///   - factory: Блок содержащий код реализующий логику внедрения объекта
     func record<Service>(_ serviceType: Service.Type,
                          name: String,
+                         inScope storage: StorageType = .autoRelease,
                          factory: @escaping (DIResolver) -> Service) {
-        record(serviceType, name: name, inScope: .autoRelease, factory: factory)
+        record(serviceType, name: name, inScope: storage, factory: factory)
     }
     
     /// Регистрация объекта в контейнер зависимости
@@ -136,8 +139,9 @@ public extension DIRegistrar {
     ///   - serviceType: Тип объекта
     ///   - factory: Блок содержащий код реализующий логику внедрения объекта
     func record<Service, Arg>(_ serviceType: Service.Type,
+                              inScope storage: StorageType = .autoRelease,
                               factory: @escaping (DIResolver, Arg) -> Service) {
-        record(serviceType, inScope: .autoRelease, factory: factory)
+        record(serviceType, inScope: storage, factory: factory)
     }
     
     /// Регистрация объекта в контейнер зависимости
@@ -145,8 +149,9 @@ public extension DIRegistrar {
     ///   - serviceType: Тип объекта
     ///   - factory: Блок содержащий код реализующий логику внедрения объекта
     func record<Service, Arg1, Arg2>(_ serviceType: Service.Type,
+                                     inScope storage: StorageType = .autoRelease,
                                      factory: @escaping (DIResolver, Arg1, Arg2) -> Service) {
-        record(serviceType, inScope: .autoRelease, factory: factory)
+        record(serviceType, inScope: storage, factory: factory)
     }
 }
 

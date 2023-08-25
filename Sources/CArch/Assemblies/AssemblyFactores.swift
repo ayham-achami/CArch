@@ -40,6 +40,10 @@ public protocol AnyDIAssemblyFactory {
     /// Выполнять регистрации всех сервисов бизнес логики в контейнер зависимости
     /// - Parameter recorder: Класс отвечающий за создание всех серверов
     func record<Recorder>(_ recorder: Recorder.Type) where Recorder: ServicesRecorder
+    
+    /// <#Description#>
+    /// - Parameter recorder: <#recorder description#>
+    func record<Recorder>(_ recorder: Recorder) where Recorder: DIAssemblyCollection
 }
 
 #if canImport(UIKit)
