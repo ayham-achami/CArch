@@ -34,7 +34,7 @@ public protocol DIAssembly {
 }
 
 /// Коллекция объектов для добавления в контейнер зависимости
-public protocol DIAssemblyCollection: Collection where Element: DIAssembly, Index == Int {
+public protocol DIAssemblyCollection: Collection where Element: DIAssembly {
     
     /// Коллекция объектов
     var services: [DIAssembly] { get }
