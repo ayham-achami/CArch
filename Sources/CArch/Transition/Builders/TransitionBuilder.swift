@@ -139,6 +139,14 @@ import UIKit
         return self
     }
     
+    /// Добавить модуль к билдеру
+    /// - Parameter module: Модуль
+    /// - Returns: Текущий билдер транзакции
+    public func with(module: CArchModule) -> Self {
+        self.module = module
+        return self
+    }
+    
     /// Добавить замыкание завершения анимации транзакции модуля к билдеру
     /// оно выполняется только если тип `Transition` был `Transition.present`
     /// - Parameter completion: Замыкание завершения анимации транзакции модуля
