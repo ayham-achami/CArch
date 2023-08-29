@@ -93,18 +93,10 @@ public extension BusinessLogicService {
 /// Протокол множества сервисов
 @MaintenanceActor public protocol BusinessLogicServicePool: CArchProtocol {}
 
-///// <#Description#>
-//@attached(extension, names: arbitrary)
-//public macro SyncAlias() = #externalMacro(module: "CArchMacros", type: "SyncAliasMacro")
-//
-///// <#Description#>
-//@attached(extension, names: arbitrary)
-//public macro UIContactor() = #externalMacro(module: "CArchMacros", type: "UIContactorMacro")
-
 /// <#Description#>
-@attached(conformance)
+@attached(extension, names: arbitrary)
 public macro SyncAlias() = #externalMacro(module: "CArchMacros", type: "SyncAliasMacro")
 
 /// <#Description#>
-@attached(conformance)
+@attached(extension, names: arbitrary)
 public macro UIContactor() = #externalMacro(module: "CArchMacros", type: "UIContactorMacro")
