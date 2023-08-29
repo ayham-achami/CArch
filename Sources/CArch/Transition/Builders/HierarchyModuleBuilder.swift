@@ -44,7 +44,9 @@ public enum Hierarchy {
 extension Hierarchy {
 
     func assert(is hierarchy: Hierarchy) {
-        guard self == hierarchy else { preconditionFailure("Could't to build module with hierarchy: \(hierarchy)") }
+        guard
+            self == hierarchy
+        else { preconditionFailure("Could't to build module with hierarchy: \(hierarchy)") }
     }
 }
 
@@ -64,9 +66,9 @@ public protocol AnyHierarchyModuleBuilder {
 public extension AnyHierarchyModuleBuilder where Self: ModuleBuilder {
 
     func build(with initialState: ModuleInitialState) -> CArchModule {
-        guard let initialState = initialState as? InitialStateType else {
-            preconditionFailure("Could't cast to \(String(describing: InitialStateType.self))")
-        }
+        guard
+            let initialState = initialState as? InitialStateType
+        else { preconditionFailure("Could't cast to \(String(describing: InitialStateType.self))") }
         return build(with: initialState)
     }
 }

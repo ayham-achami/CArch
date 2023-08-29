@@ -70,10 +70,12 @@ import UIKit
     private var transition: Transition = .auto
     /// Анимационная ли транзакция
     private var animated: Bool = true
-    /// Иерархии модуля
+    /// Билдер модуля
     private var builder: AnyHierarchyModuleBuilder?
     /// Если анимационно, замыкание, которое будет выполнено после завершения анимации транзакции
     private var completion: TransitionCompletion?
+    /// Модуль 
+    private var module: CArchModule?
 
     /// Контролер перехода между моделями
     private unowned var transitionController: TransitionController
@@ -148,9 +150,18 @@ import UIKit
 
     /// Выполняет транзакцию
     public func commit() {
-        guard
-            let module = builder?.build(with: state, into: hierarchy)
-        else { preconditionFailure("The Hierarchy Builder is nil checkout your settings") }
+        if let module {
+            perform(with: module)
+        } else if let module = builder?.build(with: state, into: hierarchy) {
+            perform(with: module)
+        } else {
+            preconditionFailure("The Hierarchy Builder is nil checkout your settings")
+        }
+    }
+    
+    /// Выполняет транзакцию с нужным модулям
+    /// - Parameter module: Модуль
+    private func perform(with module: CArchModule) {
         switch transition {
         case .auto:
             transitionController.show(module)

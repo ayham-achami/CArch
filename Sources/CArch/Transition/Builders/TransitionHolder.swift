@@ -41,6 +41,8 @@ public final class TransitionHolder {
     var builder: AnyHierarchyModuleBuilder?
     /// Если анимационно, замыкание, которое будет выполнено после завершения анимации транзакции
     var completion: TransitionCompletion?
+    /// Модуль
+    private var module: CArchModule?
     
     /// Создает и возвращает новый экземпляр `TransitionHolder`
     public static var make: Self {
@@ -92,6 +94,14 @@ public final class TransitionHolder {
     /// - Returns: Текущий билдер транзакции
     public func with(completion: @escaping TransitionCompletion) -> Self {
         self.completion = completion
+        return self
+    }
+    
+    /// Добавить модуль к билдеру
+    /// - Parameter module: Модуль
+    /// - Returns: Текущий билдер транзакции
+    public func with(module: CArchModule) -> Self {
+        self.module = module
         return self
     }
 }

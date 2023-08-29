@@ -54,9 +54,9 @@ public protocol ModuleBuilder: AnyModuleBuilder {
 public extension ModuleBuilder {
 
     func build(with initialState: ModuleInitialState) -> CArchModule {
-        guard let initialState = initialState as? InitialStateType else {
-            preconditionFailure("Could't cast to \(String(describing: InitialStateType.self))")
-        }
+        guard
+            let initialState = initialState as? InitialStateType
+        else { preconditionFailure("Could't cast to \(String(describing: InitialStateType.self))") }
         return build(with: initialState)
     }
 }
