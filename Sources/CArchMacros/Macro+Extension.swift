@@ -8,28 +8,28 @@
 import Foundation
 import SwiftDiagnostics
 
-/// <#Description#>
+/// Namespace Macros для поротокол
 enum ProtocolsMacros {
     
-    /// <#Description#>
+    /// Ошибка
     public enum Error: Swift.Error, CustomStringConvertible {
         
-        /// <#Description#>
-        case notProtocol
+        /// Не является протоколом
+        case notProtocol(Any.Type)
         
         public var description: String {
             switch self {
-            case .notProtocol:
-                return "SyncAliasMacro can be applied to protocols only"
+            case let .notProtocol(type):
+                return "\(String(describing: type.self)) can be applied to protocols only"
             }
         }
     }
 }
 
-/// <#Description#>
+/// Namespace Диагностика
 enum Diagnostics {
     
-    /// <#Description#>
+    /// Сообщения диагностики
     public struct Message: DiagnosticMessage, FixItMessage, Swift.Error {
         
         public let message: String

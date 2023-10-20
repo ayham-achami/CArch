@@ -6,6 +6,7 @@ import CompilerPluginSupport
 
 let package = Package(
     name: "CArch",
+    defaultLocalization: "en",
     platforms: [
         .iOS(.v13),
         .macOS(.v12),

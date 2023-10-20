@@ -8,9 +8,8 @@ opt_in_rules: # some rules are only opt-in
   # swiftlint rules
 included: # paths to include during linting. `--path` is ignored if present.
   - Sources
-  - CArchMacros
-  - CArchClient
   - CArchTests
+  - Package.swift
 excluded: # paths to ignore during linting. Takes precedence over `included`.
   - Pods
 analyzer_rules: # Rules run by `swiftlint analyze` (experimental)
