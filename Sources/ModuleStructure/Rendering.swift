@@ -55,7 +55,7 @@ public extension UIRenderer {
 public protocol AnyUserInteraction: AnyObject {}
 
 /// Протокол монибулации жизненный цикл модуля
-public protocol ModuleLifeCycle: CArchProtocol, NSObjectProtocol {
+public protocol ModuleLifeCycle: CArchModuleComponent, NSObjectProtocol {
 
     /// Вызывается когда модуль будет загружен
     /// эквивалентно `viewDidLoad` у `UIViewController`

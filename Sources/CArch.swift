@@ -32,6 +32,9 @@ import Foundation
 /// протоколы архитектурные от других
 public protocol CArchProtocol: AnyObject {}
 
+/// Основной протокол, все протоколы компонентов модуля
+public protocol CArchModuleComponent: CArchProtocol {}
+
 /// Oсновой протокол любого объекта UI модели
 public protocol UIModel {}
 

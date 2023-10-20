@@ -43,7 +43,7 @@ struct TransitionPrepareError: Error {
 
 /// Основной протокол содержащий логику навигации между модулями
 /// все протоколы `RoutingLogic` должны быть унаследованными от `RootRoutingLogic`
-public protocol RootRoutingLogic: CArchProtocol {
+public protocol RootRoutingLogic: CArchModuleComponent {
 
     /// Подготовить транзакцию между модулями
     ///
