@@ -26,7 +26,7 @@
 import Foundation
 
 /// <#Description#>
-public protocol ErrorAsyncHandler {
+public protocol ErrorAsyncHandler: CArchModuleComponent {
     
     /// <#Description#>
     /// - Parameter error: <#error description#>

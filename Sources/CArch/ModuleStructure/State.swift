@@ -30,7 +30,7 @@ import Foundation
 ///   - some: Объект для преобразования
 ///   - type: Тип, в котором необходимо преобразовать
 /// - Returns: Новый тип
-func convert<T>(some: Any, to type: T.Type) -> T where T: Any {
+func convert<T>(some: Any, to type: T.Type) -> T {
     guard
         let converted = some as? T
     else { preconditionFailure("Could not convert \(String(describing: some.self)) to \(String(describing: T.self))") }

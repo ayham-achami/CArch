@@ -7,7 +7,7 @@ extension CodeBlockSyntax {
     /// - Parameter function: <#function description#>
     /// - Returns: <#description#>
     static func awaitSyntax(_ function: FunctionDeclSyntax) -> Self {
-        bodySyntax(.init(stringLiteral: "await \(function.name)(\(arguments(of: function)))"))
+        bodySyntax(.init(stringLiteral: "await self?.\(function.name)(\(arguments(of: function)))"))
     }
     
     /// <#Description#>
@@ -17,9 +17,9 @@ extension CodeBlockSyntax {
         bodySyntax(.init(stringLiteral:
         """
         do {
-        try await \(function.name)(\(arguments(of: function)))
+                try await self?.\(function.name)(\(arguments(of: function)))
         } catch {
-        encountered(error)
+                self?.encountered(error)
         }
         """))
     }
@@ -44,7 +44,7 @@ extension CodeBlockSyntax {
     private static func bodySyntax(_ syntax: ExprSyntax) -> Self {
         let body = ExprSyntax(stringLiteral:
         """
-        Task {
+        Task { [weak self] in
             \(syntax)
         }
         """)

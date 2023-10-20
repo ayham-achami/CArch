@@ -27,6 +27,7 @@
 import UIKit
 
 /// Протокол способности оповещения
+@UIContactor
 @MainActor public protocol AlertAbility: CArchProtocol {
 
     /// Показать диалог оповещения с одной кнопкой
@@ -121,6 +122,24 @@ public extension AlertAbility {
     func displayErrorAlert(with message: String) {
         displayAlert(with: NSLocalizedString("Error", comment: "Error"), message)
     }
+    
+    /// Показать диалог ошибки
+    /// ```
+    /// +----------------------+
+    /// |        Error         |
+    /// |   Some error has     |
+    /// |   happened check     |
+    /// |   your settings      |
+    /// +----------------------+
+    /// |          OK          |
+    /// +----------------------+
+    /// ```
+    /// - Parameter message: Случающая ошибка
+    nonisolated func nonisolatedDisplayErrorAlert(with message: String) {
+        Task {
+            await displayAlert(with: NSLocalizedString("Error", comment: "Error"), message)
+        }
+    }
 
     /// показать диалог ошибки
     /// ```
@@ -136,6 +155,24 @@ public extension AlertAbility {
     /// - Parameter error: Случающая ошибка
     func displayErrorAlert(with error: Error) {
         displayAlert(with: NSLocalizedString("Error", comment: "Error"), error.localizedDescription)
+    }
+
+    /// показать диалог ошибки
+    /// ```
+    /// +----------------------+
+    /// |        Error         |
+    /// |   Some error has     |
+    /// |   happened check     |
+    /// |   your settings      |
+    /// +----------------------+
+    /// |          OK          |
+    /// +----------------------+
+    /// ```
+    /// - Parameter error: Случающая ошибка
+    nonisolated func nonisolatedDisplayErrorAlert(with error: Error) {
+        Task {
+            await displayAlert(with: NSLocalizedString("Error", comment: "Error"), error.localizedDescription)
+        }
     }
 }
 

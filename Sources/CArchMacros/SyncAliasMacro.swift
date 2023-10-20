@@ -3,7 +3,7 @@ import SwiftDiagnostics
 import SwiftSyntaxMacros
 import SwiftSyntaxBuilder
 
-/// <#Description#>
+/// Макрос, который добавить alias не асинхронной функции всех асинхронных функций
 public struct SyncAliasMacro: ExtensionMacro {
     
     public static func expansion(of node: AttributeSyntax,
@@ -13,15 +13,14 @@ public struct SyncAliasMacro: ExtensionMacro {
                                  in context: some MacroExpansionContext) throws -> [ExtensionDeclSyntax] {
         guard
             let protocolDecl = declaration.as(ProtocolDeclSyntax.self)
-        else { throw ProtocolsMacros.Error.notProtocol }
+        else { throw ProtocolsMacros.Error.notProtocol(Self.self) }
         
         try checkInheritanceSpecifier(to: protocolDecl, in: context)
         
         let asyncFunctions = asyncFunctions(from: protocolDecl)
         let asyncThrowsFunctions = asyncThrowsFunctions(from: protocolDecl)
         
-        let protocolName = protocolDecl.name.text
-        let extensionDecl = try ExtensionDeclSyntax("extension \(raw: protocolName)") {
+        let extensionDecl = try ExtensionDeclSyntax("extension \(raw: protocolDecl.name.text)") {
             for asyncFunction in asyncFunctions {
                 asyncFunction
             }
@@ -33,10 +32,10 @@ public struct SyncAliasMacro: ExtensionMacro {
         return [extensionDecl]
     }
     
-    /// <#Description#>
+    /// Проверить наследуется ли протокол от протокола `ErrorAsyncHandler`
     /// - Parameters:
-    ///   - protocolDecl: <#protocolDecl description#>
-    ///   - context: <#context description#>
+    ///   - protocolDecl: `ProtocolDeclSyntax`
+    ///   - context: `MacroExpansionContext`
     private static func checkInheritanceSpecifier(to protocolDecl: ProtocolDeclSyntax, in context: some MacroExpansionContext) throws {
         let errorAsyncHandler = "ErrorAsyncHandler"
         let newProtocolDecl: ProtocolDeclSyntax
@@ -72,9 +71,9 @@ public struct SyncAliasMacro: ExtensionMacro {
         context.diagnose(diagnostic)
     }
     
-    /// <#Description#>
-    /// - Parameter protocolDecl: <#protocolDecl description#>
-    /// - Returns: <#description#>
+    /// Возвращает все асинхронные функций в протоколе
+    /// - Parameter protocolDecl: `ProtocolDeclSyntax`
+    /// - Returns: `[FunctionDeclSyntax]`
     private static func asyncFunctions(from protocolDecl: ProtocolDeclSyntax) -> [FunctionDeclSyntax] {
         protocolDecl
             .memberBlock
@@ -90,9 +89,9 @@ public struct SyncAliasMacro: ExtensionMacro {
             }
     }
     
-    /// <#Description#>
-    /// - Parameter protocolDecl: <#protocolDecl description#>
-    /// - Returns: <#description#>
+    /// Возвращает все асинхронные `throws` функций в протоколе
+    /// - Parameter protocolDecl: `ProtocolDeclSyntax`
+    /// - Returns: `[FunctionDeclSyntax]`
     private static func asyncThrowsFunctions(from protocolDecl: ProtocolDeclSyntax) -> [FunctionDeclSyntax] {
         protocolDecl
             .memberBlock

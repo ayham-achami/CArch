@@ -19,7 +19,7 @@ protocol TestProtocol: TestProtocolInc, ErrorAsyncHandler {
     func asyncThrowsObtain(with id: String, and object: Any) async throws
 }
 
-struct Test: TestProtocol {
+final class Test: TestProtocol {
     
     func syncFunction(_ object: Any) {
         print(object)
@@ -56,13 +56,15 @@ test.asyncThrowsFunction("Some")
 test.asyncThrowsObtain(with: "Id")
 
 @UIContactor
-@MainActor protocol TestUIProtocol {
+@MainActor protocol TestUIProtocol: AnyObject {
     
     func function(_ object: Any)
     
     func function(with id: String)
     
     func function(with id: String, and object: Any)
+    
+    func function3(with id: String, and object: Any, and object1: Any, and object2: Any, and object3: Any)
     
     func function1(_ object: Any) async
     
@@ -71,7 +73,7 @@ test.asyncThrowsObtain(with: "Id")
     func function3(with id: String, and object: Any) -> Int
 }
 
-struct TestUI: TestUIProtocol {
+class TestUI: TestUIProtocol {
     
     nonisolated init() {}
     
@@ -99,7 +101,11 @@ struct TestUI: TestUIProtocol {
         print(id, object)
         return 0
     }
+    
+    func function3(with id: String, and object: Any, and object1: Any, and object2: Any, and object3: Any) {
+        print(id, object, object1, object2, object3)
+    }
 }
 
 let testUI = TestUI()
-testUI.nonisolatedFunction("")
+//testUI.nonisolatedFunction("")

@@ -29,10 +29,10 @@ import UIKit
 
 /// Основной протокол содержащий логику показа данных на вью (экране)
 /// все протоколы `RenderingLogic` должны быть унаследованными от `RootRenderingLogic`
-@MainActor public protocol RootRenderingLogic: AlertAbility {}
+@MainActor public protocol RootRenderingLogic: CArchModuleComponent, AlertAbility {}
 
 /// Рендер с делегаций
-@MainActor public protocol UIRenderer: ModuleLifeCycle {
+@MainActor public protocol UIRenderer: CArchModuleComponent, ModuleLifeCycle {
     
     /// Тип моделей, которые будут показаны в области действия рендера
     associatedtype ModelType: UIModel
@@ -45,16 +45,16 @@ import UIKit
 /// Любое действие пользователя
 @MainActor public protocol AnyUserInteraction: AnyObject {}
 
-/// <#Description#>
+/// Превью модуля
 public protocol UIRendererPreview {
     
-    /// <#Description#>
-    /// - Returns: <#description#>
+    /// Возвращает модуль для превью
+    /// - Returns: Модуль
     static func preview() -> Self
 }
 
 /// Протокол манипуляции жизненный цикл модуля
-@MainActor public protocol ModuleLifeCycle: CArchProtocol {
+@MainActor public protocol ModuleLifeCycle: CArchModuleComponent {
 
     /// Вызывается когда модуль будет загружен
     /// эквивалентно `viewDidLoad` у `UIViewController`
@@ -91,7 +91,7 @@ public extension ModuleLifeCycle {
 }
 
 /// Протокол контроля жизненный цикл модуля
-@MainActor public protocol ModuleLifeCycleOwner: ModuleLifeCycle {
+@MainActor public protocol ModuleLifeCycleOwner: CArchModuleComponent, ModuleLifeCycle {
 
     /// массив подписчиков на изменение жизненного цикла модуля
     var lifeCycle: [ModuleLifeCycle] { get }
@@ -124,10 +124,10 @@ public extension ModuleLifeCycleOwner {
 // MARK: - UIRenderer + UIViewController
 public extension UIRenderer where Self: UIViewController {
     
-    /// <#Description#>
+    /// Показать рендер на UIViewController
     /// - Parameters:
-    ///   - parent: <#parent description#>
-    ///   - container: <#container description#>
+    ///   - parent: `UIViewController`
+    ///   - container: `UIView`
     func embed(into parent: UIViewController, container: UIView? = nil) {
         parent.addChild(self)
         view.frame = parent.view.frame

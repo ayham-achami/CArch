@@ -8,7 +8,7 @@ let package = Package(
     name: "CArch",
     platforms: [
         .iOS(.v13),
-        .macOS(.v10_15),
+        .macOS(.v12),
         .macCatalyst(.v13)
     ],
     products: [
@@ -26,8 +26,8 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/apple/swift-syntax.git", from: "509.0.0-swift-5.9-DEVELOPMENT-SNAPSHOT-2023-04-25-b"),
-        //.package(url: "https://github.com/realm/SwiftLint", from: "0.52.4"),
+        .package(url: "https://github.com/realm/SwiftLint", from: "0.53.0"),
+        .package(url: "https://github.com/apple/swift-syntax.git", from: "509.0.0"),
     ],
     targets: [
         .macro(
@@ -35,8 +35,10 @@ let package = Package(
             dependencies: [
                 .product(name: "SwiftSyntaxMacros", package: "swift-syntax"),
                 .product(name: "SwiftCompilerPlugin", package: "swift-syntax")
+            ],
+            plugins: [
+                .plugin(name: "SwiftLintPlugin", package: "SwiftLint")
             ]
-            //plugins: [.plugin(name: "SwiftLintPlugin", package: "SwiftLint")]
         ),
         .target(
             name: "CArch",
@@ -45,15 +47,19 @@ let package = Package(
             ],
             exclude: [
                 "Info.plist"
+            ],
+            plugins: [
+                .plugin(name: "SwiftLintPlugin", package: "SwiftLint")
             ]
-            //plugins: [.plugin(name: "SwiftLintPlugin", package: "SwiftLint")]
         ),
         .executableTarget(
             name: "CArchClient",
             dependencies: [
                 "CArch"
+            ],
+            plugins: [
+                .plugin(name: "SwiftLintPlugin", package: "SwiftLint")
             ]
-            //plugins: [.plugin(name: "SwiftLintPlugin", package: "SwiftLint")]
         ),
         .testTarget(
             name: "CArchTests",
@@ -63,8 +69,10 @@ let package = Package(
             path: "CArchTests",
             exclude: [
                 "Info.plist"
+            ],
+            plugins: [
+                .plugin(name: "SwiftLintPlugin", package: "SwiftLint")
             ]
-            //plugins: [.plugin(name: "SwiftLintPlugin", package: "SwiftLint")]
         ),
     ],
     swiftLanguageVersions: [.v5]
