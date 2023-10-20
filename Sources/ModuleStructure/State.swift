@@ -68,7 +68,7 @@ public extension ModuleFinalState {
 }
 
 /// Протокол любого состояния только для чтения
-public protocol AnyReadOnlyState: CArchModuleComponent {}
+public protocol AnyReadOnlyState {}
 
 // MARK: - AnyReadOnlyState + Conversion
 public extension AnyReadOnlyState {

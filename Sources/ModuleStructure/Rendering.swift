@@ -28,7 +28,7 @@ import UIKit
 
 /// Основной протокол содержащий логику показа данных на вью (экране)
 /// все протоколы `RenderingLogic` должны быть унаследованными от `RootRenderingLogic`
-public protocol RootRenderingLogic: AlertAbility {}
+public protocol RootRenderingLogic: CArchModuleComponent, AlertAbility {}
 
 /// Рендер с делегацией
 public protocol UIRenderer: ModuleLifeCycle {
