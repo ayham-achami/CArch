@@ -48,6 +48,7 @@ public protocol AnyDIAssemblyFactory {
 
 #if canImport(UIKit)
 /// Протокол получения доступа к контейнеру зависимости с Storyboard
+@available(*, deprecated, message: "This feature has be deprecated and will be removed in future release")
 public protocol StoryboardDIAssemblyFactory: AnyDIAssemblyFactory {
     
     /// Контейнер зависимости

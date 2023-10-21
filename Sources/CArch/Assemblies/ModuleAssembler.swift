@@ -27,6 +27,7 @@ import Foundation
 
 #if canImport(UIKit)
 /// Протокол отвечающий за регистрацию компонентов архитектуры CArch в контейнер зависимости
+@available(*, deprecated, message: "This feature has be deprecated and will be removed in future release")
 public protocol StoryboardModuleAssembler: AnyObject {
 
     /// регистрирует компонент `ModuleAssembly` в контейнер зависимости
@@ -54,9 +55,11 @@ public protocol AnyModuleAssembly {
 
 #if canImport(UIKit)
 /// Контейнер зависимости + Storyboard
+@available(*, deprecated, message: "This feature has be deprecated and will be removed in future release")
 public typealias DIStoryboardContainer = DIRegistrar & DIResolver & DIStoryboard
 
 /// Протокол отвечающий за регистрацию компонентов модуля архитектуры CArch в контейнер зависимости
+@available(*, deprecated, message: "This feature has be deprecated and will be removed in future release")
 public protocol StoryboardModuleAssembly: AnyModuleAssembly {
 
     /// Зарегистрировать ссылку на вид

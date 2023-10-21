@@ -77,6 +77,51 @@ extension UIViewController: CArchModule {
 }
 #endif
 
+/// Конфигурация инъекции
+public protocol InjectConfiguration: RawRepresentable where RawValue == String {}
+
+/// Конфигурация двигателя
+public struct EngineConfiguration: InjectConfiguration {
+    
+    public var rawValue: String
+    
+    public init?(rawValue: String) {
+        self.rawValue = rawValue
+    }
+}
+
+/// Базовый протокол любого двигатель слоя бизнес логики
+/// нельзя создавать двигатель и не наследовать данный протокол
+@MaintenanceActor public protocol BusinessLogicEngine: CArchProtocol, CustomStringConvertible, CustomDebugStringConvertible {}
+
+// MARK: - BusinessLogicEngine + StringConvertible
+public extension BusinessLogicEngine {
+    
+    var description: String {
+        "🧰 \(String(describing: Self.self))"
+    }
+    
+    var debugDescription: String {
+        description
+    }
+}
+
+/// Базовый протокол любого агента слоя бизнес логики
+/// нельзя создавать агент и не наследовать данный протокол
+@MaintenanceActor public protocol BusinessLogicAgent: CArchProtocol, CustomStringConvertible, CustomDebugStringConvertible {}
+
+// MARK: - BusinessLogicAgent + StringConvertible
+public extension BusinessLogicAgent {
+    
+    var description: String {
+        "🛠️ \(String(describing: Self.self))"
+    }
+    
+    var debugDescription: String {
+        description
+    }
+}
+
 /// Базовый протокол любого сервиса слоя бизнес логики
 /// нельзя создавать сервис и не наследовать данный протокол
 @MaintenanceActor public protocol BusinessLogicService: CArchProtocol, CustomStringConvertible, CustomDebugStringConvertible {}
