@@ -96,10 +96,40 @@ public extension BusinessLogicService {
 /// Протокол множества сервисов
 @MaintenanceActor public protocol BusinessLogicServicePool: CArchProtocol {}
 
-/// <#Description#>
+/// Макрос, который добавить alias не асинхронной функции всех асинхронных функций
+///
+///     @SyncAlias
+///     protocol TestProtocol: TestProtocolInc, ErrorAsyncHandler {
+///
+///         func syncFunction(_ object: Any)
+///     }
+///
+///     extension TestProtocol {
+///
+///         func asyncFunction(_ object: Any) {
+///             Task { [weak self] in
+///                 await self?.asyncFunction(object)
+///             }
+///         }
+///     }
 @attached(extension, names: arbitrary)
 public macro SyncAlias() = #externalMacro(module: "CArchMacros", type: "SyncAliasMacro")
 
-/// <#Description#>
+/// Макрос, который добавить nonisolated alias всех не асинхронных функций
+///
+///     @UIContactor
+///     @MainActor protocol TestUIProtocol: AnyObject {
+///
+///         func function(_ object: Any)
+///     }
+///
+///     extension TestUIProtocol {
+///
+///         nonisolated func nonisolatedFunction(_ object: Any) {
+///             Task { [weak self] in
+///                 await self?.function(object)
+///             }
+///         }
+///     }
 @attached(extension, names: arbitrary)
 public macro UIContactor() = #externalMacro(module: "CArchMacros", type: "UIContactorMacro")
