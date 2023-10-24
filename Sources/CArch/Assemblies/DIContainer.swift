@@ -114,7 +114,22 @@ public protocol ModuleComponentRegistrar {
     /// - Parameters:
     ///   - _: Тип компонента
     ///   - factory: Блок содержащий код реализующий логику инициализация объекта
-    func recordComponent<Component, each Argument>(_: Component.Type, factory: @escaping (DIResolver, repeat each Argument) -> Component) where Component: CArchModuleComponent
+    func recordComponent<Component, Argument>(_: Component.Type, 
+                                              factory: @escaping (DIResolver, Argument) -> Component) where Component: CArchModuleComponent
+    
+    /// Регистрация компонента модуля в контейнер зависимости
+    /// - Parameters:
+    ///   - _: Тип компонента
+    ///   - factory: Блок содержащий код реализующий логику инициализация объекта
+    func recordComponent<Component, Argument1, Argument2>(_: Component.Type, 
+                                                          factory: @escaping (DIResolver, Argument1, Argument2) -> Component) where Component: CArchModuleComponent
+    
+    /// Регистрация компонента модуля в контейнер зависимости
+    /// - Parameters:
+    ///   - _: Тип компонента
+    ///   - factory: Блок содержащий код реализующий логику инициализация объекта
+    func recordComponent<Component, Argument1, Argument2, Argument3>(_: Component.Type,
+                                                                     factory: @escaping (DIResolver, Argument1, Argument2, Argument3) -> Component) where Component: CArchModuleComponent
 }
 
 /// Протокол регистрации объекта в контейнер зависимости
@@ -130,18 +145,7 @@ public protocol DIRegistrar: BusinessLogicRegistrar, ModuleComponentRegistrar {
                          inScope storage: StorageType,
                          configuration: (any InjectConfiguration)?,
                          factory: @escaping (DIResolver) -> Service)
-    
-    /// Регистрация объекта в контейнер зависимости
-    /// - Parameters:
-    ///   - _: Тип объекта
-    ///   - storage: Тип ссылки
-    ///   - configuration: Конфигурация инъекции
-    ///   - factory: Блок содержащий код реализующий логику инициализация объекта
-    func record<Service, each Argument>(_: Service.Type,
-                                        inScope storage: StorageType,
-                                        configuration: (any InjectConfiguration)?,
-                                        factory: @escaping (DIResolver, repeat each Argument) -> Service)
-    
+        
     /// Регистрация объекта в контейнер зависимости
     /// - Parameters:
     ///   - serviceType: Тип объекта
@@ -214,10 +218,6 @@ public extension DIRegistrar {
         record(Component.self, inScope: .moduleComponent, configuration: nil, factory: factory)
     }
     
-    func recordComponent<Component, each Argument>(_: Component.Type, factory: @escaping (DIResolver, repeat each Argument) -> Component) where Component: CArchModuleComponent {
-        record(Component.self, inScope: .moduleComponent, configuration: nil, factory: factory)
-    }
-    
     /// Регистрация объекта в контейнер зависимости
     /// - Parameters:
     ///   - serviceType: Тип объекта
@@ -276,13 +276,6 @@ public protocol DIResolver {
     /// Получение объекта из контейнера зависимости
     /// - Parameters:
     ///   - serviceType: Тип объекта
-    ///   - arguments: Аргумент чтобы передавать в замыкание фабрики
-    /// - Returns: Объекта из контейнера зависимости
-    func unravel<Service, each Argument>(_ serviceType: Service.Type, arguments: repeat each Argument) -> Service?
-    
-    /// Получение объекта из контейнера зависимости
-    /// - Parameters:
-    ///   - serviceType: Тип объекта
     ///   - configuration: Конфигурация инъекции
     /// - Returns: Объекта из контейнера зависимости
     func unravel<Service>(_ serviceType: Service.Type, configuration: any InjectConfiguration) -> Service?
@@ -290,10 +283,26 @@ public protocol DIResolver {
     /// Получение объекта из контейнера зависимости
     /// - Parameters:
     ///   - serviceType: Тип объекта
-    ///   - configuration: Конфигурация инъекции
-    ///   - arguments: Аргумент чтобы передавать в замыкание фабрики
+    ///   - argument: Аргумент чтобы передавать в замыкание фабрики
     /// - Returns: Объекта из контейнера зависимости
-    func unravel<Service, each Argument>(_ serviceType: Service.Type, configuration: any InjectConfiguration, arguments: repeat each Argument) -> Service?
+    func unravel<Service, Argument>(_: Service.Type, argument: Argument) -> Service?
+    
+    /// Получение объекта из контейнера зависимости
+    /// - Parameters:
+    ///   - serviceType: Тип объекта
+    ///   - argument1: Аргумент1 чтобы передавать в замыкание фабрики
+    ///   - argument2: Аргумент2 чтобы передавать в замыкание фабрики
+    /// - Returns: Объекта из контейнера зависимости
+    func unravel<Service, Argument1, Argument2>(_ serviceType: Service.Type, argument1: Argument1, argument2: Argument2) -> Service?
+    
+    /// Получение объекта из контейнера зависимости
+    /// - Parameters:
+    ///   - serviceType: Тип объекта
+    ///   - argument1: Аргумент1 чтобы передавать в замыкание фабрики
+    ///   - argument2: Аргумент2 чтобы передавать в замыкание фабрики
+    ///   - argument3: Аргумент3 чтобы передавать в замыкание фабрики
+    /// - Returns: Объекта из контейнера зависимости
+    func unravel<Service, Argument1, Argument2, Argument3>(_ serviceType: Service.Type, argument1: Argument1, argument2: Argument2, argument2: Argument3) -> Service?
     
     /// Получение объекта из контейнера зависимости
     /// - Parameters:
@@ -302,14 +311,6 @@ public protocol DIResolver {
     /// - Returns: Объекта из контейнера зависимости
     @available(*, deprecated, message: "This feature has be deprecated and will be removed in future release")
     func unravel<Service>(_ serviceType: Service.Type, name: String?) -> Service?
-    
-    /// Получение объекта из контейнера зависимости
-    /// - Parameters:
-    ///   - serviceType: Тип объекта
-    ///   - argument: Аргумент чтобы передавать в замыкание фабрики
-    /// - Returns: Объекта из контейнера зависимости
-    @available(*, deprecated, message: "This feature has be deprecated and will be removed in future release")
-    func unravel<Service, Arg>(_ serviceType: Service.Type, argument: Arg) -> Service?
     
     /// Получение объекта из контейнера зависимости
     /// - Parameters:
