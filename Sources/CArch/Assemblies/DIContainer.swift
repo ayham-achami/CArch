@@ -83,19 +83,19 @@ public protocol BusinessLogicRegistrar {
     
     /// Регистрация агента в контейнер зависимости
     /// - Parameters:
-    ///   - _: Тип агента
+    ///   - serviceType: Тип агента
     ///   - factory: Блок содержащий код реализующий логику инициализация объекта
     func recordAgent<Agent>(_: Agent.Type, factory: @escaping (DIResolver) -> Agent) where Agent: BusinessLogicAgent
     
     /// Регистрация сервиса в контейнер зависимости
     /// - Parameters:
-    ///   - _: Тип сервиса
+    ///   - serviceType: Тип сервиса
     ///   - factory: Блок содержащий код реализующий логику инициализация объекта
     func recordService<Service>(_: Service.Type, factory: @escaping (DIResolver) -> Service) where Service: BusinessLogicService
     
     /// Регистрация сервиса в контейнер зависимости
     /// - Parameters:
-    ///   - _: Тип сервиса
+    ///   - serviceType: Тип сервиса
     ///   - configuration: Конфигурация двигателя
     ///   - factory: Блок содержащий код реализующий логику инициализация объекта
     func recordEngine<Engine>(_: Engine.Type, configuration: EngineConfiguration, factory: @escaping (DIResolver) -> Engine) where Engine: BusinessLogicEngine
@@ -106,27 +106,27 @@ public protocol ModuleComponentRegistrar {
     
     /// Регистрация компонента модуля в контейнер зависимости
     /// - Parameters:
-    ///   - _: Тип компонента
+    ///   - serviceType: Тип компонента
     ///   - factory: Блок содержащий код реализующий логику инициализация объекта
     func recordComponent<Component>(_: Component.Type, factory: @escaping (DIResolver) -> Component) where Component: CArchModuleComponent
     
     /// Регистрация компонента модуля в контейнер зависимости
     /// - Parameters:
-    ///   - _: Тип компонента
+    ///   - serviceType: Тип компонента
     ///   - factory: Блок содержащий код реализующий логику инициализация объекта
     func recordComponent<Component, Argument>(_: Component.Type, 
                                               factory: @escaping (DIResolver, Argument) -> Component) where Component: CArchModuleComponent
     
     /// Регистрация компонента модуля в контейнер зависимости
     /// - Parameters:
-    ///   - _: Тип компонента
+    ///   - serviceType: Тип компонента
     ///   - factory: Блок содержащий код реализующий логику инициализация объекта
     func recordComponent<Component, Argument1, Argument2>(_: Component.Type, 
                                                           factory: @escaping (DIResolver, Argument1, Argument2) -> Component) where Component: CArchModuleComponent
     
     /// Регистрация компонента модуля в контейнер зависимости
     /// - Parameters:
-    ///   - _: Тип компонента
+    ///   - serviceType: Тип компонента
     ///   - factory: Блок содержащий код реализующий логику инициализация объекта
     func recordComponent<Component, Argument1, Argument2, Argument3>(_: Component.Type,
                                                                      factory: @escaping (DIResolver, Argument1, Argument2, Argument3) -> Component) where Component: CArchModuleComponent
@@ -137,7 +137,7 @@ public protocol DIRegistrar: BusinessLogicRegistrar, ModuleComponentRegistrar {
     
     /// Регистрация объекта в контейнер зависимости
     /// - Parameters:
-    ///   - _: Тип объекта
+    ///   - serviceType: Тип объекта
     ///   - storage: Тип ссылки
     ///   - configuration: Конфигурация инъекции
     ///   - factory: Блок содержащий код реализующий логику инициализация объекта
@@ -167,17 +167,7 @@ public protocol DIRegistrar: BusinessLogicRegistrar, ModuleComponentRegistrar {
                          name: String,
                          inScope storage: StorageType,
                          factory: @escaping (DIResolver) -> Service)
-    
-    /// Регистрация объекта в контейнер зависимости
-    /// - Parameters:
-    ///   - serviceType: Тип объекта
-    ///   - storage: Тип ссылки
-    ///   - factory: Блок содержащий код реализующий логику внедрения объекта
-    @available(*, deprecated, message: "This feature has be deprecated and will be removed in future release")
-    func record<Service, each Argument>(_ serviceType: Service.Type,
-                                        inScope storage: StorageType,
-                                        factory: @escaping (DIResolver, repeat each Argument) -> Service)
-    
+        
     /// Регистрация объекта в контейнер зависимости
     /// - Parameters:
     ///   - serviceType: Тип объекта
