@@ -261,14 +261,14 @@ public protocol DIResolver {
     /// Получение объекта из контейнера зависимости
     /// - Parameter serviceType: Тип объекта
     /// - Returns: Объекта из контейнера зависимости
-    func unravel<Service>(_ serviceType: Service.Type) -> Service?
+    func unravel<Service>(_: Service.Type) -> Service?
     
     /// Получение объекта из контейнера зависимости
     /// - Parameters:
     ///   - serviceType: Тип объекта
     ///   - configuration: Конфигурация инъекции
     /// - Returns: Объекта из контейнера зависимости
-    func unravel<Service>(_ serviceType: Service.Type, configuration: any InjectConfiguration) -> Service?
+    func unravel<Service>(_: Service.Type, configuration: any InjectConfiguration) -> Service?
     
     /// Получение объекта из контейнера зависимости
     /// - Parameters:
@@ -283,7 +283,7 @@ public protocol DIResolver {
     ///   - argument1: Аргумент1 чтобы передавать в замыкание фабрики
     ///   - argument2: Аргумент2 чтобы передавать в замыкание фабрики
     /// - Returns: Объекта из контейнера зависимости
-    func unravel<Service, Argument1, Argument2>(_ serviceType: Service.Type, argument1: Argument1, argument2: Argument2) -> Service?
+    func unravel<Service, Argument1, Argument2>(_: Service.Type, argument1: Argument1, argument2: Argument2) -> Service?
     
     /// Получение объекта из контейнера зависимости
     /// - Parameters:
@@ -292,7 +292,7 @@ public protocol DIResolver {
     ///   - argument2: Аргумент2 чтобы передавать в замыкание фабрики
     ///   - argument3: Аргумент3 чтобы передавать в замыкание фабрики
     /// - Returns: Объекта из контейнера зависимости
-    func unravel<Service, Argument1, Argument2, Argument3>(_ serviceType: Service.Type, argument1: Argument1, argument2: Argument2, argument2: Argument3) -> Service?
+    func unravel<Service, Argument1, Argument2, Argument3>(_: Service.Type, argument1: Argument1, argument2: Argument2, argument2: Argument3) -> Service?
     
     /// Получение объекта из контейнера зависимости
     /// - Parameters:
