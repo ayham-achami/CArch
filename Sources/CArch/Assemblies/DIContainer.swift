@@ -292,7 +292,7 @@ public protocol DIResolver {
     ///   - argument2: Аргумент2 чтобы передавать в замыкание фабрики
     ///   - argument3: Аргумент3 чтобы передавать в замыкание фабрики
     /// - Returns: Объекта из контейнера зависимости
-    func unravel<Service, Argument1, Argument2, Argument3>(_: Service.Type, argument1: Argument1, argument2: Argument2, argument2: Argument3) -> Service?
+    func unravel<Service, Argument1, Argument2, Argument3>(_: Service.Type, argument1: Argument1, argument2: Argument2, argument3: Argument3) -> Service?
     
     /// Получение объекта из контейнера зависимости
     /// - Parameters:
