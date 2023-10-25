@@ -268,41 +268,67 @@ public extension DIRegistrar {
 /// Протокол получения объекта из контейнера зависимости
 public protocol DIResolver {
     
-    /// Получение объекта из контейнера зависимости
-    /// - Parameter serviceType: Тип объекта
-    /// - Returns: Объекта из контейнера зависимости
-    func unravel<Service>(_: Service.Type) -> Service?
+    /// Получение агента в контейнер зависимости
+    /// - Parameters:
+    ///   - serviceType: Тип агента
+    ///   - factory: Блок содержащий код реализующий логику инициализация объекта
+    func unravelAgent<Agent>(_: Agent.Type) -> Agent? where Agent: BusinessLogicAgent
     
-    /// Получение объекта из контейнера зависимости
+    /// Получение сервиса в контейнер зависимости
+    /// - Parameters:
+    ///   - serviceType: Тип сервиса
+    ///   - factory: Блок содержащий код реализующий логику инициализация объекта
+    func unravelService<Service>(_: Service.Type) -> Service? where Service: BusinessLogicService
+
+    /// Получение сервиса в контейнер зависимости
+    /// - Parameters:
+    ///   - serviceType: Тип сервиса
+    ///   - factory: Блок содержащий код реализующий логику инициализация объекта
+    func unravelEngine<Engine>(_: Engine.Type) -> Engine? where Engine: BusinessLogicEngine
+    
+    /// Получение сервиса в контейнер зависимости
+    /// - Parameters:
+    ///   - serviceType: Тип сервиса
+    ///   - configuration: Конфигурация двигателя
+    ///   - factory: Блок содержащий код реализующий логику инициализация объекта
+    func unravelEngine<Engine>(_: Engine.Type, configuration: EngineConfiguration) -> Engine? where Engine: BusinessLogicEngine
+    
+    /// Получение компонента модуля в контейнер зависимости
     /// - Parameters:
     ///   - serviceType: Тип объекта
-    ///   - configuration: Конфигурация инъекции
+    ///   - argument: Аргумент чтобы передавать в замыкание фабрики
     /// - Returns: Объекта из контейнера зависимости
-    func unravel<Service>(_: Service.Type, configuration: any InjectConfiguration) -> Service?
+    func unravelComponent<Component>(_: Component.Type) -> Component? where Component: CArchModuleComponent
     
     /// Получение объекта из контейнера зависимости
     /// - Parameters:
     ///   - serviceType: Тип объекта
     ///   - argument: Аргумент чтобы передавать в замыкание фабрики
     /// - Returns: Объекта из контейнера зависимости
-    func unravel<Service, Argument>(_: Service.Type, argument: Argument) -> Service?
+    func unravelComponent<Component, Argument>(_: Component.Type,
+                                               argument: Argument) -> Component? where Component: CArchModuleComponent
     
-    /// Получение объекта из контейнера зависимости
+    /// Получение компонента модуля в контейнер зависимости
     /// - Parameters:
     ///   - serviceType: Тип объекта
     ///   - argument1: Аргумент1 чтобы передавать в замыкание фабрики
     ///   - argument2: Аргумент2 чтобы передавать в замыкание фабрики
     /// - Returns: Объекта из контейнера зависимости
-    func unravel<Service, Argument1, Argument2>(_: Service.Type, argument1: Argument1, argument2: Argument2) -> Service?
+    func unravelComponent<Component, Argument1, Argument2>(_: Component.Type, 
+                                                           argument1: Argument1,
+                                                           argument2: Argument2) -> Component? where Component: CArchModuleComponent
     
-    /// Получение объекта из контейнера зависимости
+    /// Получение компонента модуля в контейнер зависимости
     /// - Parameters:
     ///   - serviceType: Тип объекта
     ///   - argument1: Аргумент1 чтобы передавать в замыкание фабрики
     ///   - argument2: Аргумент2 чтобы передавать в замыкание фабрики
     ///   - argument3: Аргумент3 чтобы передавать в замыкание фабрики
     /// - Returns: Объекта из контейнера зависимости
-    func unravel<Service, Argument1, Argument2, Argument3>(_: Service.Type, argument1: Argument1, argument2: Argument2, argument3: Argument3) -> Service?
+    func unravelComponent<Component, Argument1, Argument2, Argument3>(_: Component.Type, 
+                                                                      argument1: Argument1,
+                                                                      argument2: Argument2,
+                                                                      argument3: Argument3) -> Component? where Component: CArchModuleComponent
     
     /// Получение объекта из контейнера зависимости
     /// - Parameters:
