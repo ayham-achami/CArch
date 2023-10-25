@@ -92,6 +92,12 @@ public protocol BusinessLogicRegistrar {
     ///   - serviceType: Тип сервиса
     ///   - factory: Блок содержащий код реализующий логику инициализация объекта
     func recordService<Service>(_: Service.Type, factory: @escaping (DIResolver) -> Service) where Service: BusinessLogicService
+
+    /// Регистрация сервиса в контейнер зависимости
+    /// - Parameters:
+    ///   - serviceType: Тип сервиса
+    ///   - factory: Блок содержащий код реализующий логику инициализация объекта
+    func recordEngine<Engine>(_: Engine.Type, factory: @escaping (DIResolver) -> Engine) where Engine: BusinessLogicEngine
     
     /// Регистрация сервиса в контейнер зависимости
     /// - Parameters:
@@ -198,6 +204,10 @@ public extension DIRegistrar {
     
     func recordService<Service>(_: Service.Type, factory: @escaping (DIResolver) -> Service) where Service: BusinessLogicService {
         record(Service.self, inScope: .businessLogic, configuration: nil, factory: factory)
+    }
+    
+    func recordEngine<Engine>(_: Engine.Type, factory: @escaping (DIResolver) -> Engine) where Engine: BusinessLogicEngine {
+        record(Engine.self, inScope: .businessLogic, configuration: nil, factory: factory)
     }
     
     func recordEngine<Engine>(_: Engine.Type, configuration: EngineConfiguration, factory: @escaping (DIResolver) -> Engine) where Engine: BusinessLogicEngine {

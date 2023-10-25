@@ -61,6 +61,7 @@ public extension DIAssemblyCollection {
 }
 
 /// Протокол отвечающий за создание всех серверов
+@available(*, deprecated, message: "This feature has be deprecated and will be removed in future release")
 public protocol ServicesRecorder {
     
     /// Инициализации без параметров
@@ -71,6 +72,7 @@ public protocol ServicesRecorder {
 }
 
 // MARK: - ServicesRecorder + DIAssemblyCollection
+@available(*, deprecated, message: "This feature has be deprecated and will be removed in future release")
 public extension ServicesRecorder {
     
     var all: [DIAssembly] {
