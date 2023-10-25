@@ -272,33 +272,33 @@ public protocol DIResolver {
     /// - Parameters:
     ///   - serviceType: Тип агента
     ///   - factory: Блок содержащий код реализующий логику инициализация объекта
-    func unravelAgent<Agent>(_: Agent.Type) -> Agent? where Agent: BusinessLogicAgent
+    func unravelAgent<Agent>(_: Agent.Type) -> Agent where Agent: BusinessLogicAgent
     
     /// Получение сервиса в контейнер зависимости
     /// - Parameters:
     ///   - serviceType: Тип сервиса
     ///   - factory: Блок содержащий код реализующий логику инициализация объекта
-    func unravelService<Service>(_: Service.Type) -> Service? where Service: BusinessLogicService
+    func unravelService<Service>(_: Service.Type) -> Service where Service: BusinessLogicService
 
     /// Получение сервиса в контейнер зависимости
     /// - Parameters:
     ///   - serviceType: Тип сервиса
     ///   - factory: Блок содержащий код реализующий логику инициализация объекта
-    func unravelEngine<Engine>(_: Engine.Type) -> Engine? where Engine: BusinessLogicEngine
+    func unravelEngine<Engine>(_: Engine.Type) -> Engine where Engine: BusinessLogicEngine
     
     /// Получение сервиса в контейнер зависимости
     /// - Parameters:
     ///   - serviceType: Тип сервиса
     ///   - configuration: Конфигурация двигателя
     ///   - factory: Блок содержащий код реализующий логику инициализация объекта
-    func unravelEngine<Engine>(_: Engine.Type, configuration: EngineConfiguration) -> Engine? where Engine: BusinessLogicEngine
+    func unravelEngine<Engine>(_: Engine.Type, configuration: EngineConfiguration) -> Engine where Engine: BusinessLogicEngine
     
     /// Получение компонента модуля в контейнер зависимости
     /// - Parameters:
     ///   - serviceType: Тип объекта
     ///   - argument: Аргумент чтобы передавать в замыкание фабрики
     /// - Returns: Объекта из контейнера зависимости
-    func unravelComponent<Component>(_: Component.Type) -> Component? where Component: CArchModuleComponent
+    func unravelComponent<Component>(_: Component.Type) -> Component where Component: CArchModuleComponent
     
     /// Получение объекта из контейнера зависимости
     /// - Parameters:
@@ -306,7 +306,7 @@ public protocol DIResolver {
     ///   - argument: Аргумент чтобы передавать в замыкание фабрики
     /// - Returns: Объекта из контейнера зависимости
     func unravelComponent<Component, Argument>(_: Component.Type,
-                                               argument: Argument) -> Component? where Component: CArchModuleComponent
+                                               argument: Argument) -> Component where Component: CArchModuleComponent
     
     /// Получение компонента модуля в контейнер зависимости
     /// - Parameters:
@@ -316,7 +316,7 @@ public protocol DIResolver {
     /// - Returns: Объекта из контейнера зависимости
     func unravelComponent<Component, Argument1, Argument2>(_: Component.Type, 
                                                            argument1: Argument1,
-                                                           argument2: Argument2) -> Component? where Component: CArchModuleComponent
+                                                           argument2: Argument2) -> Component where Component: CArchModuleComponent
     
     /// Получение компонента модуля в контейнер зависимости
     /// - Parameters:
@@ -328,7 +328,13 @@ public protocol DIResolver {
     func unravelComponent<Component, Argument1, Argument2, Argument3>(_: Component.Type, 
                                                                       argument1: Argument1,
                                                                       argument2: Argument2,
-                                                                      argument3: Argument3) -> Component? where Component: CArchModuleComponent
+                                                                      argument3: Argument3) -> Component where Component: CArchModuleComponent
+    
+    /// Получение объекта из контейнера зависимости
+    /// - Parameter serviceType: Тип объекта
+    /// - Returns: Объекта из контейнера зависимости
+    @available(*, deprecated, message: "This feature has be deprecated and will be removed in future release")
+    func unravel<Service>(_ serviceType: Service.Type) -> Service?
     
     /// Получение объекта из контейнера зависимости
     /// - Parameters:
@@ -337,6 +343,14 @@ public protocol DIResolver {
     /// - Returns: Объекта из контейнера зависимости
     @available(*, deprecated, message: "This feature has be deprecated and will be removed in future release")
     func unravel<Service>(_ serviceType: Service.Type, name: String?) -> Service?
+    
+    /// Получение объекта из контейнера зависимости
+    /// - Parameters:
+    ///   - serviceType: Тип объекта
+    ///   - argument: Аргумент чтобы передавать в замыкание фабрики
+    /// - Returns: Объекта из контейнера зависимости
+    @available(*, deprecated, message: "This feature has be deprecated and will be removed in future release")
+    func unravel<Service, Arg>(_ serviceType: Service.Type, argument: Arg) -> Service?
     
     /// Получение объекта из контейнера зависимости
     /// - Parameters:
