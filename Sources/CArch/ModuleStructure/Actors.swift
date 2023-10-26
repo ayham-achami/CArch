@@ -34,13 +34,3 @@ import Foundation
     /// Инициализация
     private init() {}
 }
-
-/// Глобальный актор для выполнения асинхронных задач бизнес логики уровня провайдера
-@globalActor public actor MaintenanceActor {
-    
-    /// `MaintenanceActor`
-    public static var shared = MaintenanceActor()
-    
-    /// Инициализация
-    private init() {}
-}

@@ -30,26 +30,15 @@ public enum StorageType {
     
     /// - singleton: Cинглтон, объект всегда есть, и будет всегда при цикле resolve
     ///              возвращен один и тоже объект
-    @available(*, deprecated, message: "This feature has be deprecated and will be removed in future release")
     case singleton
     /// - autoRelease: Автоматическое уничтожение, пока на объекта есть сильная
     ///                ссылка всегда он есть при цикле revolve, уничтожается когда
     ///                нет не каких сильных ссылка на объект и тогда при следующем цикле
     ///                возвращается новый экземпляр объекта
-    @available(*, deprecated, message: "This feature has be deprecated and will be removed in future release")
     case autoRelease
     /// - alwaysNewInstance: Всегда будет новый экземпляр объекта при цикле revolve
     @available(*, deprecated, message: "This feature has be deprecated and will be removed in future release")
     case alwaysNewInstance
-    
-    /// - businessLogic: Скоп business logic объект будет жить пока на него есть сильная ссылка
-    ///                  и он общий на уровне контейнера зависимости и его Parents и Childs
-    ///                  всегда будет один и тоже экземпляр объекта при цикле revolve
-    case businessLogic
-    /// - moduleComponent: Скоп двигателей объект будет жить пока на него есть сильная ссылка
-    ///                    и он НЕ общий на уровне контейнера зависимости и его Parents и Childs
-    ///                    всегда будет новый экземпляр объекта при цикле revolve
-    case moduleComponent
     
     /// Слабая ссылка на объект
     public class WeakReference<Wrapped: AnyObject> {
@@ -83,7 +72,7 @@ public protocol BusinessLogicRegistrar {
     
     /// Регистрация агента в контейнер зависимости
     /// - Parameters:
-    ///   - serviceType: Тип агента
+    ///   - agentType: Тип агента
     ///   - factory: Блок содержащий код реализующий логику инициализация объекта
     func recordAgent<Agent>(_: Agent.Type, factory: @escaping (DIResolver) -> Agent) where Agent: BusinessLogicAgent
     
@@ -93,18 +82,30 @@ public protocol BusinessLogicRegistrar {
     ///   - factory: Блок содержащий код реализующий логику инициализация объекта
     func recordService<Service>(_: Service.Type, factory: @escaping (DIResolver) -> Service) where Service: BusinessLogicService
 
-    /// Регистрация сервиса в контейнер зависимости
+    /// Регистрация двигателя в контейнер зависимости
     /// - Parameters:
-    ///   - serviceType: Тип сервиса
+    ///   - engineType: Тип двигателя
     ///   - factory: Блок содержащий код реализующий логику инициализация объекта
     func recordEngine<Engine>(_: Engine.Type, factory: @escaping (DIResolver) -> Engine) where Engine: BusinessLogicEngine
     
-    /// Регистрация сервиса в контейнер зависимости
+    /// Регистрация двигателя в контейнер зависимости
     /// - Parameters:
-    ///   - serviceType: Тип сервиса
+    ///   - engineType: Тип двигателя
     ///   - configuration: Конфигурация двигателя
     ///   - factory: Блок содержащий код реализующий логику инициализация объекта
-    func recordEngine<Engine>(_: Engine.Type, configuration: EngineConfiguration, factory: @escaping (DIResolver) -> Engine) where Engine: BusinessLogicEngine
+    func recordEngine<Engine>(_: Engine.Type, configuration: EngineConfiguration, factory: @escaping (DIResolver) async -> Engine) where Engine: BusinessLogicEngine
+    
+    /// Регистрация множество сервисов в контейнер зависимости
+    /// - Parameters:
+    ///   - poolType: Тип множества
+    ///   - factory: Блок содержащий код реализующий логику инициализация объекта
+    func recordPool<Pool>(_: Pool.Type, factory: @escaping (DIResolver) -> Pool) where Pool: BusinessLogicServicePool
+    
+    /// Регистрация singleton в контейнер зависимости
+    /// - Parameters:
+    ///   - singletonType: Тип singleton
+    ///   - factory: Блок содержащий код реализующий логику инициализация объекта
+    func recordSingleton<Singleton>(_: Singleton.Type, factory: @escaping (DIResolver) -> Singleton) where Singleton: BusinessLogicSingleton
 }
 
 /// Протокол внедрения объектов компонентов модуля в контейнер зависимости
@@ -197,26 +198,6 @@ public protocol DIRegistrar: BusinessLogicRegistrar, ModuleComponentRegistrar {
 
 // MARK: - DIRegistrar + Default
 public extension DIRegistrar {
-    
-    func recordAgent<Agent>(_: Agent.Type, factory: @escaping (DIResolver) -> Agent) where Agent: BusinessLogicAgent {
-        record(Agent.self, inScope: .businessLogic, configuration: nil, factory: factory)
-    }
-    
-    func recordService<Service>(_: Service.Type, factory: @escaping (DIResolver) -> Service) where Service: BusinessLogicService {
-        record(Service.self, inScope: .businessLogic, configuration: nil, factory: factory)
-    }
-    
-    func recordEngine<Engine>(_: Engine.Type, factory: @escaping (DIResolver) -> Engine) where Engine: BusinessLogicEngine {
-        record(Engine.self, inScope: .businessLogic, configuration: nil, factory: factory)
-    }
-    
-    func recordEngine<Engine>(_: Engine.Type, configuration: EngineConfiguration, factory: @escaping (DIResolver) -> Engine) where Engine: BusinessLogicEngine {
-        record(Engine.self, inScope: .businessLogic, configuration: configuration, factory: factory)
-    }
-    
-    func recordComponent<Component>(_: Component.Type, factory: @escaping (DIResolver) -> Component) where Component: CArchModuleComponent {
-        record(Component.self, inScope: .moduleComponent, configuration: nil, factory: factory)
-    }
     
     /// Регистрация объекта в контейнер зависимости
     /// - Parameters:

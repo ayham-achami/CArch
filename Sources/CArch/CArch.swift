@@ -90,9 +90,9 @@ public struct EngineConfiguration: InjectConfiguration {
     }
 }
 
-/// Базовый протокол любого двигатель слоя бизнес логики
+/// Базовый протокол любого двигателя слоя бизнес логики
 /// нельзя создавать двигатель и не наследовать данный протокол
-@MaintenanceActor public protocol BusinessLogicEngine: CArchProtocol, CustomStringConvertible, CustomDebugStringConvertible {}
+public protocol BusinessLogicEngine: CArchProtocol, Actor, CustomStringConvertible, CustomDebugStringConvertible {}
 
 // MARK: - BusinessLogicEngine + StringConvertible
 public extension BusinessLogicEngine {
@@ -108,7 +108,7 @@ public extension BusinessLogicEngine {
 
 /// Базовый протокол любого агента слоя бизнес логики
 /// нельзя создавать агент и не наследовать данный протокол
-@MaintenanceActor public protocol BusinessLogicAgent: CArchProtocol, CustomStringConvertible, CustomDebugStringConvertible {}
+public protocol BusinessLogicAgent: CArchProtocol, Actor, CustomStringConvertible, CustomDebugStringConvertible {}
 
 // MARK: - BusinessLogicAgent + StringConvertible
 public extension BusinessLogicAgent {
@@ -124,7 +124,7 @@ public extension BusinessLogicAgent {
 
 /// Базовый протокол любого сервиса слоя бизнес логики
 /// нельзя создавать сервис и не наследовать данный протокол
-@MaintenanceActor public protocol BusinessLogicService: CArchProtocol, CustomStringConvertible, CustomDebugStringConvertible {}
+public protocol BusinessLogicService: CArchProtocol, Actor, CustomStringConvertible, CustomDebugStringConvertible {}
 
 // MARK: - BusinessLogicService + StringConvertible
 public extension BusinessLogicService {
@@ -139,7 +139,10 @@ public extension BusinessLogicService {
 }
 
 /// Протокол множества сервисов
-@MaintenanceActor public protocol BusinessLogicServicePool: CArchProtocol {}
+public protocol BusinessLogicServicePool: BusinessLogicService {}
+
+/// Протокол метки объекта типа ``Singleton``
+public protocol BusinessLogicSingleton: CArchProtocol, Actor {}
 
 /// Макрос, который добавить alias не асинхронной функции всех асинхронных функций
 ///
