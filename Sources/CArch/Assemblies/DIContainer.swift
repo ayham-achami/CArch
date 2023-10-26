@@ -93,7 +93,7 @@ public protocol BusinessLogicRegistrar {
     ///   - engineType: Тип двигателя
     ///   - configuration: Конфигурация двигателя
     ///   - factory: Блок содержащий код реализующий логику инициализация объекта
-    func recordEngine<Engine>(_: Engine.Type, configuration: EngineConfiguration, factory: @escaping (DIResolver) async -> Engine) where Engine: BusinessLogicEngine
+    func recordEngine<Engine>(_: Engine.Type, configuration: EngineConfiguration, factory: @escaping (DIResolver) -> Engine) where Engine: BusinessLogicEngine
     
     /// Регистрация множество сервисов в контейнер зависимости
     /// - Parameters:
