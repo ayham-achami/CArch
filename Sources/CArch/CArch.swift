@@ -97,11 +97,11 @@ public protocol BusinessLogicEngine: CArchProtocol, Actor, CustomStringConvertib
 // MARK: - BusinessLogicEngine + StringConvertible
 public extension BusinessLogicEngine {
     
-    var description: String {
+    nonisolated var description: String {
         "🧰 \(String(describing: Self.self))"
     }
     
-    var debugDescription: String {
+    nonisolated var debugDescription: String {
         description
     }
 }
@@ -113,11 +113,11 @@ public protocol BusinessLogicAgent: CArchProtocol, Actor, CustomStringConvertibl
 // MARK: - BusinessLogicAgent + StringConvertible
 public extension BusinessLogicAgent {
     
-    var description: String {
+    nonisolated var description: String {
         "🛠️ \(String(describing: Self.self))"
     }
     
-    var debugDescription: String {
+    nonisolated var debugDescription: String {
         description
     }
 }
@@ -129,11 +129,11 @@ public protocol BusinessLogicService: CArchProtocol, Actor, CustomStringConverti
 // MARK: - BusinessLogicService + StringConvertible
 public extension BusinessLogicService {
 
-    var description: String {
+    nonisolated var description: String {
         "⚙️ \(String(describing: Self.self))"
     }
 
-    var debugDescription: String {
+    nonisolated var debugDescription: String {
         description
     }
 }
@@ -141,8 +141,32 @@ public extension BusinessLogicService {
 /// Протокол множества сервисов
 public protocol BusinessLogicServicePool: BusinessLogicService {}
 
+// MARK: - BusinessLogicServicePool + StringConvertible
+public extension BusinessLogicServicePool {
+
+    nonisolated var description: String {
+        "🏭 \(String(describing: Self.self))"
+    }
+
+    nonisolated var debugDescription: String {
+        description
+    }
+}
+
 /// Протокол метки объекта типа ``Singleton``
 public protocol BusinessLogicSingleton: CArchProtocol, Actor {}
+
+// MARK: - BusinessLogicSingleton + StringConvertible
+public extension BusinessLogicSingleton {
+
+    nonisolated var description: String {
+        "🎯 \(String(describing: Self.self))"
+    }
+
+    nonisolated var debugDescription: String {
+        description
+    }
+}
 
 /// Макрос, который добавить alias не асинхронной функции всех асинхронных функций
 ///
