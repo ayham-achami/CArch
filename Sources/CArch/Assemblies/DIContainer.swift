@@ -28,6 +28,8 @@ import Foundation
 /// Типы ссылок на объекты в контейнер зависимостей
 public enum StorageType {
     
+    /// - fleeting: Всегда будет новый экземпляр объекта при цикле revolve
+    case fleeting
     /// - singleton: Cинглтон, объект всегда есть, и будет всегда при цикле resolve
     ///              возвращен один и тоже объект
     case singleton
