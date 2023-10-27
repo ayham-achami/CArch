@@ -92,7 +92,7 @@ public struct EngineConfiguration: InjectConfiguration {
 
 /// Базовый протокол любого двигателя слоя бизнес логики
 /// нельзя создавать двигатель и не наследовать данный протокол
-public protocol BusinessLogicEngine: CArchProtocol, Actor, CustomStringConvertible, CustomDebugStringConvertible {}
+@MaintenanceActor public protocol BusinessLogicEngine: CArchProtocol, CustomStringConvertible, CustomDebugStringConvertible {}
 
 // MARK: - BusinessLogicEngine + StringConvertible
 public extension BusinessLogicEngine {
