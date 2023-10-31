@@ -251,32 +251,37 @@ public extension DIRegistrar {
 /// Протокол получения объекта из контейнера зависимости
 public protocol DIResolver {
     
-    /// Получение агента в контейнер зависимости
+    /// Получение агента из контейнера зависимости
     /// - Parameters:
     ///   - serviceType: Тип агента
     ///   - factory: Блок содержащий код реализующий логику инициализация объекта
     func unravelAgent<Agent>(_: Agent.Type) -> Agent where Agent: BusinessLogicAgent
     
-    /// Получение сервиса в контейнер зависимости
+    /// Получение сервиса из контейнера зависимости
     /// - Parameters:
     ///   - serviceType: Тип сервиса
     ///   - factory: Блок содержащий код реализующий логику инициализация объекта
     func unravelService<Service>(_: Service.Type) -> Service where Service: BusinessLogicService
 
-    /// Получение сервиса в контейнер зависимости
+    /// Получение сервиса из контейнера зависимости
     /// - Parameters:
     ///   - serviceType: Тип сервиса
     ///   - factory: Блок содержащий код реализующий логику инициализация объекта
     func unravelEngine<Engine>(_: Engine.Type) -> Engine where Engine: BusinessLogicEngine
     
-    /// Получение сервиса в контейнер зависимости
+    /// Получение сервиса из контейнера зависимости
     /// - Parameters:
     ///   - serviceType: Тип сервиса
     ///   - configuration: Конфигурация двигателя
     ///   - factory: Блок содержащий код реализующий логику инициализация объекта
     func unravelEngine<Engine>(_: Engine.Type, configuration: EngineConfiguration) -> Engine where Engine: BusinessLogicEngine
     
-    /// Получение компонента модуля в контейнер зависимости
+    /// Получение модуля из контейнера зависимости
+    /// - Parameter moduleType: Тип модуля
+    /// - Returns: модуля `CArchModule`
+    func unravelModule<Module>(_: Module.Type) -> Module where Module: CArchModule
+    
+    /// Получение компонента модуля из контейнера зависимости
     /// - Parameters:
     ///   - serviceType: Тип объекта
     ///   - argument: Аргумент чтобы передавать в замыкание фабрики
@@ -291,7 +296,7 @@ public protocol DIResolver {
     func unravelComponent<Component, Argument>(_: Component.Type,
                                                argument: Argument) -> Component where Component: CArchModuleComponent
     
-    /// Получение компонента модуля в контейнер зависимости
+    /// Получение компонента модуля из контейнера зависимости
     /// - Parameters:
     ///   - serviceType: Тип объекта
     ///   - argument1: Аргумент1 чтобы передавать в замыкание фабрики
@@ -301,7 +306,7 @@ public protocol DIResolver {
                                                            argument1: Argument1,
                                                            argument2: Argument2) -> Component where Component: CArchModuleComponent
     
-    /// Получение компонента модуля в контейнер зависимости
+    /// Получение компонента модуля из контейнера зависимости
     /// - Parameters:
     ///   - serviceType: Тип объекта
     ///   - argument1: Аргумент1 чтобы передавать в замыкание фабрики
