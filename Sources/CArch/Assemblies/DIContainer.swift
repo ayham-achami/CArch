@@ -328,13 +328,15 @@ public protocol DIResolver: BusinessLogicResolver, ModuleComponentResolver {
     
     /// Получение объекта из контейнера зависимости
     /// - Parameter serviceType: Тип объекта
-    func unravel<Service>(some _: Service.Type)
+    /// - Returns: Объекта из контейнера зависимости
+    func unravel<Service>(some _: Service.Type) -> Service
     
     /// Получение объекта из контейнера зависимости
     /// - Parameters:
     ///   - serviceType: Тип объекта
     ///   - configuration: Конфигурация инъекции
-    func unravel<Service>(some _: Service.Type, configuration: any InjectConfiguration)
+    /// - Returns: Объекта из контейнера зависимости
+    func unravel<Service>(some _: Service.Type, configuration: any InjectConfiguration) -> Service
     
     /// Получение объекта из контейнера зависимости
     /// - Parameter serviceType: Тип объекта
