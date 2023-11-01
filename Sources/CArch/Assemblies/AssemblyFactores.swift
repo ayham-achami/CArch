@@ -25,8 +25,16 @@
 
 import Foundation
 
+/// Протокол регулировки уровня логирования
+public protocol DIAssemblyFactoryDebugger {
+    
+    /// Регулировки уровня логирования
+    /// - Parameter isDebugEnabled: Вкл/Выкл
+    static func set(isDebugEnabled: Bool)
+}
+
 /// Протокол получения доступа к контейнеру зависимости
-public protocol AnyDIAssemblyFactory {
+public protocol AnyDIAssemblyFactory: DIAssemblyFactoryDebugger {
     
     /// Объект отвечающий за регистрацию сервиса в контейнер зависимости
     var registrar: DIRegistrar { get }
