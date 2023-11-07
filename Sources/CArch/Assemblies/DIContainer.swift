@@ -3,44 +3,11 @@
 //
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2019 Community Arch
-//
-//  Permission is hereby granted, free of charge, to any person obtaining a copy
-//  of this software and associated documentation files (the "Software"), to deal
-//  in the Software without restriction, including without limitation the rights
-//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-//  copies of the Software, and to permit persons to whom the Software is
-//  furnished to do so, subject to the following conditions:
-//
-//  The above copyright notice and this permission notice shall be included in all
-//  copies or substantial portions of the Software.
-//
-//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-//  SOFTWARE.
 
 import Foundation
 
 /// Типы ссылок на объекты в контейнер зависимостей
 public enum StorageType {
-    
-    /// - fleeting: Всегда будет новый экземпляр объекта при цикле revolve
-    case fleeting
-    /// - singleton: Cинглтон, объект всегда есть, и будет всегда при цикле resolve
-    ///              возвращен один и тоже объект
-    case singleton
-    /// - autoRelease: Автоматическое уничтожение, пока на объекта есть сильная
-    ///                ссылка всегда он есть при цикле revolve, уничтожается когда
-    ///                нет не каких сильных ссылка на объект и тогда при следующем цикле
-    ///                возвращается новый экземпляр объекта
-    case autoRelease
-    /// - alwaysNewInstance: Всегда будет новый экземпляр объекта при цикле revolve
-    @available(*, deprecated, message: "This feature has be deprecated and will be removed in future release")
-    case alwaysNewInstance
     
     /// Слабая ссылка на объект
     public class WeakReference<Wrapped: AnyObject> {
@@ -67,6 +34,20 @@ public enum StorageType {
             self.wrapped = wrapped
         }
     }
+    
+    /// - fleeting: Всегда будет новый экземпляр объекта при цикле revolve
+    case fleeting
+    /// - singleton: Cинглтон, объект всегда есть, и будет всегда при цикле resolve
+    ///              возвращен один и тоже объект
+    case singleton
+    /// - autoRelease: Автоматическое уничтожение, пока на объекта есть сильная
+    ///                ссылка всегда он есть при цикле revolve, уничтожается когда
+    ///                нет не каких сильных ссылка на объект и тогда при следующем цикле
+    ///                возвращается новый экземпляр объекта
+    case autoRelease
+    /// - alwaysNewInstance: Всегда будет новый экземпляр объекта при цикле revolve
+    @available(*, deprecated, message: "This feature has be deprecated and will be removed in future release")
+    case alwaysNewInstance
 }
 
 /// Протокол внедрения объектов бизнес логики в контейнер зависимости
@@ -123,14 +104,14 @@ public protocol ModuleComponentRegistrar {
     /// - Parameters:
     ///   - serviceType: Тип компонента
     ///   - factory: Блок содержащий код реализующий логику инициализация объекта
-    func recordComponent<Component, Argument>(_: Component.Type, 
+    func recordComponent<Component, Argument>(_: Component.Type,
                                               factory: @escaping (DIResolver, Argument) -> Component) where Component: CArchModuleComponent
     
     /// Регистрация компонента модуля в контейнер зависимости
     /// - Parameters:
     ///   - serviceType: Тип компонента
     ///   - factory: Блок содержащий код реализующий логику инициализация объекта
-    func recordComponent<Component, Argument1, Argument2>(_: Component.Type, 
+    func recordComponent<Component, Argument1, Argument2>(_: Component.Type,
                                                           factory: @escaping (DIResolver, Argument1, Argument2) -> Component) where Component: CArchModuleComponent
     
     /// Регистрация компонента модуля в контейнер зависимости

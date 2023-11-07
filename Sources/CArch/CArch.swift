@@ -1,27 +1,6 @@
 //
-//  CArch.h
+//  CArch.swift
 //
-//  The MIT License (MIT)
-//
-//  Copyright (c) 2019 Community Arch
-//
-//  Permission is hereby granted, free of charge, to any person obtaining a copy
-//  of this software and associated documentation files (the "Software"), to deal
-//  in the Software without restriction, including without limitation the rights
-//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-//  copies of the Software, and to permit persons to whom the Software is
-//  furnished to do so, subject to the following conditions:
-//
-//  The above copyright notice and this permission notice shall be included in all
-//  copies or substantial portions of the Software.
-//
-//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-//  SOFTWARE.
 
 import Foundation
 
@@ -48,13 +27,13 @@ public typealias ViewController = Any
 public protocol CArchModule: CArchProtocol {
 
     /// View component
-    var node: ViewController { get }
+    nonisolated var node: ViewController { get }
 
     /// Инициализатор модуля
-    var initializer: AnyModuleInitializer? { get }
+    nonisolated var initializer: AnyModuleInitializer? { get }
 
     /// Делегат модуля, объекта ожидаемый результат от текущего модуля
-    var finalizer: AnyModuleFinalizer? { get }
+    nonisolated var finalizer: AnyModuleFinalizer? { get }
 }
 
 #if canImport(UIKit)
@@ -63,15 +42,15 @@ import UIKit
 // MARK: - UIViewController + CArchModule
 extension UIViewController: CArchModule {
     
-    public var node: ViewController {
+    public nonisolated var node: ViewController {
         self
     }
     
-    public var initializer: AnyModuleInitializer? {
+    public nonisolated var initializer: AnyModuleInitializer? {
         self as? AnyModuleInitializer
     }
     
-    public var finalizer: AnyModuleFinalizer? {
+    public nonisolated var finalizer: AnyModuleFinalizer? {
         self as? AnyModuleFinalizer
     }
 }

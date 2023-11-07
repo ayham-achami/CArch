@@ -1,7 +1,11 @@
-import SwiftSyntax
+//
+//  SyncAliasMacro.swift
+//
+
 import SwiftDiagnostics
-import SwiftSyntaxMacros
+import SwiftSyntax
 import SwiftSyntaxBuilder
+import SwiftSyntaxMacros
 
 /// Макрос, который добавить alias не асинхронной функции всех асинхронных функций
 public struct SyncAliasMacro: ExtensionMacro {

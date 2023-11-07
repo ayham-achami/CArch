@@ -1,7 +1,11 @@
-import SwiftSyntax
+//
+//  UIContactorMacro.swift
+//
+
 import SwiftDiagnostics
-import SwiftSyntaxMacros
+import SwiftSyntax
 import SwiftSyntaxBuilder
+import SwiftSyntaxMacros
 
 /// Макрос, который добавить nonisolated alias всех не асинхронных функций
 public struct UIContactorMacro: ExtensionMacro {

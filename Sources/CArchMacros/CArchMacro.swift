@@ -1,5 +1,9 @@
-import SwiftSyntaxMacros
+//
+//  CArchMacro.swift
+//
+
 import SwiftCompilerPlugin
+import SwiftSyntaxMacros
 
 @main
 struct CArchPlugin: CompilerPlugin {

@@ -1,8 +1,5 @@
 //
 //  Macro+Extension.swift
-//  
-//
-//  Created by Ayham Hylam on 29.07.2023.
 //
 
 import Foundation

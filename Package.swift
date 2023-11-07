@@ -78,3 +78,9 @@ let package = Package(
     ],
     swiftLanguageVersions: [.v5]
 )
+
+for target in package.targets {
+  var settings = target.swiftSettings ?? []
+  settings.append(.enableExperimentalFeature("StrictConcurrency=minimal"))
+  target.swiftSettings = settings
+}

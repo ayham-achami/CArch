@@ -1,3 +1,7 @@
+//
+//  main.swift
+//
+
 import CArch
 
 protocol TestProtocolInc {}
@@ -108,4 +112,4 @@ class TestUI: TestUIProtocol {
 }
 
 let testUI = TestUI()
-//testUI.nonisolatedFunction("")
+testUI.nonisolatedFunction("")
