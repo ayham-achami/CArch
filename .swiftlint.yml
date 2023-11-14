@@ -66,9 +66,6 @@ nesting:
   type_level:
     warning: 4
     error: 4
-  statement_level:
-    warning: 4
-    error: 4
 implicit_return:
   severity: error
 attributes:
