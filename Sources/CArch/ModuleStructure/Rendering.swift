@@ -2,7 +2,6 @@
 //  Rendering.swift
 //
 
-import Foundation
 #if canImport(UIKit)
 import UIKit
 

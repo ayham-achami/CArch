@@ -7,16 +7,10 @@ import SwiftSyntax
 // MARK: - CodeBlockSyntax + Functions
 extension CodeBlockSyntax {
     
-    /// <#Description#>
-    /// - Parameter function: <#function description#>
-    /// - Returns: <#description#>
     static func awaitSyntax(_ function: FunctionDeclSyntax) -> Self {
         bodySyntax(.init(stringLiteral: "await self?.\(function.name)(\(arguments(of: function)))"))
     }
     
-    /// <#Description#>
-    /// - Parameter function: <#function description#>
-    /// - Returns: <#description#>
     static func tryAwaitSyntax(_ function: FunctionDeclSyntax) -> Self {
         bodySyntax(.init(stringLiteral:
         """
@@ -28,9 +22,6 @@ extension CodeBlockSyntax {
         """))
     }
     
-    /// <#Description#>
-    /// - Parameter function: <#function description#>
-    /// - Returns: <#description#>
     static func arguments(of function: FunctionDeclSyntax) -> String {
         function.signature.parameterClause.parameters.map { param in
             let argName = param.secondName ?? param.firstName
@@ -42,9 +33,6 @@ extension CodeBlockSyntax {
         }.joined(separator: ", ")
     }
     
-    /// <#Description#>
-    /// - Parameter syntax: <#syntax description#>
-    /// - Returns: <#description#>
     private static func bodySyntax(_ syntax: ExprSyntax) -> Self {
         let body = ExprSyntax(stringLiteral:
         """

@@ -23,7 +23,7 @@ opt_in_rules:
   - vertical_whitespace_closing_braces
 included:
   - Sources
-  - Tests
+  - CArchTests
   - Package.swift
 excluded:
   - Templates
