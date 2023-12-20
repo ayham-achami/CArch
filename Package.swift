@@ -46,9 +46,6 @@ let package = Package(
             dependencies: [
                 "CArchMacros"
             ],
-            exclude: [
-                "Info.plist"
-            ],
             plugins: [
                 .plugin(name: "SwiftLintPlugin", package: "SwiftLint")
             ]
@@ -68,9 +65,6 @@ let package = Package(
                 "CArch"
             ],
             path: "CArchTests",
-            exclude: [
-                "Info.plist"
-            ],
             plugins: [
                 .plugin(name: "SwiftLintPlugin", package: "SwiftLint")
             ]
@@ -79,8 +73,13 @@ let package = Package(
     swiftLanguageVersions: [.v5]
 )
 
-for target in package.targets {
-  var settings = target.swiftSettings ?? []
-  settings.append(.enableExperimentalFeature("StrictConcurrency=minimal"))
-  target.swiftSettings = settings
+let defaultSettings: [SwiftSetting] = [.enableExperimentalFeature("StrictConcurrency=minimal")]
+package.targets.forEach { target in
+    if var settings = target.swiftSettings, !settings.isEmpty {
+        settings.append(contentsOf: defaultSettings)
+        target.swiftSettings = settings
+    } else {
+        target.swiftSettings = defaultSettings
+    }
 }
+
