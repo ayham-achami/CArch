@@ -43,20 +43,11 @@ public extension DIAssemblyCollection {
 @available(*, deprecated, message: "This feature has be deprecated and will be removed in future release")
 public protocol ServicesRecorder {
     
-    /// Коллекция объектов
-    var records: [any DIAssemblyCollection] { get }
+    /// Возвращает всех cервисов бизнес логики
+    ///
+    /// - Returns: Сервисы бизнес логики
+    var records: [DIAssembly] { get }
     
     /// Инициализации без параметров
     init()
-}
-
-// MARK: - ServicesRecorder + DIAssemblyCollection
-@available(*, deprecated, message: "This feature has be deprecated and will be removed in future release")
-public extension ServicesRecorder {
-    
-    var all: [DIAssembly] {
-        records.reduce([]) { partialResult, assemblyCollection in
-            partialResult + assemblyCollection.services
-        }
-    }
 }
