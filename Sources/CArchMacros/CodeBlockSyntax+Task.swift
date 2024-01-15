@@ -8,18 +8,35 @@ import SwiftSyntax
 extension CodeBlockSyntax {
     
     static func awaitSyntax(_ function: FunctionDeclSyntax) -> Self {
-        bodySyntax(.init(stringLiteral: "await self?.\(function.name)(\(arguments(of: function)))"))
+        .init(
+            statements: .init(
+                arrayLiteral: .init(
+                    item: .expr("""
+                                Task { [weak self] in
+                                    await self?.\(function.name)(\(raw: arguments(of: function)))
+                                }
+                            """)
+                )
+            ).with(\.leadingTrivia, .tab)
+        )
     }
     
     static func tryAwaitSyntax(_ function: FunctionDeclSyntax) -> Self {
-        bodySyntax(.init(stringLiteral:
-        """
-        do {
-                try await self?.\(function.name)(\(arguments(of: function)))
-        } catch {
-                self?.encountered(error)
-        }
-        """))
+        .init(
+            statements: .init(
+                arrayLiteral: .init(
+                    item: .expr("""
+                                Task { [weak self] in
+                                    do {
+                                        try await self?.\(function.name)(\(raw: arguments(of: function)))
+                                    } catch {
+                                        self?.encountered(error)
+                                    }
+                                }
+                           """)
+                ).with(\.leadingTrivia, .tab)
+            )
+        )
     }
     
     static func arguments(of function: FunctionDeclSyntax) -> String {
@@ -31,18 +48,5 @@ extension CodeBlockSyntax {
             }
             return "\(argName.text)"
         }.joined(separator: ", ")
-    }
-    
-    private static func bodySyntax(_ syntax: ExprSyntax) -> Self {
-        let body = ExprSyntax(stringLiteral:
-        """
-        Task { [weak self] in
-            \(syntax)
-        }
-        """)
-        let statements = CodeBlockItemListSyntax([CodeBlockItemSyntax(item: .expr(body))])
-        let bodySyntax = CodeBlockSyntax(statements: statements,
-                                         rightBrace: .rightBraceToken(leadingTrivia: .newline))
-        return bodySyntax
     }
 }

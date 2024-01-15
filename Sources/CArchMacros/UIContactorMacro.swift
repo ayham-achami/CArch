@@ -18,13 +18,21 @@ public struct UIContactorMacro: ExtensionMacro {
         guard
             let protocolDecl = declaration.as(ProtocolDeclSyntax.self)
         else { throw ProtocolsMacros.Error.notProtocol(Self.self) }
-        let functions = functions(from: protocolDecl)
-        let extensionDecl = try ExtensionDeclSyntax("extension \(raw: protocolDecl.name.text)") {
-            for function in functions {
-                function
-            }
-        }
-        return [extensionDecl]
+        return [
+            ExtensionDeclSyntax(
+                extendedType: TypeSyntax(
+                    stringLiteral: protocolDecl.name.text
+                ),
+                memberBlock: .init(
+                    members: .init {
+                        let functions = functions(from: protocolDecl)
+                        for function in functions {
+                            function
+                        }
+                    }
+                )
+            )
+        ]
     }
     
     /// Возвращает все не асинхронные функций в протоколе
@@ -34,33 +42,25 @@ public struct UIContactorMacro: ExtensionMacro {
         protocolDecl
             .memberBlock
             .members
-            .compactMap { $0.decl.as(FunctionDeclSyntax.self) }
-            .filter {
+            .compactMap {
+                $0.decl.as(FunctionDeclSyntax.self)
+            }.filter {
                 $0.signature.effectSpecifiers?.asyncSpecifier == nil &&
                 $0.signature.effectSpecifiers?.throwsSpecifier == nil &&
                 $0.signature.returnClause == nil
-            }.compactMap {
-                $0.with(\.modifiers, $0.modifiers.withNonisolated())
-                    .with(\.leadingTrivia, .newline)
-                    .with(\.signature, $0.signature
-                        .with(\.effectSpecifiers, $0.signature.effectSpecifiers)
-                        .with(\.parameterClause, $0.signature.parameterClause))
-                    .with(\.name, .identifier("nonisolated\($0.name.text.capitalizedFunctionName)"))
-                    .with(\.body, .awaitSyntax($0))
+            }.map {
+                .init(
+                    modifiers: .init(
+                        arrayLiteral: .init(
+                            name: .keyword(.nonisolated)
+                        )
+                    ),
+                    name: TokenSyntax(
+                        stringLiteral: "nonisolated\($0.name.text.capitalizedFunctionName)"
+                    ),
+                    signature: $0.signature,
+                    body: .awaitSyntax($0))
             }
-    }
-}
-
-// MARK: - DeclModifierListSyntax + Nonisolated
-private extension DeclModifierListSyntax {
-    
-    func withNonisolated() -> Self {
-        DeclModifierListSyntax {
-            DeclModifierSyntax(name: .keyword(.nonisolated))
-            for modifier in self {
-                modifier
-            }
-        }.with(\.leadingTrivia, .newline)
     }
 }
 

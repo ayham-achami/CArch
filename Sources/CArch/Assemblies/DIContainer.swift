@@ -256,6 +256,14 @@ public protocol BusinessLogicResolver {
     ///   - configuration: Конфигурация двигателя
     ///   - factory: Блок содержащий код реализующий логику инициализация объекта
     func unravelEngine<Engine>(_: Engine.Type, configuration: EngineConfiguration) -> Engine where Engine: BusinessLogicEngine
+    
+    /// Получение пул сервисов из контейнера зависимости
+    /// - Parameter poolType: Тип пул сервисов
+    func unravelPool<Pool>(_: Pool.Type) -> Pool where Pool: BusinessLogicServicePool
+    
+    /// Получение Singleton из контейнера зависимости
+    /// - Parameter singletonType: Тип Singleton
+    func unravelSingleton<Singleton>(_: Singleton.Type) -> Singleton where Singleton: BusinessLogicSingleton
 }
 
 /// Протокол получения объектов компонентов модуля в контейнер зависимости

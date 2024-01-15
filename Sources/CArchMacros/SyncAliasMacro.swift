@@ -18,22 +18,26 @@ public struct SyncAliasMacro: ExtensionMacro {
         guard
             let protocolDecl = declaration.as(ProtocolDeclSyntax.self)
         else { throw ProtocolsMacros.Error.notProtocol(Self.self) }
-        
         try checkInheritanceSpecifier(to: protocolDecl, in: context)
-        
         let asyncFunctions = asyncFunctions(from: protocolDecl)
         let asyncThrowsFunctions = asyncThrowsFunctions(from: protocolDecl)
-        
-        let extensionDecl = try ExtensionDeclSyntax("extension \(raw: protocolDecl.name.text)") {
-            for asyncFunction in asyncFunctions {
-                asyncFunction
-            }
-            for asyncThrowsFunction in asyncThrowsFunctions {
-                asyncThrowsFunction
-            }
-        }
-        
-        return [extensionDecl]
+        return [
+            ExtensionDeclSyntax(
+                extendedType: TypeSyntax(
+                    stringLiteral: protocolDecl.name.text
+                ),
+                memberBlock: .init(
+                    members: .init {
+                        for asyncFunction in asyncFunctions {
+                            asyncFunction
+                        }
+                        for asyncThrowsFunction in asyncThrowsFunctions {
+                            asyncThrowsFunction
+                        }
+                    }
+                )
+            )
+        ]
     }
     
     /// Проверить наследуется ли протокол от протокола `ErrorAsyncHandler`
@@ -47,7 +51,7 @@ public struct SyncAliasMacro: ExtensionMacro {
             let inheritedTypes = inheritanceClause
                 .inheritedTypes
                 .map(\.type)
-                .compactMap({ $0.as(IdentifierTypeSyntax.self) })
+                .compactMap { $0.as(IdentifierTypeSyntax.self) }
                 .map(\.name)
                 .map(\.text)
             guard
@@ -82,14 +86,21 @@ public struct SyncAliasMacro: ExtensionMacro {
         protocolDecl
             .memberBlock
             .members
-            .compactMap { $0.decl.as(FunctionDeclSyntax.self) }
-            .filter { $0.signature.effectSpecifiers?.asyncSpecifier != nil && $0.signature.effectSpecifiers?.throwsSpecifier == nil }
             .compactMap {
-                $0.with(\.signature, $0.signature.with(\.effectSpecifiers, $0.signature.effectSpecifiers?
-                    .with(\.asyncSpecifier, nil))
-                    .with(\.returnClause, nil)
-                    .with(\.parameterClause, $0.signature.parameterClause))
-                .with(\.body, .awaitSyntax($0))
+                $0.decl.as(FunctionDeclSyntax.self)
+            }.filter {
+                $0.signature.effectSpecifiers?.asyncSpecifier != nil &&
+                $0.signature.effectSpecifiers?.throwsSpecifier == nil
+            }.compactMap {
+                .init(
+                    name: TokenSyntax(
+                        stringLiteral: $0.name.text
+                    ),
+                    signature: .init(
+                        parameterClause: $0.signature.parameterClause
+                    ),
+                    body: .awaitSyntax($0)
+                )
             }
     }
     
@@ -100,15 +111,21 @@ public struct SyncAliasMacro: ExtensionMacro {
         protocolDecl
             .memberBlock
             .members
-            .compactMap { $0.decl.as(FunctionDeclSyntax.self) }
-            .filter { $0.signature.effectSpecifiers?.asyncSpecifier != nil && $0.signature.effectSpecifiers?.throwsSpecifier != nil }
             .compactMap {
-                $0.with(\.signature, $0.signature.with(\.effectSpecifiers, $0.signature.effectSpecifiers?
-                    .with(\.asyncSpecifier, nil)
-                    .with(\.throwsSpecifier, nil))
-                    .with(\.returnClause, nil)
-                    .with(\.parameterClause, $0.signature.parameterClause))
-                .with(\.body, .tryAwaitSyntax($0))
+                $0.decl.as(FunctionDeclSyntax.self)
+            }.filter {
+                $0.signature.effectSpecifiers?.asyncSpecifier != nil &&
+                $0.signature.effectSpecifiers?.throwsSpecifier != nil
+            }.compactMap {
+                .init(
+                    name: TokenSyntax(
+                        stringLiteral: $0.name.text
+                    ),
+                    signature: .init(
+                        parameterClause: $0.signature.parameterClause
+                    ),
+                    body: .tryAwaitSyntax($0)
+                )
             }
     }
 }

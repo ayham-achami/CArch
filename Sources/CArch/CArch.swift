@@ -163,7 +163,7 @@ public extension BusinessLogicSingleton {
 ///             }
 ///         }
 ///     }
-@attached(extension, names: arbitrary)
+@attached(extension, conformances: ErrorAsyncHandler, names: arbitrary)
 public macro SyncAlias() = #externalMacro(module: "CArchMacros", type: "SyncAliasMacro")
 
 /// Макрос, который добавить nonisolated alias всех не асинхронных функций

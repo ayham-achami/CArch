@@ -1,5 +1,5 @@
 //
-//  CArchMacro.swift
+//  CArchPlugin.swift
 //
 
 import SwiftCompilerPlugin
