@@ -118,7 +118,7 @@ public extension BusinessLogicService {
 }
 
 /// Протокол множества сервисов
-public protocol BusinessLogicServicePool: BusinessLogicService {}
+public protocol BusinessLogicServicePool: CArchProtocol, Actor, CustomStringConvertible, CustomDebugStringConvertible {}
 
 // MARK: - BusinessLogicServicePool + StringConvertible
 public extension BusinessLogicServicePool {
@@ -133,7 +133,7 @@ public extension BusinessLogicServicePool {
 }
 
 /// Протокол метки объекта типа ``Singleton``
-public protocol BusinessLogicSingleton: CArchProtocol, Actor {}
+public protocol BusinessLogicSingleton: CArchProtocol, Actor, CustomStringConvertible, CustomDebugStringConvertible {}
 
 // MARK: - BusinessLogicSingleton + StringConvertible
 public extension BusinessLogicSingleton {
