@@ -24,7 +24,6 @@ opt_in_rules:
 included:
   - Sources
   - CArchTests
-  - Package.swift
 excluded:
   - Templates
   - "**/*.gen.swift"

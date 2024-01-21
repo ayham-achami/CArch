@@ -24,11 +24,12 @@ let package = Package(
             targets: [
                 "CArchClient"
             ]
-        ),
+        )
     ],
     dependencies: [
         .package(url: "https://github.com/realm/SwiftLint", from: "0.53.0"),
-        .package(url: "https://github.com/apple/swift-syntax.git", from: "509.0.0")
+        .package(url: "https://github.com/apple/swift-syntax.git", from: "509.0.0"),
+        .package(url: "https://github.com/pointfreeco/swift-macro-testing.git", from: "0.2.2")
     ],
     targets: [
         .macro(
@@ -62,7 +63,9 @@ let package = Package(
         .testTarget(
             name: "CArchTests",
             dependencies: [
-                "CArch"
+                "CArchMacros",
+                .product(name: "MacroTesting", package: "swift-macro-testing"),
+                .product(name: "SwiftSyntaxMacrosTestSupport", package: "swift-syntax")
             ],
             path: "CArchTests",
             plugins: [

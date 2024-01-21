@@ -1,6 +1,7 @@
 //
 //  main.swift
 //
+//
 
 import CArch
 
@@ -113,3 +114,89 @@ class TestUI: TestUIProtocol {
 
 let testUI = TestUI()
 testUI.nonisolatedFunction("")
+
+private extension ImplementationsKeys {
+    
+    static let v1 = Self.init(rawKey: "v1")
+    static let v2 = Self.init(rawKey: "v2")
+    static let `default` = Self.init(rawKey: "default")
+}
+
+@Contract(implementations: [
+    .v2: SomeAgentV2Implementation.self,
+    .v1: SomeAgentV1Implementation.self,
+    .default: SomeAgentImplementation.self
+])
+public protocol SomeAgent: BusinessLogicAgent, AutoResolve {}
+
+private actor SomeAgentImplementation: SomeAgent {
+    
+    init(_ resolver: DIResolver) {}
+}
+
+private actor SomeAgentV1Implementation: SomeAgent {
+    
+    init(_ resolver: DIResolver) {}
+}
+
+private actor SomeAgentV2Implementation: SomeAgent {
+    
+    init(_ resolver: DIResolver) {}
+}
+
+@Contract
+protocol SomeService: BusinessLogicService, AutoResolve {}
+
+private actor SomeServiceImplementation: SomeService {
+
+    private let agent: SomeAgent
+
+    init(_ resolver: DIResolver) {
+        self.init(agent: SomeAgentResolver(resolver).unravel(implementation: .v1))
+    }
+
+    init(agent: SomeAgent) {
+        self.agent = agent
+    }
+}
+
+@Contract(implementations: [.default: SomeSingletonImplementation.self])
+protocol SomeSingleton: BusinessLogicSingleton, AutoResolve {}
+
+private actor SomeSingletonImplementation: SomeSingleton {
+
+    init(_ resolver: DIResolver) {}
+}
+
+@Contract(isPublicAssembly: true)
+public protocol SomePool: BusinessLogicServicePool, AutoResolve {}
+
+private actor SomePoolImplementation: SomePool {
+
+    init(_ resolver: DIResolver) {
+    }
+}
+
+@Contract
+protocol SomeRootAgent: BusinessLogicAgent, AutoResolve {}
+
+private actor SomeRootAgentImplementation: SomeRootAgent {
+    
+    init(_ resolver: DIResolver) {}
+}
+
+@Contract
+protocol SomeRoot2Agent: BusinessLogicAgent, AutoResolve {}
+
+private actor SomeRoot2AgentImplementation: SomeRoot2Agent {
+    
+    init(_ resolver: DIResolver) {}
+}
+
+@Contract
+protocol SomeParentAgent: BusinessLogicAgent, SomeRootAgent, SomeRoot2Agent, AutoResolve {}
+
+private actor SomeParentAgentImplementation: SomeParentAgent {
+    
+    init(_ resolver: DIResolver) {}
+}

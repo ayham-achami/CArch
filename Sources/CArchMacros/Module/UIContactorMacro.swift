@@ -19,7 +19,14 @@ public struct UIContactorMacro: ExtensionMacro {
             let protocolDecl = declaration.as(ProtocolDeclSyntax.self)
         else { throw ProtocolsMacros.Error.notProtocol(Self.self) }
         return [
-            ExtensionDeclSyntax(
+            .init(
+                modifiers: .init(
+                    itemsBuilder: {
+                        for modifier in protocolDecl.modifiers {
+                            modifier
+                        }
+                    }
+                ),
                 extendedType: TypeSyntax(
                     stringLiteral: protocolDecl.name.text
                 ),
@@ -48,7 +55,7 @@ public struct UIContactorMacro: ExtensionMacro {
                 $0.signature.effectSpecifiers?.asyncSpecifier == nil &&
                 $0.signature.effectSpecifiers?.throwsSpecifier == nil &&
                 $0.signature.returnClause == nil
-            }.map {
+            }.map { function in
                 .init(
                     modifiers: .init(
                         arrayLiteral: .init(
@@ -56,18 +63,15 @@ public struct UIContactorMacro: ExtensionMacro {
                         )
                     ),
                     name: TokenSyntax(
-                        stringLiteral: "nonisolated\($0.name.text.capitalizedFunctionName)"
+                        stringLiteral: "nonisolated\(function.name.text.capitalizedFunctionName)"
                     ),
-                    signature: $0.signature,
-                    body: .awaitSyntax($0))
+                    signature: function.signature,
+                    body: .init(
+                        statementsBuilder: {
+                            .init(item: .taskExpr(function))
+                        }
+                    )
+                )
             }
-    }
-}
-
-// MARK: - String + capitalizedFunctionName
-private extension String {
-    
-    var capitalizedFunctionName: Self {
-        prefix(1).uppercased() + dropFirst()
     }
 }

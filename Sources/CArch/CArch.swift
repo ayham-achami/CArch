@@ -163,7 +163,7 @@ public extension BusinessLogicSingleton {
 ///             }
 ///         }
 ///     }
-@attached(extension, conformances: ErrorAsyncHandler, names: arbitrary)
+@attached(extension, conformances: ErrorAsyncHandler, names: arbitrary, overloaded)
 public macro SyncAlias() = #externalMacro(module: "CArchMacros", type: "SyncAliasMacro")
 
 /// Макрос, который добавить nonisolated alias всех не асинхронных функций
@@ -182,5 +182,86 @@ public macro SyncAlias() = #externalMacro(module: "CArchMacros", type: "SyncAlia
 ///             }
 ///         }
 ///     }
-@attached(extension, names: arbitrary)
+@attached(extension, names: arbitrary, overloaded)
 public macro UIContactor() = #externalMacro(module: "CArchMacros", type: "UIContactorMacro")
+
+/// Протокол создания объект из контейнера зависимости
+public protocol AutoResolve {
+    
+    /// Инициализация
+    /// - Parameter resolver: Контейнера зависимости
+    init(_ resolver: DIResolver)
+}
+
+/// Ключи имплементаций
+public struct ImplementationsKeys: RawRepresentable, Hashable {
+    
+    /// Ключ по умолчанию
+    public static var `default`: Self = .init(rawKey: "default")
+    
+    public var rawValue: String
+    
+    public init?(rawValue: String) {
+        self.rawValue = rawValue
+    }
+    
+    public init(rawKey: String) {
+        self.init(rawValue: rawKey)!
+    }
+}
+
+/// Макрос, который добавить код внедрения зависимости
+///
+///     @Contract(implementations: [
+///         .v2: SomeAgentV2Implementation.self,
+///         .v1: SomeAgentV1Implementation.self,
+///         .default: SomeAgentImplementation.self
+///     ])
+///     public protocol SomeAgent: BusinessLogicAgent, AutoResolve {}
+///
+///     public enum SomeAgentImplementations: Equatable {
+///         case v2
+///         case v1
+///         case `default`
+///     }
+///
+///     final class SomeAgentAssembly: DIAssembly {
+///         func assemble(container: DIContainer) {
+///             container.recordAgent(SomeAgentV2Implementation.self.self) { resolver in
+///                 .init(resolver)
+///             }
+///             container.recordAgent(SomeAgentV1Implementation.self.self) { resolver in
+///                 .init(resolver)
+///             }
+///             container.recordAgent(SomeAgentImplementation.self.self) { resolver in
+///                 .init(resolver)
+///             }
+///         }
+///     }
+///
+///     public final class SomeAgentResolver {
+///         private let resolver: DIResolver
+///         public init(_ resolver: DIResolver) {
+///             self.resolver = resolver
+///         }
+///         public func unravel(implementation: SomeAgentImplementations = .default) -> SomeAgent {
+///             switch implementation {
+///                 case .v2:
+///                     return resolver.unravelAgent(SomeAgentV2Implementation.self)
+///                 case .v1:
+///                     return resolver.unravelAgent(SomeAgentV1Implementation.self)
+///                 case .default:
+///                     return resolver.unravelAgent(SomeAgentImplementation.self)
+///             }
+///         }
+///     }
+///
+///     public extension SomeAgent {
+///         static func resolve(from resolver: DIResolver, implementation: SomeAgentImplementations = .default) -> SomeAgent {
+///             SomeAgentResolver(resolver).unravel(implementation: implementation)
+///         }
+///     }
+@attached(extension, names: arbitrary, named(resolve))
+@attached(peer, conformances: AutoResolve, names: suffixed(Assembly), suffixed(Resolver), suffixed(Implementations))
+public macro Contract(implementations: [ImplementationsKeys: Any.Type] = [:],
+                      isPublicAssembly: Bool = false) = #externalMacro(module: "CArchMacros", type: "ContractMacro")
