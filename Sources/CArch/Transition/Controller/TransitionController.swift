@@ -268,12 +268,13 @@ public extension TransitionController where Self: UIViewController {
     }
     
     func activate(with activator: TabActivator.Type) {
-        if let tabBarController = self as? UITabBarController, let index = tabBarController.viewControllers?.firstIndex(for: activator) {
+        if let tabBarController = self as? UITabBarController,
+           let index = tabBarController.viewControllers?.firstIndex(for: activator) {
             tabBarController.selectedIndex = index
         } else if let index = tabBarController?.viewControllers?.firstIndex(for: activator) {
             tabBarController?.selectedIndex = index
         } else {
-            preconditionFailure("Colud not to filde index of \(String(describing: activator.key))")
+            preconditionFailure("Colud not to find index of \(String(describing: activator.key))")
         }
     }
     
