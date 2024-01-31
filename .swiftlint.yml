@@ -1,52 +1,108 @@
-disabled_rules: # rule identifiers to exclude from running
-  - nesting
-  - trailing_whitespace
+disabled_rules:
   - inclusive_language
-opt_in_rules: # some rules are only opt-in
+opt_in_rules:
+  - attributes
+  - array_init
   - empty_count
-  # Find all the available rules by running:
-  # swiftlint rules
-included: # paths to include during linting. `--path` is ignored if present.
+  - file_header
+  - sorted_imports
+  - implicit_return
+  - file_types_order
+  - trailing_newline 
+  - required_enum_case
+  - type_contents_order
+  - closure_body_length
+  - collection_alignment
+  - untyped_error_in_catch
+  - unhandled_throwing_task
+  - closure_end_indentation
+  - empty_collection_literal
+  - discouraged_object_literal
+  - conditional_returns_on_newline
+  - enum_case_associated_values_count
+  - vertical_whitespace_closing_braces
+included:
   - Sources
-  - Tests
-  - Playground
-excluded: # paths to ignore during linting. Takes precedence over `included`.
-  - Pods
-analyzer_rules: # Rules run by `swiftlint analyze` (experimental)
+  - CArchTests
+excluded:
+  - Templates
+  - "**/*.gen.swift"
+analyzer_rules:
   - explicit_self
-# configurable rules can be customized from this configuration file
-# binary rules can set their severity level
-force_cast: error # implicitly
+  - unused_import
+force_cast: error
 force_try:
-  severity: error # explicitly
-# rules that have both warning and error levels, can set just the warning level
-# implicitly
-line_length: 250
-function_body_length:
-  warning: 21
-  error: 22
-# they can set both implicitly with an array
-type_body_length:
+  severity: error
+line_length: 
   warning: 200
-  error: 201
-# or they can set both explicitly
+  error: 200
+function_body_length:
+  warning: 70
+  error: 70
+type_body_length:
+  warning: 400
+  error: 400
 file_length:
-  warning: 550
-  error: 551
-# naming rules can set warnings/errors for min_length and max_length
-# additionally they can set excluded names
+  warning: 500
+  error: 500
+large_tuple:
+  warning: 6
+  error: 6
 type_name:
-  min_length: 3 # only warning
-  max_length: # warning and error
-    warning: 50
-    error: 51
-  excluded: iPhone # excluded via string
+  min_length: 3 
+  max_length: 
+    warning: 40
+    error: 40
+  excluded: iPhone 
 identifier_name:
-  min_length: # only min_length
-    warning: 1 # only error
-  excluded: # excluded via string array
+  min_length: 
+    warning: 1
+  excluded: 
     - id
     - URL
     - GlobalAPIKey
-reporter: "xcode" # reporter type (xcode, json, csv, checkstyle, junit, html, emoji, sonarqube, markdown)
-
+nesting:
+  type_level:
+    warning: 4
+    error: 4
+implicit_return:
+  severity: error
+attributes:
+  always_on_same_line:
+    ["@MainActor", "@objc", "@frozen", "@IBOutlet", "@IBAction", "@IBSegueAction", "@ProvisionActor", "@MaintenanceActor"]
+  always_on_line_above:
+    ["@UIContactor", "@SyncAlias", "@available", "@discardableResult"]
+file_header:
+  required_pattern: |
+                    \/\/
+                    \/\/  .*?\.swift
+                    \/\/
+  severity: error
+type_contents_order:
+  order:
+    - [type_alias, associated_type, subtype, instance_property, type_property, subscript, type_method]
+    - case 
+    - ib_inspectable
+    - ib_outlet
+    - initializer
+    - deinitializer
+    - view_life_cycle_method
+    - ib_action 
+    - other_method
+  severity: error
+file_types_order:
+  order:
+    - [supporting_type, main_type, extension]
+    - preview_provider
+    - library_content_provider
+closure_body_length:
+  warning: 20
+  error: 20
+conditional_returns_on_newline:
+  if_only: true
+enum_case_associated_values_count:
+  warning: 3
+  error: 3
+trailing_whitespace:
+  ignores_empty_lines: true
+reporter: "xcode" 
