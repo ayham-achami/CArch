@@ -27,9 +27,9 @@ let package = Package(
         )
     ],
     dependencies: [
-        .package(url: "https://github.com/realm/SwiftLint", from: "0.53.0"),
-        .package(url: "https://github.com/apple/swift-syntax.git", from: "509.0.0"),
-        .package(url: "https://github.com/pointfreeco/swift-macro-testing.git", from: "0.2.2")
+        .package(url: "https://github.com/realm/SwiftLint", from: "0.54.0"),
+        .package(url: "https://github.com/apple/swift-syntax.git", from: "509.0.2"),
+        .package(url: "https://github.com/pointfreeco/swift-macro-testing.git", from: "0.3.0")
     ],
     targets: [
         .macro(

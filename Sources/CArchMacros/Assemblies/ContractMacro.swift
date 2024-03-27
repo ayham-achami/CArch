@@ -78,10 +78,10 @@ extension ContractMacro.Arguments {
 // MARK: - ContractMacro + ArgumentsType
 extension ContractMacro {
     
-    /// <#Description#>
+    /// Типы аргументов макроса
     enum ArgumentsType: String {
         
-        /// <#Description#>
+        /// Ошибки парсинга аргументов макроса
         enum Error: Swift.Error, CustomStringConvertible {
             
             var description: String {
