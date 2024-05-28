@@ -258,11 +258,8 @@ public extension TransitionController where Self: UIViewController {
     }
     
     func assemblyIntoTabBar(_ modules: [CArchModule]) {
-        if let tabBarController = self as? UITabBarController {
-            tabBarController.viewControllers = modules.map { $0.node }
-        } else if let tabBarController = tabBarController {
-            tabBarController.viewControllers = modules.map { $0.node }
-        } else if let tabBarController = children.first(where: { $0 is UITabBarController }) as? UITabBarController {
+        let proposedTabBarControllers = [self, tabBarController] + children
+        if let tabBarController = proposedTabBarControllers.first(where: { $0 is UITabBarController }) as? UITabBarController {
             tabBarController.viewControllers = modules.map { $0.node }
         } else {
             preconditionFailure("No tab bar to assembly models into")
@@ -270,13 +267,9 @@ public extension TransitionController where Self: UIViewController {
     }
     
     func activate(with activator: TabActivator.Type) {
-        if let tabBarController = self as? UITabBarController,
+        let proposedTabBarControllers = [self, tabBarController] + children
+        if let tabBarController = proposedTabBarControllers.first(where: { $0 is UITabBarController }) as? UITabBarController,
            let index = tabBarController.viewControllers?.firstIndex(for: activator) {
-            tabBarController.selectedIndex = index
-        } else if let index = tabBarController?.viewControllers?.firstIndex(for: activator) {
-            tabBarController?.selectedIndex = index
-        } else if let tabBarController = children.first(where: { $0 is UITabBarController }) as? UITabBarController,
-                  let index = tabBarController.viewControllers?.firstIndex(for: activator) {
             tabBarController.selectedIndex = index
         } else {
             preconditionFailure("Could not to find index of \(String(describing: activator.key))")
