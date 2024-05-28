@@ -262,6 +262,8 @@ public extension TransitionController where Self: UIViewController {
             tabBarController.viewControllers = modules.map { $0.node }
         } else if let tabBarController = tabBarController {
             tabBarController.viewControllers = modules.map { $0.node }
+        } else if let tabBarController = children.first(where: { $0 is UITabBarController }) as? UITabBarController {
+            tabBarController.viewControllers = modules.map { $0.node }
         } else {
             preconditionFailure("No tab bar to assembly models into")
         }
@@ -273,8 +275,11 @@ public extension TransitionController where Self: UIViewController {
             tabBarController.selectedIndex = index
         } else if let index = tabBarController?.viewControllers?.firstIndex(for: activator) {
             tabBarController?.selectedIndex = index
+        } else if let tabBarController = children.first(where: { $0 is UITabBarController }) as? UITabBarController,
+                  let index = tabBarController.viewControllers?.firstIndex(for: activator) {
+            tabBarController.selectedIndex = index
         } else {
-            preconditionFailure("Colud not to find index of \(String(describing: activator.key))")
+            preconditionFailure("Could not to find index of \(String(describing: activator.key))")
         }
     }
     
