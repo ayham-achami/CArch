@@ -23,8 +23,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/jpsim/SourceKitten.git",
       "state" : {
-        "revision" : "b6dc09ee51dfb0c66e042d2328c017483a1a5d56",
-        "version" : "0.34.1"
+        "revision" : "fd4df99170f5e9d7cf9aa8312aa8506e0e7a44e7",
+        "version" : "0.35.0"
       }
     },
     {
@@ -41,8 +41,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/swift-macro-testing.git",
       "state" : {
-        "revision" : "10dcef36314ddfea6f60442169b0b320204cbd35",
-        "version" : "0.2.2"
+        "revision" : "5c4a1b9d7c23cd5c08ea50677d8e89080365cb00",
+        "version" : "0.4.0"
       }
     },
     {
@@ -50,8 +50,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/swift-snapshot-testing",
       "state" : {
-        "revision" : "8e68404f641300bfd0e37d478683bb275926760c",
-        "version" : "1.15.2"
+        "revision" : "625ccca8570773dd84a34ee51a81aa2bc5a4f97a",
+        "version" : "1.16.0"
       }
     },
     {
@@ -59,8 +59,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-syntax.git",
       "state" : {
-        "revision" : "6ad4ea24b01559dde0773e3d091f1b9e36175036",
-        "version" : "509.0.2"
+        "revision" : "303e5c5c36d6a558407d364878df131c3546fad8",
+        "version" : "510.0.2"
       }
     },
     {
@@ -68,8 +68,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/realm/SwiftLint",
       "state" : {
-        "revision" : "f17a4f9dfb6a6afb0408426354e4180daaf49cee",
-        "version" : "0.54.0"
+        "revision" : "b515723b16eba33f15c4677ee65f3fef2ce8c255",
+        "version" : "0.55.1"
       }
     },
     {
