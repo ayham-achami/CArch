@@ -57,6 +57,7 @@ public protocol BusinessLogicRegistrar {
     /// - Parameters:
     ///   - agentType: Тип агента
     ///   - factory: Блок содержащий код реализующий логику инициализация объекта
+    ///   - completed: Замыкание завершения инициализации
     func recordAgent<Agent>(_: Agent.Type,
                             factory: @escaping (DIResolver) -> Agent,
                             completed: ((DIResolver, Agent) -> Void)?) where Agent: BusinessLogicAgent
@@ -65,6 +66,7 @@ public protocol BusinessLogicRegistrar {
     /// - Parameters:
     ///   - serviceType: Тип сервиса
     ///   - factory: Блок содержащий код реализующий логику инициализация объекта
+    ///   - completed: Замыкание завершения инициализации
     func recordService<Service>(_: Service.Type,
                                 factory: @escaping (DIResolver) -> Service,
                                 completed: ((DIResolver, Service) -> Void)?) where Service: BusinessLogicService
@@ -73,6 +75,7 @@ public protocol BusinessLogicRegistrar {
     /// - Parameters:
     ///   - engineType: Тип двигателя
     ///   - factory: Блок содержащий код реализующий логику инициализация объекта
+    ///   - completed: Замыкание завершения инициализации
     func recordEngine<Engine>(_: Engine.Type,
                               factory: @escaping (DIResolver) -> Engine,
                               completed: ((DIResolver, Engine) -> Void)?) where Engine: BusinessLogicEngine
@@ -82,6 +85,7 @@ public protocol BusinessLogicRegistrar {
     ///   - engineType: Тип двигателя
     ///   - configuration: Конфигурация двигателя
     ///   - factory: Блок содержащий код реализующий логику инициализация объекта
+    ///   - completed: Замыкание завершения инициализации
     func recordEngine<Engine>(_: Engine.Type,
                               configuration: EngineConfiguration,
                               factory: @escaping (DIResolver) -> Engine,
@@ -91,6 +95,7 @@ public protocol BusinessLogicRegistrar {
     /// - Parameters:
     ///   - poolType: Тип множества
     ///   - factory: Блок содержащий код реализующий логику инициализация объекта
+    ///   - completed: Замыкание завершения инициализации
     func recordPool<Pool>(_: Pool.Type,
                           factory: @escaping (DIResolver) -> Pool,
                           completed: ((DIResolver, Pool) -> Void)?) where Pool: BusinessLogicServicePool
@@ -99,6 +104,7 @@ public protocol BusinessLogicRegistrar {
     /// - Parameters:
     ///   - singletonType: Тип singleton
     ///   - factory: Блок содержащий код реализующий логику инициализация объекта
+    ///   - completed: Замыкание завершения инициализации
     func recordSingleton<Singleton>(_: Singleton.Type,
                                     factory: @escaping (DIResolver) -> Singleton,
                                     completed: ((DIResolver, Singleton) -> Void)?) where Singleton: BusinessLogicSingleton
@@ -204,10 +210,12 @@ public protocol DIRegistrar: BusinessLogicRegistrar, ModuleComponentRegistrar {
     ///   - storage: Тип ссылки
     ///   - configuration: Конфигурация инъекции
     ///   - factory: Блок содержащий код реализующий логику инициализация объекта
+    ///   - completed: Замыкание завершения инициализации
     func record<Service>(some _: Service.Type,
                          inScope storage: StorageType,
                          configuration: (any InjectConfiguration)?,
-                         factory: @escaping (DIResolver) -> Service)
+                         factory: @escaping (DIResolver) -> Service,
+                         completed: ((DIResolver, Service) -> Void)?)
     
     /// Регистрация объекта в контейнер зависимости
     /// - Parameters:
@@ -271,9 +279,46 @@ public extension DIRegistrar {
     /// - Parameters:
     ///   - serviceType: Тип объекта
     ///   - factory: Блок содержащий код реализующий логику инициализация объекта
+    ///   - completed: Замыкание завершения инициализации
+    func record<Service>(some _: Service.Type,
+                         factory: @escaping (DIResolver) -> Service,
+                         completed: ((DIResolver, Service) -> Void)?) {
+        record(some: Service.self, inScope: .autoRelease, configuration: nil, factory: factory, completed: completed)
+    }
+    
+    /// Регистрация объекта в контейнер зависимости
+    /// - Parameters:
+    ///   - serviceType: Тип объекта
+    ///   - storage: Тип ссылки
+    ///   - factory: Блок содержащий код реализующий логику инициализация объекта
+    ///   - completed: Замыкание завершения инициализации
+    func record<Service>(some _: Service.Type,
+                         inScope storage: StorageType,
+                         factory: @escaping (DIResolver) -> Service,
+                         completed: ((DIResolver, Service) -> Void)?) {
+        record(some: Service.self, inScope: storage, configuration: nil, factory: factory, completed: completed)
+    }
+    
+    /// Регистрация объекта в контейнер зависимости
+    /// - Parameters:
+    ///   - serviceType: Тип объекта
+    ///   - configuration: Конфигурация инъекции
+    ///   - factory: Блок содержащий код реализующий логику инициализация объекта
+    ///   - completed: Замыкание завершения инициализации
+    func record<Service>(some _: Service.Type,
+                         configuration: (any InjectConfiguration),
+                         factory: @escaping (DIResolver) -> Service,
+                         completed: ((DIResolver, Service) -> Void)?) {
+        record(some: Service.self, inScope: .autoRelease, configuration: configuration, factory: factory, completed: completed)
+    }
+
+    /// Регистрация объекта в контейнер зависимости
+    /// - Parameters:
+    ///   - serviceType: Тип объекта
+    ///   - factory: Блок содержащий код реализующий логику инициализация объекта
     func record<Service>(some _: Service.Type,
                          factory: @escaping (DIResolver) -> Service) {
-        record(some: Service.self, inScope: .autoRelease, configuration: nil, factory: factory)
+        record(some: Service.self, inScope: .autoRelease, configuration: nil, factory: factory, completed: nil)
     }
     
     /// Регистрация объекта в контейнер зависимости
@@ -284,7 +329,7 @@ public extension DIRegistrar {
     func record<Service>(some _: Service.Type,
                          inScope storage: StorageType,
                          factory: @escaping (DIResolver) -> Service) {
-        record(some: Service.self, inScope: storage, configuration: nil, factory: factory)
+        record(some: Service.self, inScope: storage, configuration: nil, factory: factory, completed: nil)
     }
     
     /// Регистрация объекта в контейнер зависимости
@@ -295,7 +340,7 @@ public extension DIRegistrar {
     func record<Service>(some _: Service.Type,
                          configuration: (any InjectConfiguration),
                          factory: @escaping (DIResolver) -> Service) {
-        record(some: Service.self, inScope: .autoRelease, configuration: configuration, factory: factory)
+        record(some: Service.self, inScope: .autoRelease, configuration: configuration, factory: factory, completed: nil)
     }
     
     /// Регистрация объекта в контейнер зависимости
