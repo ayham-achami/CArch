@@ -1,54 +1,8 @@
 //
 //  DIContainer.swift
 //
-//  The MIT License (MIT)
-//
 
 import Foundation
-
-/// Типы ссылок на объекты в контейнер зависимостей
-public enum StorageType {
-    
-    /// Слабая ссылка на объект
-    public class WeakReference<Wrapped: AnyObject> {
-        
-        /// Объект назначения
-        public private(set) weak var wrapped: Wrapped?
-        
-        /// Инициализация с объектом
-        /// - Parameter wrapped:  Объект, на которого ссылка будет создано
-        public init(_ wrapped: Wrapped) {
-            self.wrapped = wrapped
-        }
-    }
-    
-    /// Сильная ссылка на объект
-    public class StrongReference<Wrapped: AnyObject> {
-        
-        /// Объект назначения
-        public private(set) var wrapped: Wrapped?
-        
-        /// Инициализация с объектом
-        /// - Parameter wrapped: Объект, на которого ссылка будет создано
-        public init(_ wrapped: Wrapped) {
-            self.wrapped = wrapped
-        }
-    }
-    
-    /// - fleeting: Всегда будет новый экземпляр объекта при цикле revolve
-    case fleeting
-    /// - singleton: Cинглтон, объект всегда есть, и будет всегда при цикле resolve
-    ///              возвращен один и тоже объект
-    case singleton
-    /// - autoRelease: Автоматическое уничтожение, пока на объекта есть сильная
-    ///                ссылка всегда он есть при цикле revolve, уничтожается когда
-    ///                нет не каких сильных ссылка на объект и тогда при следующем цикле
-    ///                возвращается новый экземпляр объекта
-    case autoRelease
-    /// - alwaysNewInstance: Всегда будет новый экземпляр объекта при цикле revolve
-    @available(*, deprecated, message: "This feature has be deprecated and will be removed in future release")
-    case alwaysNewInstance
-}
 
 /// Протокол внедрения объектов бизнес логики в контейнер зависимости
 public protocol BusinessLogicRegistrar {
@@ -119,7 +73,7 @@ public extension BusinessLogicRegistrar {
     ///   - factory: Блок содержащий код реализующий логику инициализация объекта
     func recordAgent<Agent>(_: Agent.Type,
                             factory: @escaping (DIResolver) -> Agent) where Agent: BusinessLogicAgent {
-        recordAgent(Agent.self, factory: factory)
+        recordAgent(Agent.self, factory: factory, completed: nil)
     }
     
     /// Регистрация сервиса в контейнер зависимости
@@ -128,7 +82,7 @@ public extension BusinessLogicRegistrar {
     ///   - factory: Блок содержащий код реализующий логику инициализация объекта
     func recordService<Service>(_: Service.Type,
                                 factory: @escaping (DIResolver) -> Service) where Service: BusinessLogicService {
-        recordService(Service.self, factory: factory)
+        recordService(Service.self, factory: factory, completed: nil)
     }
 
     /// Регистрация двигателя в контейнер зависимости
@@ -137,7 +91,7 @@ public extension BusinessLogicRegistrar {
     ///   - factory: Блок содержащий код реализующий логику инициализация объекта
     func recordEngine<Engine>(_: Engine.Type,
                               factory: @escaping (DIResolver) -> Engine) where Engine: BusinessLogicEngine {
-        recordEngine(Engine.self, factory: factory)
+        recordEngine(Engine.self, factory: factory, completed: nil)
     }
     
     /// Регистрация двигателя в контейнер зависимости
@@ -148,7 +102,7 @@ public extension BusinessLogicRegistrar {
     func recordEngine<Engine>(_: Engine.Type,
                               configuration: EngineConfiguration,
                               factory: @escaping (DIResolver) -> Engine) where Engine: BusinessLogicEngine {
-        recordEngine(Engine.self, configuration: configuration, factory: factory)
+        recordEngine(Engine.self, configuration: configuration, factory: factory, completed: nil)
     }
     
     /// Регистрация множество сервисов в контейнер зависимости
@@ -157,7 +111,7 @@ public extension BusinessLogicRegistrar {
     ///   - factory: Блок содержащий код реализующий логику инициализация объекта
     func recordPool<Pool>(_: Pool.Type,
                           factory: @escaping (DIResolver) -> Pool) where Pool: BusinessLogicServicePool {
-        recordPool(Pool.self, factory: factory)
+        recordPool(Pool.self, factory: factory, completed: nil)
     }
     
     /// Регистрация singleton в контейнер зависимости
@@ -166,7 +120,7 @@ public extension BusinessLogicRegistrar {
     ///   - factory: Блок содержащий код реализующий логику инициализация объекта
     func recordSingleton<Singleton>(_: Singleton.Type,
                                     factory: @escaping (DIResolver) -> Singleton) where Singleton: BusinessLogicSingleton {
-        recordSingleton(Singleton.self, factory: factory)
+        recordSingleton(Singleton.self, factory: factory, completed: nil)
     }
 }
 
