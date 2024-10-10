@@ -123,8 +123,8 @@ private extension ImplementationsKeys {
 }
 
 @Contract(implementations: [
-    .v2: SomeAgentV2Implementation.self,
     .v1: SomeAgentV1Implementation.self,
+    .v2: SomeAgentV2Implementation.self,
     .default: SomeAgentImplementation.self
 ])
 public protocol SomeAgent: BusinessLogicAgent, AutoResolve {}
