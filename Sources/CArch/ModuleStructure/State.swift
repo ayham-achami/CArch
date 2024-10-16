@@ -18,7 +18,7 @@ func convert<T>(some: Any, to type: T.Type) -> T {
 
 /// Набор данных с помощью которых модуль будет инициализирован
 /// на пример передать id элемента из модуль в детальный модуль
-public protocol ModuleInitialState: Sendable {}
+public protocol ModuleInitialState {}
 
 // MARK: - ModuleInitialState + Conversion
 public extension ModuleInitialState {
@@ -33,7 +33,7 @@ public extension ModuleInitialState {
 
 /// Набор данных, которые необходимо передать родительскому модулю
 /// например передать изображение после обработки
-public protocol ModuleFinalState: Sendable {}
+public protocol ModuleFinalState {}
 
 // MARK: - ModuleFinalState + Conversion
 public extension ModuleFinalState {
@@ -47,7 +47,7 @@ public extension ModuleFinalState {
 }
 
 /// Протокол любого состояния только для чтения
-public protocol AnyReadOnlyState: Sendable {}
+public protocol AnyReadOnlyState {}
 
 // MARK: - AnyReadOnlyState + Conversion
 public extension AnyReadOnlyState {
@@ -96,7 +96,7 @@ public extension ModuleState {
 public protocol AnyModuleStateRepresentable: CArchModuleComponent {}
 
 /// Основной протокол инициализации любого модуля
-public protocol AnyModuleInitializer: CArchModuleComponent, Sendable {
+public protocol AnyModuleInitializer: CArchModuleComponent {
 
     /// Настроить состояние инициализация модуль
     ///
@@ -105,7 +105,7 @@ public protocol AnyModuleInitializer: CArchModuleComponent, Sendable {
 }
 
 /// Основной протокол финализирование работы любого модуля
-public protocol AnyModuleFinalizer: CArchModuleComponent, Sendable {
+public protocol AnyModuleFinalizer: CArchModuleComponent {
 
     /// Вызывается при завершении работы модуля
     ///
