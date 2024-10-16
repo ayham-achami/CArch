@@ -9,10 +9,10 @@ import Foundation
 /// от этого протокола, основная задача протокола `CArchProtocol`
 /// создать метку в коде для того, чтобы различить
 /// протоколы архитектурные от других
-public protocol CArchProtocol: AnyObject {}
+public protocol CArchProtocol: AnyObject, Sendable {}
 
 /// Основной протокол, все протоколы компонентов модуля
-public protocol CArchModuleComponent: CArchProtocol {}
+public protocol CArchModuleComponent: CArchProtocol, Sendable {}
 
 /// Основной протокол любого объекта UI модели
 public protocol UIModel {}
@@ -24,7 +24,7 @@ public typealias ViewController = Any
 #endif
 
 /// CArch Модуль
-public protocol CArchModule: CArchProtocol {
+public protocol CArchModule: CArchProtocol, Sendable {
 
     /// View component
     nonisolated var node: ViewController { get }
@@ -57,14 +57,14 @@ extension UIViewController: CArchModule {
 #endif
 
 /// Конфигурация инъекции
-public protocol InjectConfiguration: RawRepresentable where RawValue == String {}
+public protocol InjectConfiguration: RawRepresentable, Sendable where RawValue == String {}
 
 /// Конфигурация двигателя
 public struct EngineConfiguration: InjectConfiguration {
     
-    public var rawValue: String
+    public let rawValue: String
     
-    public init?(rawValue: String) {
+    public init(rawValue: String) {
         self.rawValue = rawValue
     }
 }
@@ -194,19 +194,15 @@ public protocol AutoResolve {
 }
 
 /// Ключи имплементаций
-public struct ImplementationsKeys: RawRepresentable, Hashable {
+public struct ImplementationsKeys: RawRepresentable, Hashable, Sendable {
     
     /// Ключ по умолчанию
-    public static var `default`: Self = .init(rawKey: "default")
+    public static var `default`: Self = .init(rawValue: "default")
     
-    public var rawValue: String
+    public let rawValue: String
     
-    public init?(rawValue: String) {
+    public init(rawValue: String) {
         self.rawValue = rawValue
-    }
-    
-    public init(rawKey: String) {
-        self.init(rawValue: rawKey)!
     }
 }
 

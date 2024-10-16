@@ -5,7 +5,7 @@
 import Foundation
 
 /// Протокол внедрения объектов бизнес логики в контейнер зависимости
-public protocol BusinessLogicRegistrar {
+public protocol BusinessLogicRegistrar: Sendable {
     
     /// Регистрация агента в контейнер зависимости
     /// - Parameters:
@@ -125,7 +125,7 @@ public extension BusinessLogicRegistrar {
 }
 
 /// Протокол внедрения объектов компонентов модуля в контейнер зависимости
-public protocol ModuleComponentRegistrar {
+public protocol ModuleComponentRegistrar: Sendable {
     
     /// Регистрация компонента модуля в контейнер зависимости
     /// - Parameters:
@@ -345,7 +345,7 @@ public extension DIRegistrar {
 }
 
 /// Протокол получения объектов бизнес логики в контейнер зависимости
-public protocol BusinessLogicResolver {
+public protocol BusinessLogicResolver: Sendable {
     
     /// Получение агента из контейнера зависимости
     /// - Parameters:
@@ -382,7 +382,7 @@ public protocol BusinessLogicResolver {
 }
 
 /// Протокол получения объектов компонентов модуля в контейнер зависимости
-public protocol ModuleComponentResolver {
+public protocol ModuleComponentResolver: Sendable {
     
     /// Получение модуля из контейнера зависимости
     /// - Parameter moduleType: Тип модуля

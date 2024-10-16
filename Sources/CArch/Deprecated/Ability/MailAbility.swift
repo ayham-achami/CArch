@@ -7,6 +7,7 @@ import MessageUI
 import UIKit
 
 /// Возможность показать экран отправление E-Mail
+@available(*, deprecated, message: "This feature has been deprecated and will be removed in future release")
 @MainActor public protocol MailAbility {
 
     /// Показать стандартный интерфейс для управления, редактирования и отправки сообщений электронной почты.
@@ -15,6 +16,7 @@ import UIKit
 }
 
 // MARK: - UIViewController + MailAbility
+@available(*, deprecated, message: "This feature has been deprecated and will be removed in future release")
 extension UIViewController: MailAbility {
 
     public func displayMailComposer(mailComposer: MFMailComposeViewController) {

@@ -6,6 +6,7 @@
 import UIKit
 
 /// Носитель информации о переходе
+@available(*, deprecated, message: "This feature has been deprecated and will be removed in future release")
 public final class TransitionHolder {
     
     /// Данные инициализации модуля

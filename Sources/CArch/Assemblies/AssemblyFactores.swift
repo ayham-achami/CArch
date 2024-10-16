@@ -5,7 +5,7 @@
 import Foundation
 
 /// Протокол регулировки уровня логирования
-public protocol DIAssemblyFactoryDebugger {
+public protocol DIAssemblyFactoryDebugger: Sendable {
     
     /// Регулировки уровня логирования
     /// - Parameter isDebugEnabled: Вкл/Выкл

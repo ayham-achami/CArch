@@ -18,7 +18,7 @@ func convert<T>(some: Any, to type: T.Type) -> T {
 
 /// Набор данных с помощью которых модуль будет инициализирован
 /// на пример передать id элемента из модуль в детальный модуль
-public protocol ModuleInitialState {}
+public protocol ModuleInitialState: Sendable {}
 
 // MARK: - ModuleInitialState + Conversion
 public extension ModuleInitialState {
@@ -33,7 +33,7 @@ public extension ModuleInitialState {
 
 /// Набор данных, которые необходимо передать родительскому модулю
 /// например передать изображение после обработки
-public protocol ModuleFinalState {}
+public protocol ModuleFinalState: Sendable {}
 
 // MARK: - ModuleFinalState + Conversion
 public extension ModuleFinalState {
@@ -47,7 +47,7 @@ public extension ModuleFinalState {
 }
 
 /// Протокол любого состояния только для чтения
-public protocol AnyReadOnlyState {}
+public protocol AnyReadOnlyState: Sendable {}
 
 // MARK: - AnyReadOnlyState + Conversion
 public extension AnyReadOnlyState {
@@ -63,7 +63,7 @@ public extension AnyReadOnlyState {
 /// Текущее состояние модуля
 /// содержит `ModuleInitialState` и `ModuleFinalState`
 /// и набор данных необходимых для работы модуля
-public protocol ModuleState {
+public protocol ModuleState: Sendable {
 
     /// Тип начального состояния модуля
     associatedtype InitialStateType: ModuleInitialState

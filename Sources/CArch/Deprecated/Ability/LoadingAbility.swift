@@ -6,6 +6,7 @@
 import UIKit
 
 /// Протокол получения доступа к заглушке прогресс загрузки
+@available(*, deprecated, message: "This feature has been deprecated and will be removed in future release")
 @MainActor public protocol LoadingPlaceholder {
 
     /// Заглушка прогресс загрузки
@@ -13,6 +14,7 @@ import UIKit
 }
 
 /// Возможность показать индикатор загрузки
+@available(*, deprecated, message: "This feature has been deprecated and will be removed in future release")
 @MainActor public protocol LoadingAbility {
 
     /// Показать индикатор загрузки
@@ -41,6 +43,7 @@ import UIKit
 }
 
 // MARK: - LodingAbility + Default
+@available(*, deprecated, message: "This feature has been deprecated and will be removed in future release")
 public extension LoadingAbility {
 
     func displayLoading() {

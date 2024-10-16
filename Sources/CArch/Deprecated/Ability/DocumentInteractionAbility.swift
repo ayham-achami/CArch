@@ -6,6 +6,7 @@
 import UIKit
 
 // MARK: UIDocumentInteractionController + Init
+@available(*, deprecated, message: "This feature has been deprecated and will be removed in future release")
 private extension UIDocumentInteractionController {
 
     /// Инициализация
@@ -19,6 +20,7 @@ private extension UIDocumentInteractionController {
 }
 
 /// Протокол работы с документами
+@available(*, deprecated, message: "This feature has been deprecated and will be removed in future release")
 @MainActor public protocol DocumentInteractionAbility: CArchProtocol {
 
     /// Показать содержание документа
@@ -29,6 +31,7 @@ private extension UIDocumentInteractionController {
 }
 
 // MARK: - DocumentInteractionAbility + UIViewController
+@available(*, deprecated, message: "This feature has been deprecated and will be removed in future release")
 extension UIViewController: DocumentInteractionAbility {
 
     public func showPreview(for url: URL, delegate: UIDocumentInteractionControllerDelegate) -> Bool {
@@ -37,6 +40,7 @@ extension UIViewController: DocumentInteractionAbility {
 }
 
 // MARK: - URL + UIDocumentInteractionController
+@available(*, deprecated, message: "This feature has been deprecated and will be removed in future release")
 public extension URL {
 
     var typeIdentifier: String {

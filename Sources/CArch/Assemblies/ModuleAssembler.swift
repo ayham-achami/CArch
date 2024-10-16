@@ -17,7 +17,7 @@ public protocol StoryboardModuleAssembler: AnyObject {
 #endif
 
 /// Протокол отвечающий за регистрацию компонентов архитектуры CArch в контейнер зависимости
-public protocol LayoutModuleAssembler: AnyObject {
+public protocol LayoutModuleAssembler: AnyObject, Sendable {
 
     /// регистрирует компонент `ModuleAssembly` в контейнер зависимости
     /// - Parameter assembly: компонент, который надо зарегистрировать
@@ -26,7 +26,7 @@ public protocol LayoutModuleAssembler: AnyObject {
 }
 
 /// Протокол отвечающий за регистрацию компонентов модуля в контейнер зависимости
-public protocol AnyModuleAssembly {
+public protocol AnyModuleAssembly: Sendable {
     
     /// Метод инициализации без параметров
     init()
