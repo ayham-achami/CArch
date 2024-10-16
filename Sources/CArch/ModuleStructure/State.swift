@@ -63,7 +63,7 @@ public extension AnyReadOnlyState {
 /// Текущее состояние модуля
 /// содержит `ModuleInitialState` и `ModuleFinalState`
 /// и набор данных необходимых для работы модуля
-public protocol ModuleState: Sendable {
+public protocol ModuleState {
 
     /// Тип начального состояния модуля
     associatedtype InitialStateType: ModuleInitialState
