@@ -9,10 +9,10 @@ import Foundation
 /// от этого протокола, основная задача протокола `CArchProtocol`
 /// создать метку в коде для того, чтобы различить
 /// протоколы архитектурные от других
-public protocol CArchProtocol: AnyObject, Sendable {}
+public protocol CArchProtocol: AnyObject {}
 
 /// Основной протокол, все протоколы компонентов модуля
-public protocol CArchModuleComponent: CArchProtocol, Sendable {}
+public protocol CArchModuleComponent: CArchProtocol {}
 
 /// Основной протокол любого объекта UI модели
 public protocol UIModel {}
@@ -24,7 +24,7 @@ public typealias ViewController = Any
 #endif
 
 /// CArch Модуль
-public protocol CArchModule: CArchProtocol, Sendable {
+public protocol CArchModule: CArchProtocol {
 
     /// View component
     nonisolated var node: ViewController { get }
