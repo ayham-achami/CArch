@@ -10,9 +10,6 @@ import UIKit
 /// - destination: появляющийся модуль
 public typealias TransitionCompletion = ((CArchModule, CArchModule) -> Void)
 
-/// Поддержка все возможности
-public typealias AggregateAbility = ShareAbility & MailAbility & DocumentInteractionAbility
-
 /// Конфигуратор транзакции между модулями
 public struct TransitionConfigurator {
     
@@ -45,7 +42,7 @@ extension UIViewController: TabActivator {
 }
 
 /// Протокол контроля перехода между моделями
-@MainActor public protocol TransitionController: AggregateAbility {
+@MainActor public protocol TransitionController: AnyObject {
     
     /// Показывает модуль в основном контексте.
     /// - Parameter module: Модуль назначения

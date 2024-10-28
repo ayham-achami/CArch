@@ -1,98 +1,131 @@
 //
 //  DIContainer.swift
 //
-//  The MIT License (MIT)
-//
 
 import Foundation
 
-/// Типы ссылок на объекты в контейнер зависимостей
-public enum StorageType {
-    
-    /// Слабая ссылка на объект
-    public class WeakReference<Wrapped: AnyObject> {
-        
-        /// Объект назначения
-        public private(set) weak var wrapped: Wrapped?
-        
-        /// Инициализация с объектом
-        /// - Parameter wrapped:  Объект, на которого ссылка будет создано
-        public init(_ wrapped: Wrapped) {
-            self.wrapped = wrapped
-        }
-    }
-    
-    /// Сильная ссылка на объект
-    public class StrongReference<Wrapped: AnyObject> {
-        
-        /// Объект назначения
-        public private(set) var wrapped: Wrapped?
-        
-        /// Инициализация с объектом
-        /// - Parameter wrapped: Объект, на которого ссылка будет создано
-        public init(_ wrapped: Wrapped) {
-            self.wrapped = wrapped
-        }
-    }
-    
-    /// - fleeting: Всегда будет новый экземпляр объекта при цикле revolve
-    case fleeting
-    /// - singleton: Cинглтон, объект всегда есть, и будет всегда при цикле resolve
-    ///              возвращен один и тоже объект
-    case singleton
-    /// - autoRelease: Автоматическое уничтожение, пока на объекта есть сильная
-    ///                ссылка всегда он есть при цикле revolve, уничтожается когда
-    ///                нет не каких сильных ссылка на объект и тогда при следующем цикле
-    ///                возвращается новый экземпляр объекта
-    case autoRelease
-    /// - alwaysNewInstance: Всегда будет новый экземпляр объекта при цикле revolve
-    @available(*, deprecated, message: "This feature has be deprecated and will be removed in future release")
-    case alwaysNewInstance
-}
-
 /// Протокол внедрения объектов бизнес логики в контейнер зависимости
-public protocol BusinessLogicRegistrar {
+public protocol BusinessLogicRegistrar: Sendable {
     
     /// Регистрация агента в контейнер зависимости
     /// - Parameters:
     ///   - agentType: Тип агента
     ///   - factory: Блок содержащий код реализующий логику инициализация объекта
-    func recordAgent<Agent>(_: Agent.Type, factory: @escaping (DIResolver) -> Agent) where Agent: BusinessLogicAgent
+    ///   - completed: Замыкание завершения инициализации
+    func recordAgent<Agent>(_: Agent.Type,
+                            factory: @escaping (DIResolver) -> Agent,
+                            completed: ((DIResolver, Agent) -> Void)?) where Agent: BusinessLogicAgent
     
     /// Регистрация сервиса в контейнер зависимости
     /// - Parameters:
     ///   - serviceType: Тип сервиса
     ///   - factory: Блок содержащий код реализующий логику инициализация объекта
-    func recordService<Service>(_: Service.Type, factory: @escaping (DIResolver) -> Service) where Service: BusinessLogicService
+    ///   - completed: Замыкание завершения инициализации
+    func recordService<Service>(_: Service.Type,
+                                factory: @escaping (DIResolver) -> Service,
+                                completed: ((DIResolver, Service) -> Void)?) where Service: BusinessLogicService
 
     /// Регистрация двигателя в контейнер зависимости
     /// - Parameters:
     ///   - engineType: Тип двигателя
     ///   - factory: Блок содержащий код реализующий логику инициализация объекта
-    func recordEngine<Engine>(_: Engine.Type, factory: @escaping (DIResolver) -> Engine) where Engine: BusinessLogicEngine
+    ///   - completed: Замыкание завершения инициализации
+    func recordEngine<Engine>(_: Engine.Type,
+                              factory: @escaping (DIResolver) -> Engine,
+                              completed: ((DIResolver, Engine) -> Void)?) where Engine: BusinessLogicEngine
     
     /// Регистрация двигателя в контейнер зависимости
     /// - Parameters:
     ///   - engineType: Тип двигателя
     ///   - configuration: Конфигурация двигателя
     ///   - factory: Блок содержащий код реализующий логику инициализация объекта
-    func recordEngine<Engine>(_: Engine.Type, configuration: EngineConfiguration, factory: @escaping (DIResolver) -> Engine) where Engine: BusinessLogicEngine
+    ///   - completed: Замыкание завершения инициализации
+    func recordEngine<Engine>(_: Engine.Type,
+                              configuration: EngineConfiguration,
+                              factory: @escaping (DIResolver) -> Engine,
+                              completed: ((DIResolver, Engine) -> Void)?) where Engine: BusinessLogicEngine
     
     /// Регистрация множество сервисов в контейнер зависимости
     /// - Parameters:
     ///   - poolType: Тип множества
     ///   - factory: Блок содержащий код реализующий логику инициализация объекта
-    func recordPool<Pool>(_: Pool.Type, factory: @escaping (DIResolver) -> Pool) where Pool: BusinessLogicServicePool
+    ///   - completed: Замыкание завершения инициализации
+    func recordPool<Pool>(_: Pool.Type,
+                          factory: @escaping (DIResolver) -> Pool,
+                          completed: ((DIResolver, Pool) -> Void)?) where Pool: BusinessLogicServicePool
     
     /// Регистрация singleton в контейнер зависимости
     /// - Parameters:
     ///   - singletonType: Тип singleton
     ///   - factory: Блок содержащий код реализующий логику инициализация объекта
-    func recordSingleton<Singleton>(_: Singleton.Type, factory: @escaping (DIResolver) -> Singleton) where Singleton: BusinessLogicSingleton
+    ///   - completed: Замыкание завершения инициализации
+    func recordSingleton<Singleton>(_: Singleton.Type,
+                                    factory: @escaping (DIResolver) -> Singleton,
+                                    completed: ((DIResolver, Singleton) -> Void)?) where Singleton: BusinessLogicSingleton
+}
+
+// MARK: - BusinessLogicRegistrar + Default
+public extension BusinessLogicRegistrar {
+    
+    /// Регистрация агента в контейнер зависимости
+    /// - Parameters:
+    ///   - agentType: Тип агента
+    ///   - factory: Блок содержащий код реализующий логику инициализация объекта
+    func recordAgent<Agent>(_: Agent.Type,
+                            factory: @escaping (DIResolver) -> Agent) where Agent: BusinessLogicAgent {
+        recordAgent(Agent.self, factory: factory, completed: nil)
+    }
+    
+    /// Регистрация сервиса в контейнер зависимости
+    /// - Parameters:
+    ///   - serviceType: Тип сервиса
+    ///   - factory: Блок содержащий код реализующий логику инициализация объекта
+    func recordService<Service>(_: Service.Type,
+                                factory: @escaping (DIResolver) -> Service) where Service: BusinessLogicService {
+        recordService(Service.self, factory: factory, completed: nil)
+    }
+
+    /// Регистрация двигателя в контейнер зависимости
+    /// - Parameters:
+    ///   - engineType: Тип двигателя
+    ///   - factory: Блок содержащий код реализующий логику инициализация объекта
+    func recordEngine<Engine>(_: Engine.Type,
+                              factory: @escaping (DIResolver) -> Engine) where Engine: BusinessLogicEngine {
+        recordEngine(Engine.self, factory: factory, completed: nil)
+    }
+    
+    /// Регистрация двигателя в контейнер зависимости
+    /// - Parameters:
+    ///   - engineType: Тип двигателя
+    ///   - configuration: Конфигурация двигателя
+    ///   - factory: Блок содержащий код реализующий логику инициализация объекта
+    func recordEngine<Engine>(_: Engine.Type,
+                              configuration: EngineConfiguration,
+                              factory: @escaping (DIResolver) -> Engine) where Engine: BusinessLogicEngine {
+        recordEngine(Engine.self, configuration: configuration, factory: factory, completed: nil)
+    }
+    
+    /// Регистрация множество сервисов в контейнер зависимости
+    /// - Parameters:
+    ///   - poolType: Тип множества
+    ///   - factory: Блок содержащий код реализующий логику инициализация объекта
+    func recordPool<Pool>(_: Pool.Type,
+                          factory: @escaping (DIResolver) -> Pool) where Pool: BusinessLogicServicePool {
+        recordPool(Pool.self, factory: factory, completed: nil)
+    }
+    
+    /// Регистрация singleton в контейнер зависимости
+    /// - Parameters:
+    ///   - singletonType: Тип singleton
+    ///   - factory: Блок содержащий код реализующий логику инициализация объекта
+    func recordSingleton<Singleton>(_: Singleton.Type,
+                                    factory: @escaping (DIResolver) -> Singleton) where Singleton: BusinessLogicSingleton {
+        recordSingleton(Singleton.self, factory: factory, completed: nil)
+    }
 }
 
 /// Протокол внедрения объектов компонентов модуля в контейнер зависимости
-public protocol ModuleComponentRegistrar {
+public protocol ModuleComponentRegistrar: Sendable {
     
     /// Регистрация компонента модуля в контейнер зависимости
     /// - Parameters:
@@ -131,10 +164,12 @@ public protocol DIRegistrar: BusinessLogicRegistrar, ModuleComponentRegistrar {
     ///   - storage: Тип ссылки
     ///   - configuration: Конфигурация инъекции
     ///   - factory: Блок содержащий код реализующий логику инициализация объекта
+    ///   - completed: Замыкание завершения инициализации
     func record<Service>(some _: Service.Type,
                          inScope storage: StorageType,
                          configuration: (any InjectConfiguration)?,
-                         factory: @escaping (DIResolver) -> Service)
+                         factory: @escaping (DIResolver) -> Service,
+                         completed: ((DIResolver, Service) -> Void)?)
     
     /// Регистрация объекта в контейнер зависимости
     /// - Parameters:
@@ -198,9 +233,46 @@ public extension DIRegistrar {
     /// - Parameters:
     ///   - serviceType: Тип объекта
     ///   - factory: Блок содержащий код реализующий логику инициализация объекта
+    ///   - completed: Замыкание завершения инициализации
+    func record<Service>(some _: Service.Type,
+                         factory: @escaping (DIResolver) -> Service,
+                         completed: ((DIResolver, Service) -> Void)?) {
+        record(some: Service.self, inScope: .autoRelease, configuration: nil, factory: factory, completed: completed)
+    }
+    
+    /// Регистрация объекта в контейнер зависимости
+    /// - Parameters:
+    ///   - serviceType: Тип объекта
+    ///   - storage: Тип ссылки
+    ///   - factory: Блок содержащий код реализующий логику инициализация объекта
+    ///   - completed: Замыкание завершения инициализации
+    func record<Service>(some _: Service.Type,
+                         inScope storage: StorageType,
+                         factory: @escaping (DIResolver) -> Service,
+                         completed: ((DIResolver, Service) -> Void)?) {
+        record(some: Service.self, inScope: storage, configuration: nil, factory: factory, completed: completed)
+    }
+    
+    /// Регистрация объекта в контейнер зависимости
+    /// - Parameters:
+    ///   - serviceType: Тип объекта
+    ///   - configuration: Конфигурация инъекции
+    ///   - factory: Блок содержащий код реализующий логику инициализация объекта
+    ///   - completed: Замыкание завершения инициализации
+    func record<Service>(some _: Service.Type,
+                         configuration: (any InjectConfiguration),
+                         factory: @escaping (DIResolver) -> Service,
+                         completed: ((DIResolver, Service) -> Void)?) {
+        record(some: Service.self, inScope: .autoRelease, configuration: configuration, factory: factory, completed: completed)
+    }
+
+    /// Регистрация объекта в контейнер зависимости
+    /// - Parameters:
+    ///   - serviceType: Тип объекта
+    ///   - factory: Блок содержащий код реализующий логику инициализация объекта
     func record<Service>(some _: Service.Type,
                          factory: @escaping (DIResolver) -> Service) {
-        record(some: Service.self, inScope: .autoRelease, configuration: nil, factory: factory)
+        record(some: Service.self, inScope: .autoRelease, configuration: nil, factory: factory, completed: nil)
     }
     
     /// Регистрация объекта в контейнер зависимости
@@ -211,7 +283,7 @@ public extension DIRegistrar {
     func record<Service>(some _: Service.Type,
                          inScope storage: StorageType,
                          factory: @escaping (DIResolver) -> Service) {
-        record(some: Service.self, inScope: storage, configuration: nil, factory: factory)
+        record(some: Service.self, inScope: storage, configuration: nil, factory: factory, completed: nil)
     }
     
     /// Регистрация объекта в контейнер зависимости
@@ -222,7 +294,7 @@ public extension DIRegistrar {
     func record<Service>(some _: Service.Type,
                          configuration: (any InjectConfiguration),
                          factory: @escaping (DIResolver) -> Service) {
-        record(some: Service.self, inScope: .autoRelease, configuration: configuration, factory: factory)
+        record(some: Service.self, inScope: .autoRelease, configuration: configuration, factory: factory, completed: nil)
     }
     
     /// Регистрация объекта в контейнер зависимости
@@ -273,7 +345,7 @@ public extension DIRegistrar {
 }
 
 /// Протокол получения объектов бизнес логики в контейнер зависимости
-public protocol BusinessLogicResolver {
+public protocol BusinessLogicResolver: Sendable {
     
     /// Получение агента из контейнера зависимости
     /// - Parameters:
@@ -310,7 +382,7 @@ public protocol BusinessLogicResolver {
 }
 
 /// Протокол получения объектов компонентов модуля в контейнер зависимости
-public protocol ModuleComponentResolver {
+public protocol ModuleComponentResolver: Sendable {
     
     /// Получение модуля из контейнера зависимости
     /// - Parameter moduleType: Тип модуля

@@ -5,7 +5,7 @@
 import Foundation
 
 /// Билдер любого модуля
-public protocol AnyModuleBuilder {
+public protocol AnyModuleBuilder: Sendable {
     
     /// Создает и возвращает новый модуль передавая ему данные инициализации
     /// - Parameter initialState: Данные инициализации

@@ -5,7 +5,7 @@
 import Foundation
 
 /// Протокол внедрения зависимости
-public protocol DIAssembly {
+public protocol DIAssembly: Sendable {
 
     /// Предоставить хук для «Ассемблера» для загрузки сервисов в предоставленный контейнер
     /// - Parameter container: контейнер, предоставленный «Ассемблером»
@@ -13,7 +13,7 @@ public protocol DIAssembly {
 }
 
 /// Коллекция объектов для добавления в контейнер зависимости
-public protocol DIAssemblyCollection: Collection {
+public protocol DIAssemblyCollection: Collection, Sendable {
     
     /// Коллекция объектов
     var services: [DIAssembly] { get }

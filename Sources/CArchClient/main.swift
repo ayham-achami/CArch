@@ -117,14 +117,14 @@ testUI.nonisolatedFunction("")
 
 private extension ImplementationsKeys {
     
-    static let v1 = Self.init(rawKey: "v1")
-    static let v2 = Self.init(rawKey: "v2")
-    static let `default` = Self.init(rawKey: "default")
+    static let v1 = Self.init(rawValue: "v1")
+    static let v2 = Self.init(rawValue: "v2")
+    static let `default` = Self.init(rawValue: "default")
 }
 
 @Contract(implementations: [
-    .v2: SomeAgentV2Implementation.self,
     .v1: SomeAgentV1Implementation.self,
+    .v2: SomeAgentV2Implementation.self,
     .default: SomeAgentImplementation.self
 ])
 public protocol SomeAgent: BusinessLogicAgent, AutoResolve {}

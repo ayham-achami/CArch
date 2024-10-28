@@ -6,10 +6,10 @@
 import UIKit
 
 /// Билдер транзакции
-@MainActor public final class TransitionBuilder {
+@MainActor public final class TransitionBuilder: Sendable {
 
     /// Типы транзакции
-    public enum Transition {
+    public enum Transition: Sendable {
 
         // Показать модуль если у source есть `UINavigationController` то, выполняется push если нет то, выполняется present
         case auto
@@ -37,6 +37,7 @@ import UIKit
     ///   - transitionController: Контролер перехода между моделями
     ///   - holder: Носитель информации о переходе
     /// - Returns: Билдер транзакции
+    @available(*, deprecated, message: "This feature has been deprecated and will be removed in future release")
     static public func with(_ transitionController: TransitionController, _ holder: TransitionHolder) -> Self {
         .init(transitionController, holder)
     }
@@ -69,6 +70,7 @@ import UIKit
     /// - Parameters:
     ///   - transitionController: Контролер перехода между моделями
     ///   - holder: Носитель информации о переходе
+    @available(*, deprecated, message: "This feature has been deprecated and will be removed in future release")
     private init(_ transitionController: TransitionController, _ holder: TransitionHolder) {
         self.state = holder.state
         self.hierarchy = holder.hierarchy

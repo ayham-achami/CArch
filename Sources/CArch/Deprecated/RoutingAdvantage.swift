@@ -6,9 +6,11 @@
 import UIKit
 
 /// Тип перехода с преимуществом
+@available(*, deprecated, message: "This feature has been deprecated and will be removed in future release")
 public protocol RoutingAdvantageType {}
 
 /// Перехода с преимуществом
+@available(*, deprecated, message: "This feature has been deprecated and will be removed in future release")
 @MainActor public protocol RoutingAdvantage: AnyObject {
     
     /// Требуется переход с преимуществом
@@ -18,6 +20,7 @@ public protocol RoutingAdvantageType {}
 }
 
 /// Представление о контроле перехода
+@available(*, deprecated, message: "This feature has been deprecated and will be removed in future release")
 @MainActor public protocol TransitionControllerRepresentable {
     
     /// Протокол контроля перехода между моделями
@@ -25,6 +28,7 @@ public protocol RoutingAdvantageType {}
 }
 
 // MARK: - TransitionControllerRepresentable + Default
+@available(*, deprecated, message: "This feature has been deprecated and will be removed in future release")
 public extension TransitionControllerRepresentable {
     
     var transition: TransitionController {
@@ -39,6 +43,7 @@ public extension TransitionControllerRepresentable {
 }
 
 // MARK: RootRoutingLogic + TransitionControllerRepresentable
+@available(*, deprecated, message: "This feature has been deprecated and will be removed in future release")
 public extension RootRoutingLogic where Self: TransitionControllerRepresentable {
     
     /// Выполнение перехода с преимуществом

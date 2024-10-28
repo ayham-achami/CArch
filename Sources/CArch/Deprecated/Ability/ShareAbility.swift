@@ -6,6 +6,7 @@
 import UIKit
 
 /// Возможность поделиться разных материалов
+@available(*, deprecated, message: "This feature has been deprecated and will be removed in future release")
 @MainActor public protocol ShareAbility {
 
     /// Поделиться разных материалов
@@ -18,6 +19,7 @@ import UIKit
 }
 
 // MARK: - ShareAbility + Extension
+@available(*, deprecated, message: "This feature has been deprecated and will be removed in future release")
 public extension ShareAbility {
 
     /// Поделиться разных материалов
@@ -48,6 +50,7 @@ public extension ShareAbility {
 }
 
 // MARK: - UIViewController + ShareAbility
+@available(*, deprecated, message: "This feature has been deprecated and will be removed in future release")
 extension UIViewController: ShareAbility {
 
     public func share(_ text: String?, _ image: UIImage?, _ url: URL?, _ completion: (() -> Void)?) {

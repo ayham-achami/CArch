@@ -57,14 +57,14 @@ extension UIViewController: CArchModule {
 #endif
 
 /// Конфигурация инъекции
-public protocol InjectConfiguration: RawRepresentable where RawValue == String {}
+public protocol InjectConfiguration: RawRepresentable, Sendable where RawValue == String {}
 
 /// Конфигурация двигателя
 public struct EngineConfiguration: InjectConfiguration {
     
-    public var rawValue: String
+    public let rawValue: String
     
-    public init?(rawValue: String) {
+    public init(rawValue: String) {
         self.rawValue = rawValue
     }
 }
@@ -194,19 +194,15 @@ public protocol AutoResolve {
 }
 
 /// Ключи имплементаций
-public struct ImplementationsKeys: RawRepresentable, Hashable {
+public struct ImplementationsKeys: RawRepresentable, Hashable, Sendable {
     
     /// Ключ по умолчанию
-    public static var `default`: Self = .init(rawKey: "default")
+    public static var `default`: Self = .init(rawValue: "default")
     
-    public var rawValue: String
+    public let rawValue: String
     
-    public init?(rawValue: String) {
+    public init(rawValue: String) {
         self.rawValue = rawValue
-    }
-    
-    public init(rawKey: String) {
-        self.init(rawValue: rawKey)!
     }
 }
 

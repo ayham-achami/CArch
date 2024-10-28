@@ -30,7 +30,7 @@ extension Hierarchy {
 }
 
 /// Любая иерархия модуля
-public protocol AnyHierarchyModuleBuilder {
+public protocol AnyHierarchyModuleBuilder: Sendable {
 
     /// Создает и возвращает новый модуль передавая ему данные
     /// инициализации, с нужной иерархия исходя из объекта `Hierarchy`

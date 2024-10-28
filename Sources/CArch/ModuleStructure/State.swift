@@ -96,7 +96,7 @@ public extension ModuleState {
 public protocol AnyModuleStateRepresentable: CArchModuleComponent {}
 
 /// Основной протокол инициализации любого модуля
-public protocol AnyModuleInitializer: CArchModuleComponent, Sendable {
+public protocol AnyModuleInitializer: CArchModuleComponent {
 
     /// Настроить состояние инициализация модуль
     ///
@@ -105,7 +105,7 @@ public protocol AnyModuleInitializer: CArchModuleComponent, Sendable {
 }
 
 /// Основной протокол финализирование работы любого модуля
-public protocol AnyModuleFinalizer: CArchModuleComponent, Sendable {
+public protocol AnyModuleFinalizer: CArchModuleComponent {
 
     /// Вызывается при завершении работы модуля
     ///
