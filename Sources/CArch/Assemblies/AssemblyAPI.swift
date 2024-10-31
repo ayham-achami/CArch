@@ -38,16 +38,3 @@ public extension DIAssemblyCollection {
         services.index(after: index)
     }
 }
-
-/// Протокол отвечающий за создание всех серверов
-@available(*, deprecated, message: "This feature has be deprecated and will be removed in future release")
-public protocol ServicesRecorder {
-    
-    /// Возвращает всех cервисов бизнес логики
-    ///
-    /// - Returns: Сервисы бизнес логики
-    var records: [DIAssembly] { get }
-    
-    /// Инициализации без параметров
-    init()
-}
