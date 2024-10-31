@@ -163,11 +163,15 @@ public protocol DIRegistrar: BusinessLogicRegistrar, ModuleComponentRegistrar {
     ///   - serviceType: Тип объекта
     ///   - storage: Тип ссылки
     ///   - configuration: Конфигурация инъекции
+    ///   - shouldCheckRegistration: Надо ли проверить объект на регистрацию в контейнер зависимости
+    ///                              если передать true то если до этот было зарегистрирован с таким же
+    ///                              типом и конфигурацией то операция регистрации отменяется
     ///   - factory: Блок содержащий код реализующий логику инициализация объекта
     ///   - completed: Замыкание завершения инициализации
     func record<Service>(some _: Service.Type,
                          inScope storage: StorageType,
                          configuration: (any InjectConfiguration)?,
+                         shouldCheckRegistration: Bool,
                          factory: @escaping (DIResolver) -> Service,
                          completed: ((DIResolver, Service) -> Void)?)
     
@@ -233,46 +237,9 @@ public extension DIRegistrar {
     /// - Parameters:
     ///   - serviceType: Тип объекта
     ///   - factory: Блок содержащий код реализующий логику инициализация объекта
-    ///   - completed: Замыкание завершения инициализации
-    func record<Service>(some _: Service.Type,
-                         factory: @escaping (DIResolver) -> Service,
-                         completed: ((DIResolver, Service) -> Void)?) {
-        record(some: Service.self, inScope: .autoRelease, configuration: nil, factory: factory, completed: completed)
-    }
-    
-    /// Регистрация объекта в контейнер зависимости
-    /// - Parameters:
-    ///   - serviceType: Тип объекта
-    ///   - storage: Тип ссылки
-    ///   - factory: Блок содержащий код реализующий логику инициализация объекта
-    ///   - completed: Замыкание завершения инициализации
-    func record<Service>(some _: Service.Type,
-                         inScope storage: StorageType,
-                         factory: @escaping (DIResolver) -> Service,
-                         completed: ((DIResolver, Service) -> Void)?) {
-        record(some: Service.self, inScope: storage, configuration: nil, factory: factory, completed: completed)
-    }
-    
-    /// Регистрация объекта в контейнер зависимости
-    /// - Parameters:
-    ///   - serviceType: Тип объекта
-    ///   - configuration: Конфигурация инъекции
-    ///   - factory: Блок содержащий код реализующий логику инициализация объекта
-    ///   - completed: Замыкание завершения инициализации
-    func record<Service>(some _: Service.Type,
-                         configuration: (any InjectConfiguration),
-                         factory: @escaping (DIResolver) -> Service,
-                         completed: ((DIResolver, Service) -> Void)?) {
-        record(some: Service.self, inScope: .autoRelease, configuration: configuration, factory: factory, completed: completed)
-    }
-
-    /// Регистрация объекта в контейнер зависимости
-    /// - Parameters:
-    ///   - serviceType: Тип объекта
-    ///   - factory: Блок содержащий код реализующий логику инициализация объекта
     func record<Service>(some _: Service.Type,
                          factory: @escaping (DIResolver) -> Service) {
-        record(some: Service.self, inScope: .autoRelease, configuration: nil, factory: factory, completed: nil)
+        record(some: Service.self, inScope: .autoRelease, configuration: nil, shouldCheckRegistration: true, factory: factory, completed: nil)
     }
     
     /// Регистрация объекта в контейнер зависимости
@@ -283,18 +250,20 @@ public extension DIRegistrar {
     func record<Service>(some _: Service.Type,
                          inScope storage: StorageType,
                          factory: @escaping (DIResolver) -> Service) {
-        record(some: Service.self, inScope: storage, configuration: nil, factory: factory, completed: nil)
+        record(some: Service.self, inScope: storage, configuration: nil, shouldCheckRegistration: true, factory: factory, completed: nil)
     }
     
     /// Регистрация объекта в контейнер зависимости
     /// - Parameters:
     ///   - serviceType: Тип объекта
+    ///   - storage: Тип ссылки
     ///   - configuration: Конфигурация инъекции
     ///   - factory: Блок содержащий код реализующий логику инициализация объекта
     func record<Service>(some _: Service.Type,
-                         configuration: (any InjectConfiguration),
+                         inScope storage: StorageType,
+                         configuration: any InjectConfiguration,
                          factory: @escaping (DIResolver) -> Service) {
-        record(some: Service.self, inScope: .autoRelease, configuration: configuration, factory: factory, completed: nil)
+        record(some: Service.self, inScope: .autoRelease, configuration: configuration, shouldCheckRegistration: true, factory: factory, completed: nil)
     }
     
     /// Регистрация объекта в контейнер зависимости

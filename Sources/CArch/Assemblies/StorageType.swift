@@ -43,7 +43,4 @@ public enum StorageType: @unchecked Sendable {
     ///                нет не каких сильных ссылка на объект и тогда при следующем цикле
     ///                возвращается новый экземпляр объекта
     case autoRelease
-    /// - alwaysNewInstance: Всегда будет новый экземпляр объекта при цикле revolve
-    @available(*, deprecated, message: "This feature has be deprecated and will be removed in future release")
-    case alwaysNewInstance
 }
