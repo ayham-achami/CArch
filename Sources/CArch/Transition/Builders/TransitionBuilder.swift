@@ -31,16 +31,6 @@ import UIKit
     static public func with(_ transitionController: TransitionController) -> Self {
         .init(transitionController)
     }
-    
-    /// Фабричный метод создания билдера
-    /// - Parameters:
-    ///   - transitionController: Контролер перехода между моделями
-    ///   - holder: Носитель информации о переходе
-    /// - Returns: Билдер транзакции
-    @available(*, deprecated, message: "This feature has been deprecated and will be removed in future release")
-    static public func with(_ transitionController: TransitionController, _ holder: TransitionHolder) -> Self {
-        .init(transitionController, holder)
-    }
 
     /// Данные инициализации модуля
     private var state: ModuleInitialState?
@@ -63,21 +53,6 @@ import UIKit
     /// Инициализации
     /// - Parameter transitionController: Контролер перехода между моделями
     private init(_ transitionController: TransitionController) {
-        self.transitionController = transitionController
-    }
-    
-    /// Инициализации
-    /// - Parameters:
-    ///   - transitionController: Контролер перехода между моделями
-    ///   - holder: Носитель информации о переходе
-    @available(*, deprecated, message: "This feature has been deprecated and will be removed in future release")
-    private init(_ transitionController: TransitionController, _ holder: TransitionHolder) {
-        self.state = holder.state
-        self.hierarchy = holder.hierarchy
-        self.transition = holder.transition
-        self.animated = holder.animated
-        self.builder = holder.builder
-        self.completion = holder.completion
         self.transitionController = transitionController
     }
     

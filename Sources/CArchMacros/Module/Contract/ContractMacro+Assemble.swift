@@ -96,7 +96,7 @@ private extension MemberBlockItemSyntax {
                 body: .init(
                     statements: .init(
                         itemsBuilder: {
-                            for implementation in arguments.implementations.values.countSorted {
+                            for implementation in arguments.implementations.keys.countSorted {
                                 .init(item: .recordExp(from: arguments.component, name: implementation))
                             }
                         }

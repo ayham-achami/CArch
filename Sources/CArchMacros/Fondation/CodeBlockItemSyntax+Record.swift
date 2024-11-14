@@ -10,20 +10,22 @@ extension CodeBlockItemSyntax.Item {
     static func recordExp(from component: ContractMacro.Arguments.Component, name: String) -> CodeBlockItemSyntax.Item {
         switch component {
         case .pool:
-            return recordPoolExp(name)
+            recordPoolExp(name)
         case .agent:
-            return recordAgentExp(name)
+            recordAgentExp(name)
         case .service:
-            return recordServiceExp(name)
+            recordServiceExp(name)
         case .singleton:
-            return recordSingletonExp(name)
+            recordSingletonExp(name)
+        case .controller:
+            recordControllerExp(name)
         }
     }
     
     private static func recordPoolExp(_ name: String) -> Self {
         .expr("""
         container.recordPool(\(raw: name).self) { resolver in
-            .init(resolver)
+            \(raw: name)(resolver)
         }
         """)
     }
@@ -31,7 +33,7 @@ extension CodeBlockItemSyntax.Item {
     private static func recordAgentExp(_ name: String) -> Self {
         .expr("""
         container.recordAgent(\(raw: name).self) { resolver in
-            .init(resolver)
+            \(raw: name)(resolver)
         }
         """)
     }
@@ -39,7 +41,7 @@ extension CodeBlockItemSyntax.Item {
     private static func recordServiceExp(_ name: String) -> Self {
         .expr("""
         container.recordService(\(raw: name).self) { resolver in
-            .init(resolver)
+            \(raw: name)(resolver)
         }
         """)
     }
@@ -47,7 +49,15 @@ extension CodeBlockItemSyntax.Item {
     private static func recordSingletonExp(_ name: String) -> Self {
         .expr("""
         container.recordSingleton(\(raw: name).self) { resolver in
-            .init(resolver)
+            \(raw: name)(resolver)
+        }
+        """)
+    }
+    
+    private static func recordControllerExp(_ name: String) -> Self {
+        .expr("""
+        container.recordController(\(raw: name).self) { resolver in
+            \(raw: name)(resolver)
         }
         """)
     }

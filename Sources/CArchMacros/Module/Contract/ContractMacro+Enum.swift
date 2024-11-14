@@ -38,7 +38,7 @@ extension ContractMacro {
             memberBlock: .init(
                 members: .init(
                     itemsBuilder: {
-                        for implementation in arguments.implementations.keys.countSorted {
+                        for implementation in arguments.implementations.values.countSorted {
                             EnumCaseDeclSyntax(
                                 elements: .init {
                                     if implementation.isDefault {

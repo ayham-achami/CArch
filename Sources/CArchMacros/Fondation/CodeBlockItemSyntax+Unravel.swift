@@ -6,17 +6,19 @@ import SwiftSyntax
 
 // MARK: - ContractMacro + CodeBlockItemSyntax.Item + Unravel
 extension CodeBlockItemSyntax.Item {
-
+    
     static func unravelExp(from component: ContractMacro.Arguments.Component, name: String) -> CodeBlockItemSyntax.Item {
         switch component {
         case .pool:
-            return unravelPoolExp(name)
+            unravelPoolExp(name)
         case .agent:
-            return unravelAgentExp(name)
+            unravelAgentExp(name)
         case .service:
-            return unravelServiceExp(name)
+            unravelServiceExp(name)
         case .singleton:
-            return unravelSingletonExp(name)
+            unravelSingletonExp(name)
+        case .controller:
+            unravelControllerExp(name)
         }
     }
     
@@ -41,6 +43,12 @@ extension CodeBlockItemSyntax.Item {
     private static func unravelSingletonExp(_ name: String) -> Self {
         .expr("""
         resolver.unravelSingleton(\(raw: name).self)
+        """)
+    }
+    
+    private static func unravelControllerExp(_ name: String) -> Self {
+        .expr("""
+        resolver.unravelController(\(raw: name).self)
         """)
     }
 }

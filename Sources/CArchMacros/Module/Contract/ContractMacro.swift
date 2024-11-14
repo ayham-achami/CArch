@@ -7,7 +7,23 @@ import SwiftSyntax
 import SwiftSyntaxMacros
 
 /// Макрос, который добавить код внедрение зависимости для протокол
-public struct ContractMacro {}
+public struct ContractMacro: PeerMacro {
+    
+    public static func expansion(of node: SwiftSyntax.AttributeSyntax,
+                                 providingPeersOf declaration: some SwiftSyntax.DeclSyntaxProtocol,
+                                 in context: some SwiftSyntaxMacros.MacroExpansionContext) throws -> [SwiftSyntax.DeclSyntax] {
+        guard
+            let protocolDecl = declaration.as(ProtocolDeclSyntax.self)
+        else { throw ProtocolsMacros.Error.notProtocol(Self.self) }
+        
+        try checkInheritanceSpecifier(protocolDecl, from: "AutoResolve", in: context)
+        let arguments = try Parser.arguments(from: node, decl: protocolDecl, context: context)
+        
+        return [.init(try implementationsEnum(protocolDecl, arguments)),
+                .init(try assembleClass(protocolDecl, arguments)),
+                .init(try resolverClass(protocolDecl, arguments))]
+    }
+}
 
 // MARK: - ContractMacro + Arguments
 extension ContractMacro {
@@ -18,7 +34,7 @@ extension ContractMacro {
         var defaultImplementation: String {
             get throws {
                 guard
-                let `default` = implementations.keys.first(where: { $0 == "default" })
+                    let `default` = implementations.values.first(where: { $0 == "default" })
                 else { throw  Error.defaultImplementation }
                 return `default`
             }
@@ -45,6 +61,7 @@ extension ContractMacro.Arguments {
         case agent
         case service
         case singleton
+        case controller
     }
 }
 

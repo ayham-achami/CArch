@@ -104,9 +104,7 @@ extension MemberBlockItemSyntax {
                 body: .init(
                     statements: .init(
                         arrayLiteral: .init(
-                            item: .expr("""
-                                           \(raw: protocolDecl.name.text)Resolver(resolver).unravel(implementation: implementation)
-                                       """)
+                            item: .expr("\(raw: protocolDecl.name.text)Resolver(resolver).unravel(implementation: implementation)")
                         )
                     )
                 )

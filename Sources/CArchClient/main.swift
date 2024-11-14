@@ -123,80 +123,73 @@ private extension ImplementationsKeys {
 }
 
 @Contract(implementations: [
-    .v1: SomeAgentV1Implementation.self,
-    .v2: SomeAgentV2Implementation.self,
-    .default: SomeAgentImplementation.self
+    .init(type: SomeAgentV1Implementation.self, version: .v1),
+    .init(type: SomeAgentV2Implementation.self, version: .v2),
+    .init(type: SomeAgentImplementation.self, version: .default)
 ])
 public protocol SomeAgent: BusinessLogicAgent, AutoResolve {}
 
+@AutoResolvable
 private actor SomeAgentImplementation: SomeAgent {
-    
-    init(_ resolver: DIResolver) {}
 }
 
+@AutoResolvable
 private actor SomeAgentV1Implementation: SomeAgent {
-    
-    init(_ resolver: DIResolver) {}
 }
 
+@AutoResolvable
 private actor SomeAgentV2Implementation: SomeAgent {
-    
-    init(_ resolver: DIResolver) {}
 }
 
 @Contract
 protocol SomeService: BusinessLogicService, AutoResolve {}
 
+@AutoResolvable(implementations: [.init(type: SomeAgent.self, version: .v1)])
 private actor SomeServiceImplementation: SomeService {
 
     private let agent: SomeAgent
-
-    init(_ resolver: DIResolver) {
-        self.init(agent: SomeAgentResolver(resolver).unravel(implementation: .v1))
-    }
-
-    init(agent: SomeAgent) {
-        self.agent = agent
-    }
 }
 
-@Contract(implementations: [.default: SomeSingletonImplementation.self])
+@Contract
+protocol SomeController: BusinessLogicController, AutoResolve {}
+
+@AutoResolvable(options: [.required, .convenience])
+private class SomeControllerImplementation: SomeController {
+    
+    private let service: SomeService
+}
+
+@Contract(implementations: [.init(type: SomeSingletonImplementation.self, version: .default)])
 protocol SomeSingleton: BusinessLogicSingleton, AutoResolve {}
 
+@AutoResolvable
 private actor SomeSingletonImplementation: SomeSingleton {
-
-    init(_ resolver: DIResolver) {}
 }
 
 @Contract(isPublicAssembly: true)
 public protocol SomePool: BusinessLogicServicePool, AutoResolve {}
 
+@AutoResolvable
 private actor SomePoolImplementation: SomePool {
-
-    init(_ resolver: DIResolver) {
-    }
 }
 
 @Contract
 protocol SomeRootAgent: BusinessLogicAgent, AutoResolve {}
 
+@AutoResolvable
 private actor SomeRootAgentImplementation: SomeRootAgent {
-    
-    init(_ resolver: DIResolver) {}
 }
 
 @Contract
 protocol SomeRoot2Agent: BusinessLogicAgent, AutoResolve {}
 
+@AutoResolvable
 private actor SomeRoot2AgentImplementation: SomeRoot2Agent {
-    
-    init(_ resolver: DIResolver) {}
 }
 
 @Contract
 protocol SomeParentAgent: BusinessLogicAgent, SomeRootAgent, SomeRoot2Agent, AutoResolve {}
 
+@AutoResolvable
 private actor SomeParentAgentImplementation: SomeParentAgent {
-    
-    init(_ resolver: DIResolver) {}
 }

@@ -23,6 +23,24 @@ enum ProtocolsMacros {
     }
 }
 
+/// <#Description#>
+enum SwiftObjectMacros {
+    
+    /// <#Description#>
+    public enum Error: Swift.Error, CustomStringConvertible {
+    
+        /// <#Description#>
+        case notSupported(Any.Type)
+        
+        public var description: String {
+            switch self {
+            case let .notSupported(type):
+                return "\(String(describing: type.self)) can be applied to Structure, Class or Actors only"
+            }
+        }
+    }
+}
+
 /// Namespace Диагностика
 enum Diagnostics {
     

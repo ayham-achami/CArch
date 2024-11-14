@@ -117,6 +117,21 @@ public extension BusinessLogicService {
     }
 }
 
+/// Базовый протокол любого контроллер слоя бизнес логики
+public protocol BusinessLogicController: CArchProtocol, CustomStringConvertible, CustomDebugStringConvertible {}
+
+// MARK: - BusinessLogicController + StringConvertible
+public extension BusinessLogicController {
+
+    var description: String {
+        "🎛️ \(String(describing: Self.self))"
+    }
+
+    var debugDescription: String {
+        description
+    }
+}
+
 /// Протокол множества сервисов
 public protocol BusinessLogicServicePool: CArchProtocol, Actor, CustomStringConvertible, CustomDebugStringConvertible {}
 
@@ -194,7 +209,7 @@ public protocol AutoResolve {
 }
 
 /// Ключи имплементаций
-public struct ImplementationsKeys: RawRepresentable, Hashable, Sendable {
+@frozen public struct ImplementationsKeys: RawRepresentable, Hashable, Sendable {
     
     /// Ключ по умолчанию
     public static var `default`: Self = .init(rawValue: "default")
@@ -206,12 +221,31 @@ public struct ImplementationsKeys: RawRepresentable, Hashable, Sendable {
     }
 }
 
+/// <#Description#>
+@frozen public struct ImplementationsAiming: Hashable {
+    
+    /// <#Description#>
+    public let type: String
+    
+    /// <#Description#>
+    public let version: ImplementationsKeys
+    
+    /// <#Description#>
+    /// - Parameters:
+    ///   - type: <#type description#>
+    ///   - version: <#version description#>
+    public init(type: Any.Type, version: ImplementationsKeys) {
+        self.version = version
+        self.type = String(describing: type)
+    }
+}
+
 /// Макрос, который добавить код внедрения зависимости
 ///
 ///     @Contract(implementations: [
-///         .v2: SomeAgentV2Implementation.self,
-///         .v1: SomeAgentV1Implementation.self,
-///         .default: SomeAgentImplementation.self
+///         .init(type: SomeAgentV2Implementation.self, version: .v2),
+///         .init(type: SomeAgentV1Implementation.self, version: .v1),
+///         .init(type: SomeAgentImplementation.self, version: .default)
 ///     ])
 ///     public protocol SomeAgent: BusinessLogicAgent, AutoResolve {}
 ///
@@ -259,5 +293,44 @@ public struct ImplementationsKeys: RawRepresentable, Hashable, Sendable {
 ///     }
 @attached(extension, names: arbitrary, named(resolve))
 @attached(peer, conformances: AutoResolve, names: suffixed(Assembly), suffixed(Resolver), suffixed(Implementations))
-public macro Contract(implementations: [ImplementationsKeys: Any.Type] = [:],
+public macro Contract(implementations: Set<ImplementationsAiming> = [],
                       isPublicAssembly: Bool = false) = #externalMacro(module: "CArchMacros", type: "ContractMacro")
+
+public struct InitAttributesOptions: OptionSet {
+    
+    public static let `public` = Self(rawValue: 1 << 0)
+    public static let required = Self(rawValue: 1 << 1)
+    public static let convenience = Self(rawValue: 1 << 2)
+    
+    public let rawValue: Int
+
+    public init(rawValue: Int) {
+        self.rawValue = rawValue
+    }
+}
+
+/// Макрос, который добавить Init метода к Class, Actor и Struct и также генерирует `init(_ resolver: DIResolver)` метод
+///
+///     @AutoResolvable
+///     actor SomeActor: AutoResolve {
+///
+///         let firstProperty: SomeFirstPropertyType
+///         let secondProperty: SomeSecondPropertyType
+///
+///         init(firstProperty: SomeFirstPropertyType,
+///              secondProperty: SomeSecondPropertyType) {
+///                 self.firstProperty = firstProperty
+///                 self.secondProperty = secondProperty
+///         }
+///
+///         init(_ resolver: any DIResolver) {
+///             self.init(firstProperty: SomeFirstPropertyTypeResolver(resolver).unravel(),
+///                       secondProperty: SomeSecondPropertyTypeResolver(resolver).unravel())
+///         }
+///
+///         func doSomething() {}
+///     }
+@attached(member, names: named(init))
+public macro AutoResolvable(shouldUseResolver: Bool = true,
+                            options: InitAttributesOptions = [],
+                            implementations: Set<ImplementationsAiming> = []) = #externalMacro(module: "CArchMacros", type: "AutoResolvableMacro")

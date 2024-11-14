@@ -174,11 +174,11 @@ private extension MemberBlockItemSyntax {
                             casesBuilder: {
                                 SwitchCaseListSyntax(
                                     itemsBuilder: {
-                                        for (implementationCase, implementationType) in arguments.implementations.countSorted {
+                                        for (type, version) in arguments.implementations.countSorted {
                                             .init(
-                                                label: .implementationCase(from: implementationCase),
+                                                label: .implementationCase(from: version),
                                                 statementsBuilder: {
-                                                    .returnImplementation(for: arguments.component, with: implementationType)
+                                                    .returnImplementation(for: arguments.component, with: type)
                                                 }
                                             )
                                         }

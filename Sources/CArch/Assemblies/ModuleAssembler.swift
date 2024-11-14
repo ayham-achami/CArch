@@ -5,30 +5,23 @@
 import Foundation
 
 /// Протокол отвечающий за регистрацию компонентов архитектуры CArch в контейнер зависимости
-public protocol LayoutModuleAssembler: AnyObject, Sendable {
+public protocol ModuleAssembler: AnyObject, Sendable {
 
     /// регистрирует компонент `ModuleAssembly` в контейнер зависимости
     /// - Parameter assembly: компонент, который надо зарегистрировать
     /// - Returns: ссылку на контейнер зависимостей
-    static func assembly<Module>(_ type: Module.Type) -> StorageType.WeakReference<Module> where Module: LayoutModuleAssembly
+    static func assembly<Module>(_ type: Module.Type) -> StorageType.WeakReference<Module> where Module: ModuleAssembly
 }
-
-/// Протокол отвечающий за регистрацию компонентов модуля в контейнер зависимости
-public protocol AnyModuleAssembly: Sendable {
-    
-    /// Метод инициализации без параметров
-    init()
-}
-
-/// Контейнер зависимости
-public typealias DIContainer = DIRegistrar & DIResolver
 
 /// Протокол отвечающий за регистрацию компонентов модуля архитектуры CArch в контейнер зависимости
-public protocol LayoutModuleAssembly: AnyModuleAssembly {
+public protocol ModuleAssembly: Sendable {
+
+    /// Инициализации без параметров
+    init()
     
     /// Зарегистрировать рендера
     /// - Parameter container: Контейнер внедрения зависимостей
-    func registerRenderers(in container: CArch.DIContainer)
+    func registerRenderers(in container: DIContainer)
     
     /// Зарегистрировать ссылку на вид
     /// - Parameter container: Контейнер внедрения зависимостей
@@ -46,3 +39,11 @@ public protocol LayoutModuleAssembly: AnyModuleAssembly {
     /// - Parameter container: Контейнер внедрения зависимостей
     func registerRouter(in container: DIContainer)
 }
+
+/// Протокол отвечающий за регистрацию компонентов архитектуры CArch в контейнер зависимости
+@available(*, deprecated, renamed: "ModuleAssembler", message: "Use new object")
+public typealias LayoutModuleAssembler = ModuleAssembler
+
+/// Протокол отвечающий за регистрацию компонентов модуля архитектуры CArch в контейнер зависимости
+@available(*, deprecated, renamed: "ModuleAssembly", message: "Use new object")
+public typealias LayoutModuleAssembly = ModuleAssembly

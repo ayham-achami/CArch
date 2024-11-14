@@ -19,7 +19,7 @@ public struct SyncAliasMacro: ExtensionMacro {
             let protocolDecl = declaration.as(ProtocolDeclSyntax.self)
         else { throw ProtocolsMacros.Error.notProtocol(Self.self) }
         
-        try protocolDecl.checkInheritanceSpecifier(from: "ErrorAsyncHandler", in: context)
+        try checkInheritanceSpecifier(protocolDecl, from: "ErrorAsyncHandler", in: context)
         
         return [try syncExtension(from: protocolDecl, with: context)]
     }
@@ -28,11 +28,11 @@ public struct SyncAliasMacro: ExtensionMacro {
 // MARK: - SyncAliasMacro + Sync Functions
 private extension SyncAliasMacro {
     
-    /// <#Description#>
+    /// Создают Extension с асинхронными функциями
     /// - Parameters:
-    ///   - protocolDecl: <#protocolDecl description#>
-    ///   - context: <#context description#>
-    /// - Returns: <#description#>
+    ///   - protocolDecl: `ProtocolDeclSyntax`
+    ///   - context: `MacroExpansionContext`
+    /// - Returns: `ExtensionDeclSyntax`
     static func syncExtension(from protocolDecl: ProtocolDeclSyntax,
                               with context: some MacroExpansionContext) throws -> ExtensionDeclSyntax {
         .init(
@@ -63,11 +63,11 @@ private extension SyncAliasMacro {
 // MARK: - SyncAliasMacro + Sync Functions
 private extension SyncAliasMacro {
     
-    /// <#Description#>
+    /// Создают асинхронные функции
     /// - Parameters:
-    ///   - protocolDecl: <#protocolDecl description#>
-    ///   - context: <#context description#>
-    /// - Returns: <#description#>
+    ///   - protocolDecl: `ProtocolDeclSyntax`
+    ///   - context: `MacroExpansionContext`
+    /// - Returns: `[MemberBlockItemSyntax]`
     static func syncFunctions(from protocolDecl: ProtocolDeclSyntax, with context: some MacroExpansionContext) throws -> [MemberBlockItemSyntax] {
         let syncFunctions = protocolDecl.asyncFunctions.map { function in
             MemberBlockItemSyntax(

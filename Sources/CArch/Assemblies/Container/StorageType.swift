@@ -5,7 +5,7 @@
 import Foundation
 
 /// Типы ссылок на объекты в контейнер зависимостей
-public enum StorageType: @unchecked Sendable {
+public enum StorageType: Sendable {
     
     /// Слабая ссылка на объект
     public class WeakReference<Wrapped: AnyObject> {

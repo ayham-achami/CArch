@@ -75,7 +75,7 @@ final class SyncAliasMacroTests: XCTestCase {
             @SyncAlias
             protocol TestProtocol {}
             ┬───────
-            ╰─ 🛑 Macro can be applied to protocols inherited from ErrorAsyncHandler only
+            ╰─ 🛑 SyncAliasMacro can be applied to protocols inherited from ErrorAsyncHandler only
                ✏️ add inheritance from ErrorAsyncHandler
             """
         } fixes: {

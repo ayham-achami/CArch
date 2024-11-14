@@ -48,6 +48,8 @@ extension ContractMacro {
                 return .agent
             } else if inheritedTypes.contains("BusinessLogicService") {
                 return .service
+            } else if inheritedTypes.contains("BusinessLogicController") {
+                return .controller
             } else if inheritedTypes.contains("BusinessLogicSingleton") {
                 return .singleton
             } else if inheritedTypes.contains("BusinessLogicServicePool") {
@@ -94,19 +96,19 @@ extension ContractMacro {
                                     with context: some SwiftSyntaxMacros.MacroExpansionContext) throws -> [String: String] {
             guard
                 let element = labeledList?.first(where: { $0.label?.text == ArgumentsType.implementations.rawValue })
-            else { return ["default": "\(protocolDecl.name.text)Implementation"] }
+            else { return ["\(protocolDecl.name.text)Implementation": "default"] }
             guard
-                let expression = element.expression.as(DictionaryExprSyntax.self)
+                let expression = element.expression.as(ArrayExprSyntax.self)
             else { throw ArgumentsType.Error.convert }
-            guard
-                case let .elements(list) = expression.content
-            else { throw ArgumentsType.Error.convert }
-            return try list.reduce(into: [:]) { result, element in
-                guard
-                    let property = element.key.as(MemberAccessExprSyntax.self)
-                else { throw ArgumentsType.Error.convert }
-                result[property.declName.baseName.text] = element.value.description
-            }
+            return expression
+                .elements
+                .map(\.expression)
+                .compactMap { $0.as(FunctionCallExprSyntax.self)?.arguments.map(\.expression) }
+                .reduce(into: []) { $0.append(contentsOf: $1) }
+                .compactMap { $0.as(MemberAccessExprSyntax.self) }
+                .map { $0.base?.as(DeclReferenceExprSyntax.self)?.baseName.text ?? $0.declName.baseName.text }
+                .chunked(into: 2)
+                .reduce(into: [:]) { $0[$1[0]] = $1[1] }
         }
     }
 }
