@@ -216,7 +216,7 @@ private extension SwitchCaseSyntax.Label {
 // MARK: - Return
 private extension CodeBlockItemListSyntax {
     
-    static func returnImplementation(for component: ContractMacro.Arguments.Component, with type: String) -> CodeBlockItemListSyntax {
+    static func returnImplementation(for component: CArchComponent, with type: String) -> CodeBlockItemListSyntax {
         .init {
             ReturnStmtSyntax(
                 expression: ExprSyntax(

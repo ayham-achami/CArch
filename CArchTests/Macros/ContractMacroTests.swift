@@ -16,12 +16,9 @@ class ContractMacroTests: XCTestCase {
     // swiftlint:disable closure_body_length function_body_length superfluous_disable_command
     override func invokeTest() {
         #if canImport(CArchMacros)
-        withMacroTesting(
-            macros: [ContractMacro.self],
-            operation: {
-                super.invokeTest()
-            }
-        )
+        withMacroTesting(macros: [ContractMacro.self]) {
+            super.invokeTest()
+        }
         #else
         super.invokeTest()
         #endif
@@ -77,8 +74,8 @@ class ContractMacroTests: XCTestCase {
             """
             @Contract
             ┬────────
-            ├─ 🛑 Contract protocol must inherited from some CArch component protocol
-            ╰─ 🛑 Contract protocol must inherited from some CArch component protocol
+            ├─ 🛑 Invalid argument 'InheritedTypes' Contract protocol must inherited from some CArch component protocol
+            ╰─ 🛑 Invalid argument 'InheritedTypes' Contract protocol must inherited from some CArch component protocol
             protocol SomeRootAgent: AutoResolve {}
             """
         }
@@ -220,7 +217,7 @@ class ContractMacroTests: XCTestCase {
         #if canImport(CArchMacros)
         assertMacro {
             """
-            @Contract(isPublicAssembly: true)
+            @Contract(options: .public)
             public protocol SomePool: BusinessLogicServicePool, AutoResolve {}
             """
         } expansion: {

@@ -166,7 +166,7 @@ protocol SomeSingleton: BusinessLogicSingleton, AutoResolve {}
 private actor SomeSingletonImplementation: SomeSingleton {
 }
 
-@Contract(isPublicAssembly: true)
+@Contract(options: .public)
 public protocol SomePool: BusinessLogicServicePool, AutoResolve {}
 
 @AutoResolvable
@@ -193,3 +193,11 @@ protocol SomeParentAgent: BusinessLogicAgent, SomeRootAgent, SomeRoot2Agent, Aut
 @AutoResolvable
 private actor SomeParentAgentImplementation: SomeParentAgent {
 }
+
+@Assemblable
+@AutoResolvable
+class SomeFacade: AutoResolve {}
+
+@AutoResolvable
+@Assemblable(options: .freestanding)
+class SomeFacade2: AutoResolve {}

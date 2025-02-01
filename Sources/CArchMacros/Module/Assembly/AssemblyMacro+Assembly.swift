@@ -1,5 +1,5 @@
 //
-//  ContractMacro+Assemble.swift
+//  AssemblyMacro+Assembly.swift
 //
 
 import SwiftDiagnostics
@@ -7,17 +7,17 @@ import SwiftSyntax
 import SwiftSyntaxBuilder
 import SwiftSyntaxMacros
 
-// MARK: - ContractMacro + AssembleClass
-extension ContractMacro {
+// MARK: - AssemblableMacro + AssembleClass
+extension AssemblableMacro {
     
     /// Возвращает декларацию класс X-Assemble
     /// - Parameters:
     ///   - protocolDecl: `ProtocolDeclSyntax`
     ///   - arguments: `Arguments`
-    static func assembleClass(_ protocolDecl: ProtocolDeclSyntax, _ arguments: Arguments) throws -> ClassDeclSyntax {
+    static func assembleClass(_ arguments: Arguments) throws -> ClassDeclSyntax {
         .init(
             modifiers: try .assembleClass(arguments),
-            name: try .assembleClass(from: protocolDecl),
+            name: try .assembleClass(for: arguments),
             inheritanceClause: try .assembleClass(),
             memberBlock: .init(
                 members: .init(
@@ -28,24 +28,24 @@ extension ContractMacro {
     }
 }
 
+// MARK: - Name
+private extension TokenSyntax {
+    
+    static func assembleClass(for arguments: AssemblableMacro.Arguments) throws -> TokenSyntax {
+        arguments.options.contains(.freestanding) ? "\(raw: arguments.type)Assembly" : "Assembly"
+    }
+}
+
 // MARK: - Modifier
 private extension DeclModifierListSyntax {
     
-    static func assembleClass(_ arguments: ContractMacro.Arguments) throws -> DeclModifierListSyntax {
+    static func assembleClass(_ arguments: AssemblableMacro.Arguments) throws -> DeclModifierListSyntax {
         .init {
             if arguments.options.contains(.public) {
                 DeclModifierSyntax(name: .keyword(.public))
             }
             DeclModifierSyntax(name: .keyword(.final))
         }
-    }
-}
-
-// MARK: - Name
-private extension TokenSyntax {
-    
-    static func assembleClass(from protocolDecl: ProtocolDeclSyntax) throws -> TokenSyntax {
-        .init(stringLiteral: "\(protocolDecl.name.text)Assembly")
     }
 }
 
@@ -68,7 +68,7 @@ private extension InheritanceClauseSyntax {
 // MARK: - Assemble Function
 private extension MemberBlockItemSyntax {
     
-    static func assembleClassAssembleFunction(_ arguments: ContractMacro.Arguments) throws -> MemberBlockItemSyntax {
+    static func assembleClassAssembleFunction(_ arguments: AssemblableMacro.Arguments) throws -> MemberBlockItemSyntax {
         .init(
             decl: FunctionDeclSyntax(
                 modifiers: .init {
@@ -96,13 +96,24 @@ private extension MemberBlockItemSyntax {
                 body: .init(
                     statements: .init(
                         itemsBuilder: {
-                            for implementation in arguments.implementations.keys.countSorted {
-                                .init(item: .recordExp(from: arguments.component, name: implementation))
-                            }
+                            .recordExp(for: arguments)
                         }
                     )
                 )
             )
         )
+    }
+}
+
+// MARK: - CodeBlockItemSyntax + AssemblyMacro.Arguments
+private extension CodeBlockItemSyntax {
+    
+    static func recordExp(for arguments: AssemblableMacro.Arguments) -> CodeBlockItemSyntax {
+        switch arguments.behavior {
+        case .auto:
+            .init(item: .recordExp(from: .from(arguments.type) ?? .some, name: arguments.type))
+        case .some:
+            .init(item: .recordExp(from: .some, name: arguments.type))
+        }
     }
 }

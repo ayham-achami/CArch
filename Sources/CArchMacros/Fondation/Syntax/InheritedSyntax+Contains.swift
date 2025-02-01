@@ -1,5 +1,5 @@
 //
-//  InheritedTypeListSyntax+Contains.swift
+//  InheritedSyntax+Contains.swift
 //
 
 import SwiftSyntax
@@ -8,9 +8,7 @@ import SwiftSyntax
 extension InheritedTypeListSyntax {
     
     func contains(_ type: String) -> Bool {
-        compactMap {
-            $0.type.as(IdentifierTypeSyntax.self)?.name.text
-        }.contains(type)
+        compactMap { $0.type.as(IdentifierTypeSyntax.self)?.name.text }.contains(type)
     }
     
     func contains<Inherited>(_: Inherited.Type) -> Bool {

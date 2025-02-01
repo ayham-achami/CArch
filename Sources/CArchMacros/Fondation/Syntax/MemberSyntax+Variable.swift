@@ -1,9 +1,10 @@
 //
-//  MemberBlockItemListSyntax+Variable.swift
+//  MemberSyntax+Variable.swift
 //
 
 import SwiftSyntax
 
+// MARK: - MemberBlockItemListSyntax + Variable
 extension MemberBlockItemListSyntax {
     
     func variable(exclude modifiers: [DeclModifierSyntax]) -> [VariableDeclSyntax] {
@@ -11,6 +12,7 @@ extension MemberBlockItemListSyntax {
     }
 }
 
+// MARK: - DeclModifierListSyntax + Contains
 extension DeclModifierListSyntax {
     
     func contains(_ modifiers: [DeclModifierSyntax]) -> Bool {
@@ -18,11 +20,13 @@ extension DeclModifierListSyntax {
     }
 }
 
+// MARK: - DeclModifierSyntax + Static
 extension DeclModifierSyntax {
     
     static var `static`: Self { .init(name: .keyword(.static)) }
 }
 
+// MARK: - PatternSyntax + Raw
 extension PatternSyntax {
     
     var raw: String? {
@@ -30,6 +34,7 @@ extension PatternSyntax {
     }
 }
 
+// MARK: - TypeSyntax + Raw
 extension TypeSyntax {
     
     var raw: String? {

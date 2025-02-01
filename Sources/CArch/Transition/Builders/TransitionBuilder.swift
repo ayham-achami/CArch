@@ -6,7 +6,7 @@
 import UIKit
 
 /// Билдер транзакции
-@MainActor public final class TransitionBuilder: Sendable {
+@MainActor public final class TransitionBuilder {
 
     /// Типы транзакции
     public enum Transition: Sendable {

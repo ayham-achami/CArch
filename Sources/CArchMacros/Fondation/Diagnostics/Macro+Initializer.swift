@@ -9,10 +9,10 @@ import SwiftSyntaxMacros
 // MARK: - Macro + Initializer
 extension Macro {
     
-    /// <#Description#>
+    /// Проверить содержит ли объект методы инициализации
     /// - Parameters:
-    ///   - declGroupSyntax: <#declGroupSyntax description#>
-    ///   - context: <#context description#>
+    ///   - declGroupSyntax: Декларация для проверки
+    ///   - context: Контекст
     static func checkInitializerDecl(_ declGroupSyntax: DeclGroupSyntax, in context: some MacroExpansionContext) throws {
         let initializers = declGroupSyntax.memberBlock.members.map(\.decl).compactMap { $0.as(InitializerDeclSyntax.self) }
         guard !initializers.isEmpty else { return }

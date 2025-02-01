@@ -16,12 +16,9 @@ final class UIContactorMacroTests: XCTestCase {
     // swiftlint:disable closure_body_length function_body_length superfluous_disable_command
     override func invokeTest() {
         #if canImport(CArchMacros)
-        withMacroTesting(
-            macros: [UIContactorMacro.self],
-            operation: {
-                super.invokeTest()
-            }
-        )
+        withMacroTesting(macros: [UIContactorMacro.self]) {
+            super.invokeTest()
+        }
         #else
         super.invokeTest()
         #endif

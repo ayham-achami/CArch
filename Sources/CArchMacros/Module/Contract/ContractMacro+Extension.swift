@@ -1,5 +1,5 @@
 //
-//  ContractMacro+ExtensionMacro.swift
+//  ContractMacro+Extension.swift
 //
 
 import SwiftDiagnostics
@@ -7,26 +7,8 @@ import SwiftSyntax
 import SwiftSyntaxBuilder
 import SwiftSyntaxMacros
 
-// MARK: - ContractMacro + ExtensionMacro
-extension ContractMacro: ExtensionMacro {
-    
-    public static func expansion(of node: SwiftSyntax.AttributeSyntax,
-                                 attachedTo declaration: some SwiftSyntax.DeclGroupSyntax,
-                                 providingExtensionsOf type: some SwiftSyntax.TypeSyntaxProtocol,
-                                 conformingTo protocols: [SwiftSyntax.TypeSyntax],
-                                 in context: some SwiftSyntaxMacros.MacroExpansionContext) throws -> [SwiftSyntax.ExtensionDeclSyntax] {
-        guard
-            let protocolDecl = declaration.as(ProtocolDeclSyntax.self)
-        else { throw ProtocolsMacros.Error.notProtocol(Self.self) }
-        
-        let arguments = try Parser.arguments(from: node, decl: protocolDecl, context: context)
-        
-        return [try resolveExtension(protocolDecl, arguments)]
-    }
-}
-
 // MARK: - Resolve Extension
-private extension ContractMacro {
+extension ContractMacro {
     
     /// Возвращает декларацию Extension типа `protocolDecl.name.text`
     /// - Parameter protocolDecl: `ProtocolDeclSyntax`
@@ -52,7 +34,7 @@ private extension ContractMacro {
 }
 
 // MARK: - Resolve Function
-extension MemberBlockItemSyntax {
+private extension MemberBlockItemSyntax {
     
     static func resolveFunction(_ protocolDecl: ProtocolDeclSyntax, _ arguments: ContractMacro.Arguments) throws -> MemberBlockItemSyntax {
         .init(

@@ -9,10 +9,11 @@ import SwiftSyntaxMacros
 // MARK: - Macro + Inheritance
 extension Macro {
     
-    /// <#Description#>
+    /// Проверить что интерфейса наследуется от нужного объекта
     /// - Parameters:
-    ///   - inheritance: <#inheritance description#>
-    ///   - context: <#context description#>
+    ///   - protocolDecl: Интерфейс для проверки
+    ///   - inheritance: Проверяемый тип
+    ///   - context: Контекст
     static func checkInheritanceSpecifier(_ protocolDecl: ProtocolDeclSyntax, from inheritance: String, in context: some MacroExpansionContext) throws {
         let newProtocolDecl: ProtocolDeclSyntax
         if let inheritanceClause = protocolDecl.inheritanceClause {

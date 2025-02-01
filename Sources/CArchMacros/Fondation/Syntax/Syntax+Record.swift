@@ -1,5 +1,5 @@
 //
-//  CodeBlockItemSyntax+Record.swift
+//  Syntax+Record.swift
 //
 
 import SwiftSyntax
@@ -7,8 +7,10 @@ import SwiftSyntax
 // MARK: - ContractMacro + CodeBlockItemSyntax.Item + Record
 extension CodeBlockItemSyntax.Item {
     
-    static func recordExp(from component: ContractMacro.Arguments.Component, name: String) -> CodeBlockItemSyntax.Item {
+    static func recordExp(from component: CArchComponent, name: String) -> CodeBlockItemSyntax.Item {
         switch component {
+        case .some:
+            recordSomeExp(name)
         case .pool:
             recordPoolExp(name)
         case .agent:
@@ -20,6 +22,14 @@ extension CodeBlockItemSyntax.Item {
         case .controller:
             recordControllerExp(name)
         }
+    }
+    
+    private static func recordSomeExp(_ name: String) -> Self {
+        .expr("""
+        container.record(some: \(raw: name).self) { resolver in
+            \(raw: name)(resolver)
+        }
+        """)
     }
     
     private static func recordPoolExp(_ name: String) -> Self {

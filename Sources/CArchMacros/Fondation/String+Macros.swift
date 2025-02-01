@@ -1,5 +1,5 @@
 //
-//  String+Capitalized.swift
+//  String+Macros.swift
 //
 
 import Foundation

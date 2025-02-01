@@ -8,12 +8,6 @@ import SwiftSyntaxMacros
 // MARK: - AutoResolvableMacro + InitializerDeclSyntax
 extension AutoResolvableMacro {
     
-    /// <#Description#>
-    /// - Parameters:
-    ///   - arguments: <#arguments description#>
-    ///   - members: <#members description#>
-    ///   - context: <#context description#>
-    /// - Returns: <#description#>
     static func initializerDeclSyntax(_ arguments: Arguments,
                                       _ members: MemberBlockItemListSyntax,
                                       _ context: some MacroExpansionContext) throws -> [InitializerDeclSyntax] {
@@ -24,12 +18,7 @@ extension AutoResolvableMacro {
         return [try initializer(properties, arguments),
                 try resolverInitializer(properties, arguments)]
     }
-    
-    /// <#Description#>
-    /// - Parameters:
-    ///   - properties: <#properties description#>
-    ///   - arguments: <#arguments description#>
-    /// - Returns: <#description#>
+
     static func initializer(_ properties: [AutoResolvableMacro.Property],
                             _ arguments: AutoResolvableMacro.Arguments) throws -> InitializerDeclSyntax {
         .init(
@@ -59,15 +48,22 @@ extension AutoResolvableMacro {
         )
     }
     
-    /// <#Description#>
-    /// - Parameters:
-    ///   - properties: <#properties description#>
-    ///   - arguments: <#arguments description#>
-    /// - Returns: <#description#>
     static func resolverInitializer(_ properties: [AutoResolvableMacro.Property],
                                     _ arguments: AutoResolvableMacro.Arguments) throws -> InitializerDeclSyntax {
         .init(
-            modifiers: arguments.options.modifiers,
+            modifiers: .init(
+                itemsBuilder: {
+                    if arguments.options.contains(.public) {
+                        .init(name: .keyword(.public))
+                    }
+                    if arguments.options.contains(.required) {
+                        .init(name: .keyword(.required))
+                    }
+                    if arguments.options.contains(.convenience) {
+                        .init(name: .keyword(.convenience))
+                    }
+                }
+            ),
             signature: .init(
                 parameterClause: .init(
                     parameters: .init(
@@ -105,11 +101,6 @@ extension AutoResolvableMacro {
 // MARK: - FunctionParameterListSyntax + Parameters
 private extension FunctionParameterListSyntax {
     
-    /// <#Description#>
-    /// - Parameters:
-    ///   - properties: <#properties description#>
-    ///   - arguments: <#arguments description#>
-    /// - Returns: <#description#>
     static func parameters(_ properties: [AutoResolvableMacro.Property],
                            _ arguments: AutoResolvableMacro.Arguments) -> Self {
         .init(
@@ -137,11 +128,6 @@ private extension FunctionParameterListSyntax {
 // MARK: - FunctionCallExprSyntax + SelfInit
 private extension FunctionCallExprSyntax {
     
-    /// <#Description#>
-    /// - Parameters:
-    ///   - properties: <#properties description#>
-    ///   - arguments: <#arguments description#>
-    /// - Returns: <#description#>
     static func selfInit(_ properties: [AutoResolvableMacro.Property],
                          _ arguments: AutoResolvableMacro.Arguments) -> Self {
         .init(
@@ -162,9 +148,6 @@ private extension FunctionCallExprSyntax {
 // MARK: - LabeledExprListSyntax + Properties
 private extension LabeledExprListSyntax {
     
-    /// <#Description#>
-    /// - Parameter properties: <#properties description#>
-    /// - Returns: <#description#>
     static func resolverSyntax(_ properties: [AutoResolvableMacro.Property], _ implementations: [String: String]) -> Self {
         .init {
             for property in properties {
@@ -178,9 +161,6 @@ private extension LabeledExprListSyntax {
         }
     }
     
-    /// <#Description#>
-    /// - Parameter properties: <#properties description#>
-    /// - Returns: <#description#>
     static func someSyntax(_ properties: [AutoResolvableMacro.Property]) -> Self {
         .init {
             for property in properties {
@@ -197,6 +177,7 @@ private extension LabeledExprListSyntax {
     }
 }
 
+// MARK: - ExprSyntax + Resolver
 private extension ExprSyntax {
     
     static func resolverSyntax(_ type: String, _ version: String?) -> Self {
@@ -215,9 +196,6 @@ private extension ExprSyntax {
 // MARK: - Array + ([String], [String])
 private extension Array where Element == ([String], [String]) {
     
-    /// <#Description#>
-    /// - Parameter transform: <#transform description#>
-    /// - Returns: <#description#>
     func mapBoth<T>(_ transform: (String, String) throws -> T) rethrows -> [T] {
         var result = [T]()
         for var (first, second) in self {
@@ -230,16 +208,10 @@ private extension Array where Element == ([String], [String]) {
 // MARK: - Array + AutoResolvableMacro.Property
 private extension Array where Element == AutoResolvableMacro.Property {
     
-    /// <#Description#>
-    /// - Parameter element: <#element description#>
-    /// - Returns: <#description#>
     func isLast(_ element: Element) -> Bool {
         last == element
     }
     
-    /// <#Description#>
-    /// - Parameter element: <#element description#>
-    /// - Returns: <#description#>
     func isFirst(_ element: Element) -> Bool {
         first == element
     }

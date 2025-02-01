@@ -17,7 +17,7 @@ public struct UIContactorMacro: ExtensionMacro {
                                  in context: some MacroExpansionContext) throws -> [ExtensionDeclSyntax] {
         guard
             let protocolDecl = declaration.as(ProtocolDeclSyntax.self)
-        else { throw ProtocolsMacros.Error.notProtocol(Self.self) }
+        else { throw ProtocolsMacros.Error.notSupported(Self.self) }
         return [
             .init(
                 modifiers: .init(
@@ -52,9 +52,9 @@ public struct UIContactorMacro: ExtensionMacro {
             .compactMap {
                 $0.decl.as(FunctionDeclSyntax.self)
             }.filter {
+                $0.signature.returnClause == nil &&
                 $0.signature.effectSpecifiers?.asyncSpecifier == nil &&
-                $0.signature.effectSpecifiers?.throwsSpecifier == nil &&
-                $0.signature.returnClause == nil
+                $0.signature.effectSpecifiers?.throwsClause?.throwsSpecifier == nil
             }.map { function in
                 .init(
                     modifiers: .init(

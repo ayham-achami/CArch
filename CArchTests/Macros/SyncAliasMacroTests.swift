@@ -16,12 +16,9 @@ final class SyncAliasMacroTests: XCTestCase {
     // swiftlint:disable closure_body_length function_body_length superfluous_disable_command
     override func invokeTest() {
         #if canImport(CArchMacros)
-        withMacroTesting(
-            macros: [SyncAliasMacro.self],
-            operation: {
-                super.invokeTest()
-            }
-        )
+        withMacroTesting(macros: [SyncAliasMacro.self]) {
+            super.invokeTest()
+        }
         #else
         super.invokeTest()
         #endif
