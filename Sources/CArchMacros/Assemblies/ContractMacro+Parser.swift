@@ -52,6 +52,8 @@ extension ContractMacro {
                 return .singleton
             } else if inheritedTypes.contains("BusinessLogicServicePool") {
                 return .pool
+            } else if inheritedTypes.contains("PresentationLogicManager") {
+                return .manager
             }
             throw ArgumentsType.Error.inherited
         }

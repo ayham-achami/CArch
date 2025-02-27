@@ -44,6 +44,7 @@ extension ContractMacro.Arguments {
         case pool
         case agent
         case service
+        case manager
         case singleton
     }
 }

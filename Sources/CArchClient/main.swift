@@ -160,6 +160,14 @@ private actor SomeServiceImplementation: SomeService {
     }
 }
 
+@Contract
+protocol SomeManager: PresentationLogicManager, AutoResolve {}
+
+private class SomeManagerImplementation: SomeManager {
+    
+    required init(_ resolver: DIResolver) {}
+}
+
 @Contract(implementations: [.default: SomeSingletonImplementation.self])
 protocol SomeSingleton: BusinessLogicSingleton, AutoResolve {}
 

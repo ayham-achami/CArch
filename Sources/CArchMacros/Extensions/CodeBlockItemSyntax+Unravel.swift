@@ -17,7 +17,15 @@ extension CodeBlockItemSyntax.Item {
             return unravelServiceExp(name)
         case .singleton:
             return unravelSingletonExp(name)
+        case .manager:
+            return unravelManagerExp(name)
         }
+    }
+    
+    private static func unravelManagerExp(_ name: String) -> Self {
+        .expr("""
+        resolver.unravelManager(\(raw: name).self)
+        """)
     }
     
     private static func unravelPoolExp(_ name: String) -> Self {
