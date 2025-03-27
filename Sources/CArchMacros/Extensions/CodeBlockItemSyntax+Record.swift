@@ -17,7 +17,17 @@ extension CodeBlockItemSyntax.Item {
             return recordServiceExp(name)
         case .singleton:
             return recordSingletonExp(name)
+        case .manager:
+            return recordManagerExp(name)
         }
+    }
+    
+    private static func recordManagerExp(_ name: String) -> Self {
+        .expr("""
+        container.recordManager(\(raw: name).self) { resolver in
+            .init(resolver)
+        }
+        """)
     }
     
     private static func recordPoolExp(_ name: String) -> Self {

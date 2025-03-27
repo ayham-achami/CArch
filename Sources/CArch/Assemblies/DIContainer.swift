@@ -62,6 +62,15 @@ public protocol BusinessLogicRegistrar: Sendable {
     func recordSingleton<Singleton>(_: Singleton.Type,
                                     factory: @escaping (DIResolver) -> Singleton,
                                     completed: ((DIResolver, Singleton) -> Void)?) where Singleton: BusinessLogicSingleton
+    
+    /// Регистрация менеджера в контейнер зависимости
+    /// - Parameters:
+    ///   - _: Тип менеджера
+    ///   - factory: Блок содержащий код реализующий логику инициализация объекта
+    ///   - completed: Замыкание завершения инициализации
+    func recordManager<Manager>(_: Manager.Type,
+                                factory: @escaping (DIResolver) -> Manager,
+                                completed: ((DIResolver, Manager) -> Void)?) where Manager: PresentationLogicManager
 }
 
 // MARK: - BusinessLogicRegistrar + Default
@@ -121,6 +130,16 @@ public extension BusinessLogicRegistrar {
     func recordSingleton<Singleton>(_: Singleton.Type,
                                     factory: @escaping (DIResolver) -> Singleton) where Singleton: BusinessLogicSingleton {
         recordSingleton(Singleton.self, factory: factory, completed: nil)
+    }
+    
+    /// Регистрация менеджера в контейнер зависимости
+    /// - Parameters:
+    ///   - _: Тип менеджера
+    ///   - factory: Блок содержащий код реализующий логику инициализация объекта
+    ///   - completed: Замыкание завершения инициализации
+    func recordManager<Manager>(_: Manager.Type,
+                                factory: @escaping (DIResolver) -> Manager) where Manager: PresentationLogicManager {
+        recordManager(Manager.self, factory: factory, completed: nil)
     }
 }
 
@@ -348,6 +367,11 @@ public protocol BusinessLogicResolver: Sendable {
     /// Получение Singleton из контейнера зависимости
     /// - Parameter singletonType: Тип Singleton
     func unravelSingleton<Singleton>(_: Singleton.Type) -> Singleton where Singleton: BusinessLogicSingleton
+    
+    /// Получение менеджера из контейнера зависимости
+    /// - Parameters:
+    ///   - _: Тип менеджера
+    func unravelManager<Manager>(_: Manager.Type) -> Manager where Manager: PresentationLogicManager
 }
 
 /// Протокол получения объектов компонентов модуля в контейнер зависимости
