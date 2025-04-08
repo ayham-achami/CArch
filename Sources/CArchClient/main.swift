@@ -159,6 +159,13 @@ private class SomeControllerImplementation: SomeController {
     private let service: SomeService
 }
 
+@Contract
+protocol SomeManager: PresentationLogicManager, AutoResolve {}
+
+@AutoResolvable
+private class SomeManagerImplementation: SomeManager {
+}
+
 @Contract(implementations: [.init(type: SomeSingletonImplementation.self, version: .default)])
 protocol SomeSingleton: BusinessLogicSingleton, AutoResolve {}
 

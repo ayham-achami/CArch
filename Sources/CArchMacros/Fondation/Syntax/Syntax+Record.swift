@@ -17,6 +17,8 @@ extension CodeBlockItemSyntax.Item {
             recordAgentExp(name)
         case .service:
             recordServiceExp(name)
+        case .manager:
+            recordManagerExp(name)
         case .singleton:
             recordSingletonExp(name)
         case .controller:
@@ -28,6 +30,14 @@ extension CodeBlockItemSyntax.Item {
         .expr("""
         container.record(some: \(raw: name).self) { resolver in
             \(raw: name)(resolver)
+        }
+        """)
+    }
+    
+    private static func recordManagerExp(_ name: String) -> Self {
+        .expr("""
+        container.recordManager(\(raw: name).self) { resolver in
+            .init(resolver)
         }
         """)
     }

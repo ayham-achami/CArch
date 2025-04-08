@@ -17,6 +17,8 @@ extension CodeBlockItemSyntax.Item {
             unravelAgentExp(name)
         case .service:
             unravelServiceExp(name)
+        case .manager:
+            unravelManagerExp(name)
         case .singleton:
             unravelSingletonExp(name)
         case .controller:
@@ -27,6 +29,12 @@ extension CodeBlockItemSyntax.Item {
     private static func unravelSomeExp(_ name: String) -> Self {
         .expr("""
         resolver.unravel(some: \(raw: name).self)
+        """)
+    }
+    
+    private static func unravelManagerExp(_ name: String) -> Self {
+        .expr("""
+        resolver.unravelManager(\(raw: name).self)
         """)
     }
     

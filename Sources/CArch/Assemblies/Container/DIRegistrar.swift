@@ -62,6 +62,15 @@ public protocol BusinessLogicRegistrar: Sendable {
     func recordSingleton<Singleton>(_: Singleton.Type,
                                     factory: @escaping (DIResolver) -> Singleton,
                                     completed: ((DIResolver, Singleton) -> Void)?) where Singleton: BusinessLogicSingleton
+    
+    /// Регистрация менеджера в контейнер зависимости
+    /// - Parameters:
+    ///   - _: Тип менеджера
+    ///   - factory: Блок содержащий код реализующий логику инициализация объекта
+    ///   - completed: Замыкание завершения инициализации
+    func recordManager<Manager>(_: Manager.Type,
+                                factory: @escaping (DIResolver) -> Manager,
+                                completed: ((DIResolver, Manager) -> Void)?) where Manager: PresentationLogicManager
 }
 
 // MARK: - BusinessLogicRegistrar + Default
@@ -120,6 +129,16 @@ public extension BusinessLogicRegistrar {
     func recordSingleton<Singleton>(_: Singleton.Type,
                                     factory: @escaping (DIResolver) -> Singleton) where Singleton: BusinessLogicSingleton {
         recordSingleton(Singleton.self, factory: factory, completed: nil)
+    }
+    
+    /// Регистрация менеджера в контейнер зависимости
+    /// - Parameters:
+    ///   - _: Тип менеджера
+    ///   - factory: Блок содержащий код реализующий логику инициализация объекта
+    ///   - completed: Замыкание завершения инициализации
+    func recordManager<Manager>(_: Manager.Type,
+                                factory: @escaping (DIResolver) -> Manager) where Manager: PresentationLogicManager {
+        recordManager(Manager.self, factory: factory, completed: nil)
     }
 }
 

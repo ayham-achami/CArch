@@ -56,6 +56,22 @@ extension UIViewController: CArchModule {
 }
 #endif
 
+/// Базовый протокол любого менеджера Presentation слоя
+/// нельзя создавать менеджер и не наследовать данный протокол
+public protocol PresentationLogicManager: CArchProtocol, CustomStringConvertible, CustomDebugStringConvertible {}
+
+// MARK: - PresentationLogicManager + StringConvertible
+public extension PresentationLogicManager {
+    
+    nonisolated var description: String {
+        "🎛️ \(String(describing: Self.self))"
+    }
+    
+    nonisolated var debugDescription: String {
+        description
+    }
+}
+
 /// Конфигурация инъекции
 public protocol InjectConfiguration: RawRepresentable, Sendable where RawValue == String {}
 
