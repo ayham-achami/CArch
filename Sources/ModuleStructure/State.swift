@@ -113,10 +113,10 @@ public extension ModuleState {
 }
 
 /// Объект передающий доступ к (только для чтения) состоянии модуля
-public protocol AnyModuleStateRepresentable: CArchProtocol {}
+public protocol AnyModuleStateRepresentable: CArchModuleComponent {}
 
 /// Основной протокол инициализации любого модуля
-public protocol AnyModuleInitializer: CArchProtocol {
+public protocol AnyModuleInitializer: CArchModuleComponent {
 
     /// Настроить состояние инициализация модуль
     ///
@@ -125,7 +125,7 @@ public protocol AnyModuleInitializer: CArchProtocol {
 }
 
 /// Основной протокол финализирование работы любого модуля
-public protocol AnyModuleFinalizer: CArchProtocol {
+public protocol AnyModuleFinalizer: CArchModuleComponent {
 
     /// Вызывается при завершении работы модуля
     ///

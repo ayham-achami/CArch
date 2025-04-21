@@ -28,7 +28,7 @@ import UIKit
 
 /// Основной протокол содержащий логику показа данных на вью (экране)
 /// все протоколы `RenderingLogic` должны быть унаследованными от `RootRenderingLogic`
-public protocol RootRenderingLogic: AlertAbility {}
+public protocol RootRenderingLogic: CArchModuleComponent, AlertAbility {}
 
 /// Рендер с делегацией
 public protocol UIRenderer: ModuleLifeCycle {
@@ -55,7 +55,7 @@ public extension UIRenderer {
 public protocol AnyUserInteraction: AnyObject {}
 
 /// Протокол монибулации жизненный цикл модуля
-public protocol ModuleLifeCycle: CArchProtocol, NSObjectProtocol {
+public protocol ModuleLifeCycle: CArchModuleComponent, NSObjectProtocol {
 
     /// Вызывается когда модуль будет загружен
     /// эквивалентно `viewDidLoad` у `UIViewController`

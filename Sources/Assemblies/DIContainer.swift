@@ -111,6 +111,27 @@ public protocol DIRegistrar {
     func record<Service, Arg1, Arg2>(_ serviceType: Service.Type,
                                      inScope storage: StorageType,
                                      factory: @escaping (DIResolver, Arg1, Arg2) -> Service)
+    
+    /// Регистрация сервиса в контейнер зависимости
+    /// - Parameters:
+    ///   - serviceType: Тип объекта
+    ///   - name: Название (Таг)
+    ///   - storage: Тип ссылки
+    ///   - factory: Блок содержащий код реализующий логику внедрения объекта
+    func recordService<Service>(_ serviceType: Service.Type,
+                                name: String,
+                                inScope storage: StorageType,
+                                factory: @escaping (DIResolver) -> Service)
+    
+    /// Регистрация сервиса в контейнер зависимости
+    /// - Parameters:
+    ///   - serviceType: Тип объекта
+    ///   - name: Название (Таг)
+    ///   - storage: Тип ссылки
+    ///   - factory: Блок содержащий код реализующий логику внедрения объекта
+    func recordService<Service>(_ serviceType: Service.Type,
+                                inScope storage: StorageType,
+                                factory: @escaping (DIResolver) -> Service)
 }
 
 // MARK: - DIRegistrar + Default
@@ -156,6 +177,26 @@ public extension DIRegistrar {
     func record<Service, Arg1, Arg2>(_ serviceType: Service.Type,
                                      factory: @escaping (DIResolver, Arg1, Arg2) -> Service) {
         record(serviceType, inScope: .autoRelease, factory: factory)
+    }
+    
+    /// Регистрация сервиса в контейнер зависимости
+    /// - Parameters:
+    ///   - serviceType: Тип объекта
+    ///   - name: Название (Таг)
+    ///   - factory: Блок содержащий код реализующий логику внедрения объекта
+    func recordService<Service>(_ serviceType: Service.Type,
+                                name: String,
+                                factory: @escaping (DIResolver) -> Service) {
+        recordService(serviceType, name: name, inScope: .autoRelease, factory: factory)
+    }
+    
+    /// Регистрация сервиса в контейнер зависимости
+    /// - Parameters:
+    ///   - serviceType: Тип объекта
+    ///   - factory: Блок содержащий код реализующий логику внедрения объекта
+    func recordService<Service>(_ serviceType: Service.Type,
+                                factory: @escaping (DIResolver) -> Service) {
+        recordService(serviceType, inScope: .autoRelease, factory: factory)
     }
 }
 
