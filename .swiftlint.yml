@@ -63,6 +63,7 @@ identifier_name:
   excluded: 
     - id
     - URL
+    - Parsing
     - GlobalAPIKey
 nesting:
   type_level:

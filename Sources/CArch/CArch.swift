@@ -3,6 +3,9 @@
 //
 
 import Foundation
+#if canImport(UIKit)
+import UIKit
+#endif
 
 /// Основной протокол новой архитектурой, все протоколы
 /// компонентов архитектурой должны быть унаследованным
@@ -16,8 +19,7 @@ public protocol CArchModuleComponent: CArchProtocol {}
 
 /// Основной протокол любого объекта UI модели
 public protocol UIModel {}
-#if os(iOS)
-import UIKit
+#if canImport(UIKit)
 public typealias ViewController = UIViewController
 #else
 public typealias ViewController = Any
@@ -37,8 +39,6 @@ public protocol CArchModule: CArchProtocol {
 }
 
 #if canImport(UIKit)
-import UIKit
-
 // MARK: - UIViewController + CArchModule
 extension UIViewController: CArchModule {
     
@@ -133,6 +133,21 @@ public extension BusinessLogicService {
     }
 }
 
+/// Базовый протокол любого контроллер слоя бизнес логики
+public protocol BusinessLogicController: CArchProtocol, CustomStringConvertible, CustomDebugStringConvertible {}
+
+// MARK: - BusinessLogicController + StringConvertible
+public extension BusinessLogicController {
+
+    var description: String {
+        "🎛️ \(String(describing: Self.self))"
+    }
+
+    var debugDescription: String {
+        description
+    }
+}
+
 /// Протокол множества сервисов
 public protocol BusinessLogicServicePool: CArchProtocol, Actor, CustomStringConvertible, CustomDebugStringConvertible {}
 
@@ -148,7 +163,7 @@ public extension BusinessLogicServicePool {
     }
 }
 
-/// Протокол метки объекта типа ``Singleton``
+/// Протокол объекта типа ``Singleton``
 public protocol BusinessLogicSingleton: CArchProtocol, Actor, CustomStringConvertible, CustomDebugStringConvertible {}
 
 // MARK: - BusinessLogicSingleton + StringConvertible
@@ -163,26 +178,113 @@ public extension BusinessLogicSingleton {
     }
 }
 
-/// Макрос, который добавить alias не асинхронной функции всех асинхронных функций
+/// Протокол создания объект из контейнера зависимости
+public protocol AutoResolve {
+    
+    /// Инициализация
+    /// - Parameter resolver: Контейнера зависимости
+    init(_ resolver: DIResolver)
+}
+
+/// Ключи имплементаций
+@frozen public struct ImplementationsKeys: RawRepresentable, Hashable, Sendable {
+    
+    /// Ключ по умолчанию
+    public static var `default`: Self = .init(rawValue: "default")
+    
+    public let rawValue: String
+    
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+}
+
+/// Прицеливание имплементации
+@frozen public struct ImplementationsAiming: Hashable {
+    
+    /// Тип объекта
+    public let type: String
+    
+    /// Версия имплементации
+    public let version: ImplementationsKeys
+    
+    /// Инициализация
+    /// - Parameters:
+    ///   - type: Тип объекта
+    ///   - version: Версия имплементации
+    public init(type: Any.Type, version: ImplementationsKeys) {
+        self.version = version
+        self.type = String(describing: type)
+    }
+}
+
+/// Опции атрибутов метода инициализации
+public struct InitAttributesOptions: OptionSet {
+    
+    /// Публичный
+    public static let `public` = Self(rawValue: 1 << 0)
+    
+    /// Востребованный
+    public static let required = Self(rawValue: 1 << 1)
+    
+    /// Удобный
+    public static let convenience = Self(rawValue: 1 << 2)
+    
+    /// Все
+    public static let all = [Self.public, Self.required, Self.convenience]
+    
+    public let rawValue: Int
+
+    public init(rawValue: Int) {
+        self.rawValue = rawValue
+    }
+}
+
+/// Поведение (тип сборки) сборки
+public enum AssemblyBehavior {
+    
+    /// Автоматический
+    case auto
+    /// Любой тип
+    case some
+}
+
+/// Опции сборки
+public struct AssemblyOptions: OptionSet {
+    
+    /// Публичный
+    public static let `public` = Self(rawValue: 1 << 0)
+    
+    /// Создать отдельный объект а не использовать расширение
+    public static let freestanding = Self(rawValue: 1 << 1)
+    
+    public let rawValue: Int
+    
+    public init(rawValue: Int) {
+        self.rawValue = rawValue
+    }
+}
+
+/// Макрос, который добавит alias не асинхронной функции всех асинхронных функций
 ///
 ///     @SyncAlias
 ///     protocol TestProtocol: TestProtocolInc, ErrorAsyncHandler {
 ///
-///         func syncFunction(_ object: Any)
+///         func someFunction(_ object: Any) async
 ///     }
 ///
 ///     extension TestProtocol {
 ///
-///         func asyncFunction(_ object: Any) {
+///         func someFunction(_ object: Any) {
 ///             Task { [weak self] in
-///                 await self?.asyncFunction(object)
+///                 await self?.someFunction(object)
 ///             }
 ///         }
 ///     }
 @attached(extension, conformances: ErrorAsyncHandler, names: arbitrary, overloaded)
 public macro SyncAlias() = #externalMacro(module: "CArchMacros", type: "SyncAliasMacro")
 
-/// Макрос, который добавить nonisolated alias всех не асинхронных функций
+/// Макрос, который добавит nonisolated alias всех не асинхронных функций
 ///
 ///     @UIContactor
 ///     @MainActor protocol TestUIProtocol: AnyObject {
@@ -201,43 +303,22 @@ public macro SyncAlias() = #externalMacro(module: "CArchMacros", type: "SyncAlia
 @attached(extension, names: arbitrary, overloaded)
 public macro UIContactor() = #externalMacro(module: "CArchMacros", type: "UIContactorMacro")
 
-/// Протокол создания объект из контейнера зависимости
-public protocol AutoResolve {
-    
-    /// Инициализация
-    /// - Parameter resolver: Контейнера зависимости
-    init(_ resolver: DIResolver)
-}
-
-/// Ключи имплементаций
-public struct ImplementationsKeys: RawRepresentable, Hashable, Sendable {
-    
-    /// Ключ по умолчанию
-    public static var `default`: Self = .init(rawValue: "default")
-    
-    public let rawValue: String
-    
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-}
-
-/// Макрос, который добавить код внедрения зависимости
+/// Макрос, который добавит код внедрения зависимости
 ///
 ///     @Contract(implementations: [
-///         .v2: SomeAgentV2Implementation.self,
-///         .v1: SomeAgentV1Implementation.self,
-///         .default: SomeAgentImplementation.self
+///         .init(type: SomeAgentV2Implementation.self, version: .v2),
+///         .init(type: SomeAgentV1Implementation.self, version: .v1),
+///         .init(type: SomeAgentImplementation.self, version: .default)
 ///     ])
-///     public protocol SomeAgent: BusinessLogicAgent, AutoResolve {}
+///     protocol SomeAgent: BusinessLogicAgent, AutoResolve {}
 ///
-///     public enum SomeAgentImplementations: Equatable {
+///     enum SomeAgentImplementations: Equatable {
 ///         case v2
 ///         case v1
 ///         case `default`
 ///     }
 ///
-///     final class SomeAgentAssembly: DIAssembly {
+///     class SomeAgentAssembly: DIAssembly {
 ///         func assemble(container: DIContainer) {
 ///             container.recordAgent(SomeAgentV2Implementation.self.self) { resolver in
 ///                 .init(resolver)
@@ -251,7 +332,7 @@ public struct ImplementationsKeys: RawRepresentable, Hashable, Sendable {
 ///         }
 ///     }
 ///
-///     public final class SomeAgentResolver {
+///     final class SomeAgentResolver {
 ///         private let resolver: DIResolver
 ///         public init(_ resolver: DIResolver) {
 ///             self.resolver = resolver
@@ -268,12 +349,67 @@ public struct ImplementationsKeys: RawRepresentable, Hashable, Sendable {
 ///         }
 ///     }
 ///
-///     public extension SomeAgent {
+///     extension SomeAgent {
 ///         static func resolve(from resolver: DIResolver, implementation: SomeAgentImplementations = .default) -> SomeAgent {
 ///             SomeAgentResolver(resolver).unravel(implementation: implementation)
 ///         }
 ///     }
 @attached(extension, names: arbitrary, named(resolve))
 @attached(peer, conformances: AutoResolve, names: suffixed(Assembly), suffixed(Resolver), suffixed(Implementations))
-public macro Contract(implementations: [ImplementationsKeys: Any.Type] = [:],
-                      isPublicAssembly: Bool = false) = #externalMacro(module: "CArchMacros", type: "ContractMacro")
+public macro Contract(implementations: Set<ImplementationsAiming> = [],
+                      options: AssemblyOptions = []) = #externalMacro(module: "CArchMacros", type: "ContractMacro")
+
+/// Макрос, который добавит Init метода к Class, Actor и Struct и также генерирует `init(_ resolver: DIResolver)` метод
+///
+///     @AutoResolvable
+///     actor SomeActor: AutoResolve {
+///
+///         let firstProperty: SomeFirstPropertyType
+///         let secondProperty: SomeSecondPropertyType
+///
+///         init(firstProperty: SomeFirstPropertyType,
+///              secondProperty: SomeSecondPropertyType) {
+///                 self.firstProperty = firstProperty
+///                 self.secondProperty = secondProperty
+///         }
+///
+///         init(_ resolver: any DIResolver) {
+///             self.init(firstProperty: SomeFirstPropertyTypeResolver(resolver).unravel(),
+///                       secondProperty: SomeSecondPropertyTypeResolver(resolver).unravel())
+///         }
+///
+///         func doSomething() {}
+///     }
+@attached(member, conformances: AutoResolve, names: named(init))
+public macro AutoResolvable(shouldUseResolver: Bool = true,
+                            options: InitAttributesOptions = [],
+                            implementations: Set<ImplementationsAiming> = []) = #externalMacro(module: "CArchMacros", type: "AutoResolvableMacro")
+
+/// Макрос, который добавит `Assemble` и `Resolver`  Class, Actor, Struct и Protocol
+///
+///      @Assemblable
+///      class SomeObject {}
+///
+///      extension SomeObject {
+///          final class Assembly: DIAssembly {
+///              func assemble(container: DIContainer) {
+///                  container.record(some: SomeObject.self) { resolver in
+///                      SomeObject(resolver)
+///                  }
+///              }
+///          }
+///          final class Resolver {
+///              private let resolver: DIResolver
+///              init(_ resolver: DIResolver) {
+///                  self.resolver = resolver
+///              }
+///              func unravel() -> SomeObject {
+///                  resolver.unravel(some: SomeObject.self)
+///              }
+///          }
+///      }
+
+@attached(peer, conformances: AutoResolve, names: suffixed(Assembly), suffixed(Resolver))
+@attached(extension, conformances: AutoResolve, names: named(Resolver), named(Assembly))
+public macro Assemblable(behavior: AssemblyBehavior = .auto,
+                         options: AssemblyOptions = []) = #externalMacro(module: "CArchMacros", type: "AssemblableMacro")

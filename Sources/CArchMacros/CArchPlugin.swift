@@ -10,5 +10,7 @@ struct CArchPlugin: CompilerPlugin {
     
     let providingMacros: [Macro.Type] = [ContractMacro.self,
                                          SyncAliasMacro.self,
-                                         UIContactorMacro.self]
+                                         AssemblableMacro.self,
+                                         UIContactorMacro.self,
+                                         AutoResolvableMacro.self]
 }

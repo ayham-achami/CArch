@@ -16,12 +16,9 @@ class ContractMacroTests: XCTestCase {
     // swiftlint:disable closure_body_length function_body_length superfluous_disable_command
     override func invokeTest() {
         #if canImport(CArchMacros)
-        withMacroTesting(
-            macros: [ContractMacro.self],
-            operation: {
-                super.invokeTest()
-            }
-        )
+        withMacroTesting(macros: [ContractMacro.self]) {
+            super.invokeTest()
+        }
         #else
         super.invokeTest()
         #endif
@@ -77,8 +74,8 @@ class ContractMacroTests: XCTestCase {
             """
             @Contract
             ┬────────
-            ├─ 🛑 Contract protocol must inherited from some CArch component protocol
-            ╰─ 🛑 Contract protocol must inherited from some CArch component protocol
+            ├─ 🛑 Invalid argument 'InheritedTypes' Contract protocol must inherited from some CArch component protocol
+            ╰─ 🛑 Invalid argument 'InheritedTypes' Contract protocol must inherited from some CArch component protocol
             protocol SomeRootAgent: AutoResolve {}
             """
         }
@@ -99,7 +96,7 @@ class ContractMacroTests: XCTestCase {
             @Contract
             protocol SomeRootAgent: BusinessLogicAgent {}
             ┬───────
-            ╰─ 🛑 Macro can be applied to protocols inherited from AutoResolve only
+            ╰─ 🛑 ContractMacro can be applied to protocols inherited from AutoResolve only
                ✏️ add inheritance from AutoResolve
             """
         } fixes: {
@@ -118,7 +115,7 @@ class ContractMacroTests: XCTestCase {
             final class SomeRootAgentAssembly: DIAssembly {
                 func assemble(container: DIContainer) {
                     container.recordAgent(SomeRootAgentImplementation.self) { resolver in
-                        .init(resolver)
+                        SomeRootAgentImplementation(resolver)
                     }
                 }
             }
@@ -153,11 +150,15 @@ class ContractMacroTests: XCTestCase {
         assertMacro {
             """
             @Contract(implementations: [
-                .v2: SomeAgentV2Implementation.self,
-                .v1: SomeAgentV1Implementation.self,
-                .default: SomeAgentImplementation.self
+                .init(type: SomeAgentV2Implementation.self, version: .v2),
+                .init(type: SomeAgentV1Implementation.self, version: .v1),
+                .init(type: SomeAgentImplementation.self, version: .default)
             ])
             public protocol SomeAgent: BusinessLogicAgent, AutoResolve {}
+            """
+        } diagnostics: {
+            """
+
             """
         } expansion: {
             """
@@ -171,14 +172,14 @@ class ContractMacroTests: XCTestCase {
 
             final class SomeAgentAssembly: DIAssembly {
                 func assemble(container: DIContainer) {
-                    container.recordAgent(SomeAgentV2Implementation.self.self) { resolver in
-                        .init(resolver)
+                    container.recordAgent(SomeAgentV2Implementation.self) { resolver in
+                        SomeAgentV2Implementation(resolver)
                     }
-                    container.recordAgent(SomeAgentV1Implementation.self.self) { resolver in
-                        .init(resolver)
+                    container.recordAgent(SomeAgentV1Implementation.self) { resolver in
+                        SomeAgentV1Implementation(resolver)
                     }
-                    container.recordAgent(SomeAgentImplementation.self.self) { resolver in
-                        .init(resolver)
+                    container.recordAgent(SomeAgentImplementation.self) { resolver in
+                        SomeAgentImplementation(resolver)
                     }
                 }
             }
@@ -216,7 +217,7 @@ class ContractMacroTests: XCTestCase {
         #if canImport(CArchMacros)
         assertMacro {
             """
-            @Contract(isPublicAssembly: true)
+            @Contract(options: .public)
             public protocol SomePool: BusinessLogicServicePool, AutoResolve {}
             """
         } expansion: {
@@ -230,7 +231,7 @@ class ContractMacroTests: XCTestCase {
             public final class SomePoolAssembly: DIAssembly {
                 public func assemble(container: DIContainer) {
                     container.recordPool(SomePoolImplementation.self) { resolver in
-                        .init(resolver)
+                        SomePoolImplementation(resolver)
                     }
                 }
             }
@@ -278,7 +279,7 @@ class ContractMacroTests: XCTestCase {
             final class SomeAgentAssembly: DIAssembly {
                 func assemble(container: DIContainer) {
                     container.recordAgent(SomeAgentImplementation.self) { resolver in
-                        .init(resolver)
+                        SomeAgentImplementation(resolver)
                     }
                 }
             }
