@@ -192,149 +192,25 @@ public protocol DIRegistrar: BusinessLogicRegistrar, ModuleComponentRegistrar {
                          shouldCheckRegistration: Bool,
                          factory: @escaping (DIResolver) -> Service,
                          completed: ((DIResolver, Service) -> Void)?)
-    
-    /// Регистрация объекта в контейнер зависимости
-    /// - Parameters:
-    ///   - serviceType: Тип объекта
-    ///   - storage: Тип ссылки
-    ///   - configuration: Конфигурация инъекции
-    ///   - factory: Блок содержащий код реализующий логику инициализация объекта
-    @available(*, deprecated, renamed: "record(some:inScope:configuration:factory:)")
-    func record<Service>(_: Service.Type,
-                         inScope storage: StorageType,
-                         configuration: (any InjectConfiguration)?,
-                         factory: @escaping (DIResolver) -> Service)
-        
-    /// Регистрация объекта в контейнер зависимости
-    /// - Parameters:
-    ///   - serviceType: Тип объекта
-    ///   - storage: Тип ссылки
-    ///   - factory: Блок содержащий код реализующий логику внедрения объекта
-    @available(*, deprecated, message: "This feature has be deprecated and will be removed in future release")
-    func record<Service>(_ serviceType: Service.Type,
-                         inScope storage: StorageType,
-                         factory: @escaping (DIResolver) -> Service)
-    
-    /// Регистрация объекта в контейнер зависимости по названию (Таг)
-    /// - Parameters:
-    ///   - serviceType: Тип объекта
-    ///   - name: Название (Таг)
-    ///   - storage: Тип ссылки
-    ///   - factory: Блок содержащий код реализующий логику внедрения объекта
-    @available(*, deprecated, message: "This feature has be deprecated and will be removed in future release")
-    func record<Service>(_ serviceType: Service.Type,
-                         name: String,
-                         inScope storage: StorageType,
-                         factory: @escaping (DIResolver) -> Service)
-        
-    /// Регистрация объекта в контейнер зависимости
-    /// - Parameters:
-    ///   - serviceType: Тип объекта
-    ///   - storage: Тип ссылки
-    ///   - factory: Блок содержащий код реализующий логику внедрения объекта
-    @available(*, deprecated, message: "This feature has be deprecated and will be removed in future release")
-    func record<Service, Arg>(_ serviceType: Service.Type,
-                              inScope storage: StorageType,
-                              factory: @escaping (DIResolver, Arg) -> Service)
-    
-    /// Регистрация объекта в контейнер зависимости
-    /// - Parameters:
-    ///   - serviceType: Тип объекта
-    ///   - storage: Тип ссылки
-    ///   - factory: Блок содержащий код реализующий логику внедрения объекта
-    @available(*, deprecated, message: "This feature has be deprecated and will be removed in future release")
-    func record<Service, Arg1, Arg2>(_ serviceType: Service.Type,
-                                     inScope storage: StorageType,
-                                     factory: @escaping (DIResolver, Arg1, Arg2) -> Service)
 }
 
 // MARK: - DIRegistrar + Default
 public extension DIRegistrar {
-    
-    /// Регистрация объекта в контейнер зависимости
-    /// - Parameters:
-    ///   - serviceType: Тип объекта
-    ///   - factory: Блок содержащий код реализующий логику инициализация объекта
-    func record<Service>(some _: Service.Type,
-                         factory: @escaping (DIResolver) -> Service) {
-        record(some: Service.self, inScope: .autoRelease, configuration: nil, shouldCheckRegistration: true, factory: factory, completed: nil)
-    }
-    
-    /// Регистрация объекта в контейнер зависимости
-    /// - Parameters:
-    ///   - serviceType: Тип объекта
-    ///   - storage: Тип ссылки
-    ///   - factory: Блок содержащий код реализующий логику инициализация объекта
-    func record<Service>(some _: Service.Type,
-                         inScope storage: StorageType,
-                         factory: @escaping (DIResolver) -> Service) {
-        record(some: Service.self, inScope: storage, configuration: nil, shouldCheckRegistration: true, factory: factory, completed: nil)
-    }
-    
+
     /// Регистрация объекта в контейнер зависимости
     /// - Parameters:
     ///   - serviceType: Тип объекта
     ///   - storage: Тип ссылки
     ///   - configuration: Конфигурация инъекции
+    ///   - shouldCheckRegistration: Надо ли проверить объект на регистрацию в контейнер зависимости
+    ///                              если передать true то если до этот было зарегистрирован с таким же
+    ///                              типом и конфигурацией то операция регистрации отменяется
     ///   - factory: Блок содержащий код реализующий логику инициализация объекта
     func record<Service>(some _: Service.Type,
-                         inScope storage: StorageType,
-                         configuration: any InjectConfiguration,
-                         factory: @escaping (DIResolver) -> Service) {
-        record(some: Service.self, inScope: storage, configuration: configuration, shouldCheckRegistration: true, factory: factory, completed: nil)
-    }
-    
-//    func recordController(_ controller: (some BusinessLogicController).Type, isSingleton: Bool, factory: @escaping (any DIResolver) -> some BusinessLogicController) {
-//        record(some: controller, inScope: isSingleton ? .singleton : .autoRelease, factory: factory as! (any DIResolver) -> (some BusinessLogicController))
-//    }
-}
-
-// MARK: - Deprecated
-public extension DIRegistrar {
-    
-    /// Регистрация объекта в контейнер зависимости
-    /// - Parameters:
-    ///   - serviceType: Тип объекта
-    ///   - factory: Блок содержащий код реализующий логику внедрения объекта
-    @available(*, deprecated, message: "This feature has be deprecated and will be removed in future release")
-    func record<Service>(_ serviceType: Service.Type,
                          inScope storage: StorageType = .autoRelease,
+                         configuration: (any InjectConfiguration)? = nil,
+                         shouldCheckRegistration: Bool = true,
                          factory: @escaping (DIResolver) -> Service) {
-        record(serviceType, inScope: storage, factory: factory)
-    }
-    
-    /// Регистрация объекта в контейнер зависимости по названию (Таг)
-    /// - Parameters:
-    ///   - serviceType: Тип объекта
-    ///   - name: Название (Таг)
-    ///   - factory: Блок содержащий код реализующий логику внедрения объекта
-    @available(*, deprecated, message: "This feature has be deprecated and will be removed in future release")
-    func record<Service>(_ serviceType: Service.Type,
-                         name: String,
-                         inScope storage: StorageType = .autoRelease,
-                         factory: @escaping (DIResolver) -> Service) {
-        record(serviceType, name: name, inScope: storage, factory: factory)
-    }
-    
-    /// Регистрация объекта в контейнер зависимости
-    /// - Parameters:
-    ///   - serviceType: Тип объекта
-    ///   - factory: Блок содержащий код реализующий логику внедрения объекта
-    @available(*, deprecated, message: "This feature has be deprecated and will be removed in future release")
-    func record<Service, Arg>(_ serviceType: Service.Type,
-                              inScope storage: StorageType = .autoRelease,
-                              factory: @escaping (DIResolver, Arg) -> Service) {
-        record(serviceType, inScope: storage, factory: factory)
-    }
-    
-    /// Регистрация объекта в контейнер зависимости
-    /// - Parameters:
-    ///   - serviceType: Тип объекта
-    ///   - factory: Блок содержащий код реализующий логику внедрения объекта
-    @available(*, deprecated, message: "This feature has be deprecated and will be removed in future release")
-    func record<Service, Arg1, Arg2>(_ serviceType: Service.Type,
-                                     inScope storage: StorageType = .autoRelease,
-                                     factory: @escaping (DIResolver, Arg1, Arg2) -> Service) {
-        record(serviceType, inScope: storage, factory: factory)
+        record(some: Service.self, inScope: storage, configuration: configuration, shouldCheckRegistration: shouldCheckRegistration, factory: factory, completed: nil)
     }
 }

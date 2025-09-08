@@ -39,11 +39,3 @@ public protocol ModuleAssembly: Sendable {
     /// - Parameter container: Контейнер внедрения зависимостей
     func registerRouter(in container: DIContainer)
 }
-
-/// Протокол отвечающий за регистрацию компонентов архитектуры CArch в контейнер зависимости
-@available(*, deprecated, renamed: "ModuleAssembler", message: "Use new object")
-public typealias LayoutModuleAssembler = ModuleAssembler
-
-/// Протокол отвечающий за регистрацию компонентов модуля архитектуры CArch в контейнер зависимости
-@available(*, deprecated, renamed: "ModuleAssembly", message: "Use new object")
-public typealias LayoutModuleAssembly = ModuleAssembly

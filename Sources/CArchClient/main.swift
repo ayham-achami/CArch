@@ -159,7 +159,6 @@ private class SomeControllerImplementation: SomeController {
     private let service: SomeService
 }
 
-@Contract
 protocol SomeManager: PresentationLogicManager, AutoResolve {}
 
 @AutoResolvable

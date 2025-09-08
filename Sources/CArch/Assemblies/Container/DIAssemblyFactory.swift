@@ -16,14 +16,17 @@ public protocol DIAssembly: Sendable {
 }
 
 /// Коллекция объектов для добавления в контейнер зависимости
-public protocol DIAssemblyCollection: Collection, Sendable {
+public protocol DIServicesAssembly: Collection, Sendable {
     
     /// Коллекция объектов
     var services: [DIAssembly] { get }
+    
+    /// Инициализации без параметров
+    init()
 }
 
 // MARK: - ServicesDICollection + Default
-public extension DIAssemblyCollection {
+public extension DIServicesAssembly {
     
     var startIndex: Int {
         services.startIndex
@@ -67,14 +70,10 @@ public protocol DIAssemblyFactory: DIAssemblyFactoryDebugger {
     
     /// Выполнять регистрации всех сервисов бизнес логики в контейнер зависимости
     /// - Parameter recorder: Класс отвечающий за создание всех серверов
-    func record<Recorder>(_ recorder: Recorder) where Recorder: DIAssemblyCollection
+    func record<Recorder>(_ recorder: Recorder) where Recorder: DIServicesAssembly
     
     /// Регистрирует компонент модуля в контейнер зависимости
     /// - Parameter module: Модуль
     /// - Returns: Модуль после регистрации
     func assembly<Module>(_ module: Module) -> Module where Module: ModuleAssembly
 }
-
-/// Протокол получения доступа к контейнеру зависимости
-@available(*, deprecated, renamed: "DIAssemblyFactory", message: "Use new object")
-public typealias LayoutDIAssemblyFactory = DIAssemblyFactory

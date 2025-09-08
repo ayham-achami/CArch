@@ -11,15 +11,15 @@ enum ProtocolsMacros {
     /// Ошибка
     enum Error: Swift.Error, CustomStringConvertible {
         
-        /// Не является протоколом
-        case notSupported(Any.Type)
-        
         var description: String {
             switch self {
             case let .notSupported(type):
                 "\(String(describing: type.self)) can be applied to protocols only"
             }
         }
+        
+        /// Не является протоколом
+        case notSupported(Any.Type)
     }
 }
 
@@ -28,9 +28,6 @@ enum ObjectMacros {
     
     /// гументОшибки
     enum Error: Swift.Error, CustomStringConvertible {
-    
-        /// Не поддерживается
-        case notSupported(Any.Type)
         
         var description: String {
             switch self {
@@ -38,6 +35,9 @@ enum ObjectMacros {
                 "\(String(describing: type.self)) can be applied to Structure, Class or Actors only"
             }
         }
+        
+        /// Не поддерживается
+        case notSupported(Any.Type)
     }
 }
 
@@ -47,11 +47,6 @@ enum Parsing {
     /// Ошибки
     enum Error: Swift.Error, CustomStringConvertible {
     
-        /// Неверный аргумент
-        case invalidArgument(String)
-        /// Отсутствует обязательный аргумент
-        case missingArgument(String)
-        
         var description: String {
             switch self {
             case .invalidArgument(let message):
@@ -60,6 +55,11 @@ enum Parsing {
                 "\(name) is required argument"
             }
         }
+        
+        /// Неверный аргумент
+        case invalidArgument(String)
+        /// Отсутствует обязательный аргумент
+        case missingArgument(String)
     }
 }
 
@@ -82,13 +82,13 @@ extension Diagnostics {
     
     enum Error: Swift.Error, CustomStringConvertible {
         
-        case unsupported(String)
-        
         var description: String {
             switch self {
             case .unsupported(let message):
                 message
             }
         }
+        
+        case unsupported(String)
     }
 }

@@ -387,42 +387,28 @@ public macro AutoResolvable(shouldUseResolver: Bool = true,
 
 /// Макрос, который добавит `Assemble` и `Resolver`  Class, Actor, Struct и Protocol
 ///
-///     @Assemblable
-///     actor SomeFacade: AutoResolve {
+///      @Assemblable
+///      class SomeObject {}
 ///
-///         init() {
-///         }
-///
-///         init(_ resolver: any DIResolver) {
-///             self.init()
-///         }
-///     }
-///
-///     extension SomeFacade {
-///         public enum Implementations: Equatable {
-///             case `default`
-///         }
-///
-///         final class Assembly: DIAssembly {
-///             func assemble(container: DIContainer) {
-///                 container.record(some: SomeFacade.self) { resolver in
-///                     .init(resolver)
-///                 }
-///             }
-///         }
-///
-///         final class Resolver {
-///             private let resolver: DIResolver
-///             init(_ resolver: DIResolver) {
-///                 self.resolver = resolver
-///             }
-///             func unravel(implementation: Implementations = .default) -> SomeFacade {
-///                 switch implementation {
-///                 case .default:
-///                     return resolver.unravel(some: SomeFacade.self)
-///             }
-///         }
-///     }
+///      extension SomeObject {
+///          final class Assembly: DIAssembly {
+///              func assemble(container: DIContainer) {
+///                  container.record(some: SomeObject.self) { resolver in
+///                      SomeObject(resolver)
+///                  }
+///              }
+///          }
+///          final class Resolver {
+///              private let resolver: DIResolver
+///              init(_ resolver: DIResolver) {
+///                  self.resolver = resolver
+///              }
+///              func unravel() -> SomeObject {
+///                  resolver.unravel(some: SomeObject.self)
+///              }
+///          }
+///      }
+
 @attached(peer, conformances: AutoResolve, names: suffixed(Assembly), suffixed(Resolver))
 @attached(extension, conformances: AutoResolve, names: named(Resolver), named(Assembly))
 public macro Assemblable(behavior: AssemblyBehavior = .auto,

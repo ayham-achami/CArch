@@ -28,8 +28,8 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/realm/SwiftLint", from: "0.58.2"),
-        .package(url: "https://github.com/pointfreeco/swift-macro-testing.git", from: "0.5.2"),
-        .package(url: "https://github.com/swiftlang/swift-syntax", "509.0.0"..<"601.0.0-prerelease")
+        .package(url: "https://github.com/swiftlang/swift-syntax", "509.0.0"..<"601.0.0-prerelease"),
+        .package(url: "https://github.com/pointfreeco/swift-macro-testing.git", exact: "0.6.0")
     ],
     targets: [
         .macro(

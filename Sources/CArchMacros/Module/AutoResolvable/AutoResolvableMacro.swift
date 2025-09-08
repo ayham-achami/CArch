@@ -9,9 +9,9 @@ import SwiftSyntaxMacros
 /// Макрос автоматического получения объекта из контерна зависимости
 public struct AutoResolvableMacro: MemberMacro {
     
-    public static func expansion(of node: AttributeSyntax,
-                                 providingMembersOf declaration: some DeclGroupSyntax,
-                                 in context: some MacroExpansionContext) throws -> [DeclSyntax] {
+    public  static func expansion(of node: AttributeSyntax,
+                                  providingMembersOf declaration: some DeclGroupSyntax,
+                                  in context: some MacroExpansionContext) throws -> [DeclSyntax] {
         try checkInitializerDecl(declaration, in: context)
         
         let initializersDecl = if let declaration = declaration.as(StructDeclSyntax.self) {
@@ -24,5 +24,12 @@ public struct AutoResolvableMacro: MemberMacro {
             throw ObjectMacros.Error.notSupported(Self.self)
         }
         return initializersDecl.map(DeclSyntax.init)
+    }
+    
+    public static func expansion(of node: AttributeSyntax,
+                                 providingMembersOf declaration: some DeclGroupSyntax,
+                                 conformingTo protocols: [TypeSyntax],
+                                 in context: some MacroExpansionContext) throws -> [DeclSyntax] {
+        try expansion(of: node, providingMembersOf: declaration, in: context)
     }
 }
