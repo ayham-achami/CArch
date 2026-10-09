@@ -11,15 +11,15 @@ enum ProtocolsMacros {
     /// Ошибка
     public enum Error: Swift.Error, CustomStringConvertible {
         
-        /// Не является протоколом
-        case notProtocol(Any.Type)
-        
         public var description: String {
             switch self {
             case let .notProtocol(type):
                 return "\(String(describing: type.self)) can be applied to protocols only"
             }
         }
+        
+        /// Не является протоколом
+        case notProtocol(Any.Type)
     }
 }
 

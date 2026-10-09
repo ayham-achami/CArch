@@ -15,6 +15,10 @@ public extension UIViewController {
         public typealias RawValue = String
 
         public var rawValue: String
+        
+        public static func == (lhs: Name, rhs: Name) -> Bool {
+            lhs.rawValue == rhs.rawValue
+        }
 
         public init?(rawValue: Name.RawValue) {
             guard !rawValue.isEmpty else { return nil }
@@ -39,10 +43,6 @@ public extension UIViewController {
 
         public func hash(into hasher: inout Hasher) {
             hasher.combine(rawValue)
-        }
-
-        public static func == (lhs: Name, rhs: Name) -> Bool {
-            lhs.rawValue == rhs.rawValue
         }
     }
 }
