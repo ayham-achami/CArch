@@ -53,7 +53,7 @@ public struct UIContactorMacro: ExtensionMacro {
                 $0.decl.as(FunctionDeclSyntax.self)
             }.filter {
                 $0.signature.effectSpecifiers?.asyncSpecifier == nil &&
-                $0.signature.effectSpecifiers?.throwsSpecifier == nil &&
+                $0.signature.effectSpecifiers?.throwsClause?.throwsSpecifier == nil &&
                 $0.signature.returnClause == nil
             }.map { function in
                 .init(

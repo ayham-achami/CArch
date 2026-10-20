@@ -117,7 +117,7 @@ private extension ProtocolDeclSyntax {
                 $0.decl.as(FunctionDeclSyntax.self)
             }.filter {
                 $0.signature.returnClause == nil &&
-                $0.signature.effectSpecifiers?.throwsSpecifier == nil &&
+                $0.signature.effectSpecifiers?.throwsClause?.throwsSpecifier == nil &&
                 $0.signature.effectSpecifiers?.asyncSpecifier != nil
             }.map {
                 $0.withoutAsyncSpecifier()
@@ -132,7 +132,7 @@ private extension ProtocolDeclSyntax {
             }.filter {
                 $0.signature.returnClause == nil &&
                 $0.signature.effectSpecifiers?.asyncSpecifier != nil &&
-                $0.signature.effectSpecifiers?.throwsSpecifier != nil
+                $0.signature.effectSpecifiers?.throwsClause?.throwsSpecifier != nil
             }.map {
                 $0.withoutAsyncThrowsSpecifier()
             }
@@ -153,6 +153,8 @@ private extension FunctionDeclSyntax {
         guard
             let effectSpecifiers = signature.effectSpecifiers
         else { return self }
-        return with(\.signature, signature.with(\.effectSpecifiers, effectSpecifiers.with(\.asyncSpecifier, nil).with(\.throwsSpecifier, nil)))
+        return with(\.signature, signature.with(\.effectSpecifiers, effectSpecifiers
+            .with(\.asyncSpecifier, nil)
+            .with(\.throwsClause, nil)))
     }
 }
